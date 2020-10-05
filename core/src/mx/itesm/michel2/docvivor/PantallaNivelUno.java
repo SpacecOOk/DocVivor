@@ -19,11 +19,16 @@ public class PantallaNivelUno extends Pantalla {
     //Jugador
     private Texture texturaPersonaje;
     private Jugador jugador;
+
+    //Vidas
     private Texture texturaVidas = new Texture("vidas.png");
 
     //Enemigos
     private Texture texturaEnemigoUno;
     private Enemigo enemigoUno;
+
+    //Marcador
+    private float puntos;
 
     public PantallaNivelUno(Juego juego) {
         this.juego = juego;
