@@ -57,6 +57,7 @@ public class PantallaNivelUno extends Pantalla {
         //Boton mover a la derecha
         Texture texturaMoverDerecha = new Texture("Botones/Boton_der_negro.png");
         TextureRegionDrawable botonMoverDerecha = new TextureRegionDrawable(new TextureRegion(texturaMoverDerecha));
+
         //Aqui para el boton inverso (click)
         ImageButton btnMoverDerecha = new ImageButton(botonMoverDerecha);
         btnMoverDerecha.setPosition(0+(btnMoverDerecha.getWidth()/2)*3,0+btnMoverDerecha.getHeight()/2, Align.center);
@@ -64,8 +65,18 @@ public class PantallaNivelUno extends Pantalla {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                //Cuando le pica se mueve a la derecha, falta implementar el movimiento
-                jugador.moverDerecha();
+            }
+
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                jugador.setEstadoCaminando(EstadoCaminando.DERECHA);
+                return super.touchDown(event, x, y, pointer, button);
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                jugador.setEstadoCaminando(EstadoCaminando.QUIETO);
+                super.touchUp(event, x, y, pointer, button);
             }
         });
         escenaNivelUno.addActor(btnMoverDerecha);
@@ -80,7 +91,19 @@ public class PantallaNivelUno extends Pantalla {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 //Cuando le pica se mueve a la izquierda, falta implementar el movimiento
-                jugador.moverIzquierda();
+
+            }
+
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                jugador.setEstadoCaminando(EstadoCaminando.IZQUIERDA);
+                return super.touchDown(event, x, y, pointer, button);
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                jugador.setEstadoCaminando(EstadoCaminando.QUIETO);
+                super.touchUp(event, x, y, pointer, button);
             }
         });
         escenaNivelUno.addActor(btnMoverIzquierda);
