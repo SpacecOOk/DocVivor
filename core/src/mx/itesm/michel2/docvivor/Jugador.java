@@ -43,6 +43,14 @@ public class Jugador extends Objeto {
 
     }
 
+    public void setVidas(int vidasRestantes){
+        vidas = vidasRestantes;
+    }
+
+    public int getVidas(){
+        return vidas;
+    }
+
     public void setEstadoCaminando(EstadoCaminando nuevoEstado) {
         estadoCaminando = nuevoEstado;
     }

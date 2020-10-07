@@ -1,19 +1,23 @@
 package mx.itesm.michel2.docvivor;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class PantallaNivelUno extends Pantalla {
     private final Juego juego;
 
-    private Stage escenaNivelUno;
+    //Fondo
     private Texture texturaFondoNivelUno;
 
     //Jugador
@@ -27,8 +31,11 @@ public class PantallaNivelUno extends Pantalla {
     private Texture texturaEnemigoUno;
     private Enemigo enemigoUno;
 
-    //Marcador
-    private float puntos;
+
+    //HUD
+    private Stage HUD;
+    private OrthographicCamera camaraHUD;
+    private Viewport vistaHUD;
 
     public PantallaNivelUno(Juego juego) {
         this.juego = juego;
@@ -37,10 +44,13 @@ public class PantallaNivelUno extends Pantalla {
     @Override
     public void show() {
         texturaFondoNivelUno = new Texture("Fondos/level1_Background.png");
-        crearNivelUno();
+        crearHUD();
         crearPersonaje();
         crearEnemigos();
+
+        Gdx.input.setInputProcessor(HUD);
     }
+
 
     private void crearEnemigos() {
         texturaEnemigoUno = new Texture("Enemigos/enemigoUno.png");
@@ -52,8 +62,13 @@ public class PantallaNivelUno extends Pantalla {
         jugador = new Jugador(texturaPersonaje,100,133);
     }
 
-    private void crearNivelUno() {
-        escenaNivelUno = new Stage(vista);
+    private void crearHUD() {
+        camaraHUD = new OrthographicCamera(ANCHO,ALTO);
+        // Ajustar para el fondo
+        camaraHUD.position.set(ANCHO/3,ALTO/2,0);
+        camaraHUD.update();
+        vistaHUD = new StretchViewport(ANCHO,ALTO,camaraHUD);
+        HUD = new Stage(vistaHUD);
         //Boton mover a la derecha
         Texture texturaMoverDerecha = new Texture("Botones/Boton_der_negro.png");
         TextureRegionDrawable botonMoverDerecha = new TextureRegionDrawable(new TextureRegion(texturaMoverDerecha));
@@ -79,7 +94,9 @@ public class PantallaNivelUno extends Pantalla {
                 super.touchUp(event, x, y, pointer, button);
             }
         });
-        escenaNivelUno.addActor(btnMoverDerecha);
+        //Le movi aqui
+        HUD.addActor(btnMoverDerecha);
+
         //Boton mover izquierda
         Texture texturaMoverIzquierda = new Texture("Botones/Boton_izq_negro.png");
         final TextureRegionDrawable botonMoverIzquierda = new TextureRegionDrawable(new TextureRegion(texturaMoverIzquierda));
@@ -106,7 +123,10 @@ public class PantallaNivelUno extends Pantalla {
                 super.touchUp(event, x, y, pointer, button);
             }
         });
-        escenaNivelUno.addActor(btnMoverIzquierda);
+
+        //Le movi aqui
+        HUD.addActor(btnMoverIzquierda);
+
         //Boton atacar
         Texture texturaAtacar = new Texture("Botones/Boton_disparo.png");
         TextureRegionDrawable botonAtacar = new TextureRegionDrawable(new TextureRegion(texturaAtacar));
@@ -121,7 +141,10 @@ public class PantallaNivelUno extends Pantalla {
 
             }
         });
-        escenaNivelUno.addActor(btnAtacar);
+
+        //Le movi aqui
+        HUD.addActor(btnAtacar);
+
         //Boton para saltar
         Texture texturaSaltar = new Texture("Botones/Boton_saltar_negro.png");
         TextureRegionDrawable botonSaltar = new TextureRegionDrawable(new TextureRegion(texturaSaltar));
@@ -136,7 +159,10 @@ public class PantallaNivelUno extends Pantalla {
 
             }
         });
-        escenaNivelUno.addActor(btnSaltar);
+
+        //Le movi aqui
+        HUD.addActor(btnSaltar);
+
         //Boton para pausa
         Texture texturaPausa = new Texture("Botones/Boton_pausa.png");
         TextureRegionDrawable botonPausa = new TextureRegionDrawable(new TextureRegion(texturaPausa));
@@ -154,26 +180,47 @@ public class PantallaNivelUno extends Pantalla {
 
             }
         });
-        escenaNivelUno.addActor(btnPausa);
-        Gdx.input.setInputProcessor(escenaNivelUno);
+
+        //Le movi aqui
+        HUD.addActor(btnPausa);
+
 
     }
 
     @Override
     public void render(float delta) {
-        borrarPantalla();
+        actualizar();
+
+        borrarPantalla(0,0,0.5f);
         batch.setProjectionMatrix(camara.combined);
         batch.begin();
         batch.draw(texturaFondoNivelUno,0,0);
         jugador.render(batch);
         enemigoUno.render(batch);
-        //Dibujo de vidas, cambiar despues
+
+        //Dibujo de vidas, hay que moverlas al HUD
         batch.draw(texturaVidas,0, ALTO-texturaVidas.getHeight());
         batch.draw(texturaVidas,0+texturaVidas.getWidth(), ALTO-texturaVidas.getHeight());
         batch.draw(texturaVidas,0+2*(texturaVidas.getWidth()),ALTO-texturaVidas.getHeight());
 
         batch.end();
-        escenaNivelUno.draw();
+
+        //************ HUD ***************
+        batch.setProjectionMatrix(camaraHUD.combined);
+        HUD.draw();
+
+
+    }
+
+    private void actualizar() {
+        actualizarCamara();
+    }
+
+    private void actualizarCamara() {
+        float xCamara = camara.position.x;
+        xCamara = jugador.sprite.getX();
+        camara.position.x = xCamara;
+        camara.update();
     }
 
     @Override

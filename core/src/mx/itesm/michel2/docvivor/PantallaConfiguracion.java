@@ -41,17 +41,9 @@ public class PantallaConfiguracion extends Pantalla {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                //Callar la música on/off
-                //Para silenciar la música cuando le picas
-                if(juego.musicaFondo.isPlaying() == true) {//Checar aqui para la musica
-                    juego.posicionCancion = juego.musicaFondo.getPosition();
-                    juego.musicaFondo.pause();
-                }else{
-                    juego.musicaFondo.setPosition(juego.posicionCancion);
-                    juego.musicaFondo.play();
-                }
             }
         });
+
         escenaConfiguracion.addActor(btnCallarMusica);
         //Boton Silenciar Efectos de sonido
         Texture texturaCallarSonidoOn = new Texture("Botones/boton_sonido_on.png");

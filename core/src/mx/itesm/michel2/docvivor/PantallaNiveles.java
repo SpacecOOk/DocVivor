@@ -14,8 +14,8 @@ import com.badlogic.gdx.utils.Align;
 public class PantallaNiveles extends Pantalla {
     private  final Juego juego;
 
-    private Texture texturaNiveles;
 
+    private Texture texturaNiveles;
     private Stage escenaNiveles;
 
     public PantallaNiveles(Juego juego) {
