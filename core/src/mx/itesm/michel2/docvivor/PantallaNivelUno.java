@@ -137,7 +137,8 @@ public class PantallaNivelUno extends Pantalla {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                //Cuando le pica se mueve a la izquierda, falta implementar el movimiento
+                //Cuando le pica para atacar
+
 
             }
         });
@@ -155,7 +156,13 @@ public class PantallaNivelUno extends Pantalla {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                //Cuando le pica se mueve a la izquierda, falta implementar el movimiento
+                //Cuando le pica salta
+                //Salta a la izquierda/derecha
+                if(jugador.getEstadoCaminando()==EstadoCaminando.DERECHA){
+                    jugador.setEstadoCaminando(EstadoCaminando.SALTANDO_DERECHA);
+                }else if(jugador.getEstadoCaminando()==EstadoCaminando.IZQUIERDA){
+                    jugador.setEstadoCaminando(EstadoCaminando.SALTANDO_IZQUIERDA);
+                }
 
             }
         });

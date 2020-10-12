@@ -6,5 +6,7 @@ public enum EstadoCaminando
     DERECHA,
     IZQUIERDA,
     QUIETO,
-    SALTANDO
+    SALTANDO_DERECHA,
+    SALTANDO_IZQUIERDA,
+    SALTANDO_QUIETO;
 }
