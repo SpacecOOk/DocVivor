@@ -11,6 +11,9 @@ public class Jugador extends Objeto {
 
     private Animation<TextureRegion> animacion;
     private  float timerAnimacion;
+    private TextureRegion frame;
+    private TextureRegion[][] texturasFrames;
+    private TextureRegion region ;
 
     //VIDAS
     private int vidas;
@@ -30,8 +33,8 @@ public class Jugador extends Objeto {
     private EstadoCaminando estadoCaminando;
 
     public Jugador(Texture textura, float x, float y){
-        TextureRegion region = new TextureRegion(textura);
-        TextureRegion[][] texturasFrames = region.split(64,64);
+        region = new TextureRegion(textura);
+        texturasFrames = region.split(64,64);
         //Cuando esta quieto
         sprite = new Sprite(texturasFrames[0][1]);
         sprite.setPosition(x,y);
@@ -44,7 +47,7 @@ public class Jugador extends Objeto {
 
         //Salto
         yBase = y;
-        estado= EstadoJugador.QUIETO;
+        estado= EstadoJugador.QUIETO_DERECHA;
 
         //Estado inicial del jugador
         estadoCaminando = EstadoCaminando.QUIETO;
@@ -84,7 +87,7 @@ public class Jugador extends Objeto {
         float delta = Gdx.graphics.getDeltaTime();
         timerAnimacion += delta;   //Aqui acumula el tiempo
         if (estado == EstadoJugador.CAMINANDO) {
-            TextureRegion frame = animacion.getKeyFrame(timerAnimacion);
+            frame = animacion.getKeyFrame(timerAnimacion);
             // Derecha / Izquierda
             if (estadoCaminando==EstadoCaminando.DERECHA && !frame.isFlipX()){
                 frame.flip(true,false);
@@ -92,11 +95,16 @@ public class Jugador extends Objeto {
                 frame.flip(true, false);
             } else {
                 frame.flip(false,false); //Normal
-            }
+            }batch.draw(frame, sprite.getX(), sprite.getY());
+        } else if(estado==EstadoJugador.QUIETO_DERECHA){
+            frame = texturasFrames[0][1];
+            frame.flip(true, false);
             batch.draw(frame, sprite.getX(), sprite.getY());
-        } else if(estado==EstadoJugador.QUIETO){
-            sprite.draw(batch);
+            frame.flip(true, false);
 
+        }else if(estado==EstadoJugador.QUIETO_IZQUIERDA){
+            frame = texturasFrames[0][1];
+            batch.draw(frame, sprite.getX(), sprite.getY());
         }else {
             //Gdx.app.log("SALTA", "tAire: " + tAire );
             tAire += 12*delta;

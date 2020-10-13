@@ -92,7 +92,7 @@ public class PantallaNivelUno extends Pantalla {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 jugador.setEstadoCaminando(EstadoCaminando.QUIETO);        //Cuando se deja de presionar el boton
-                jugador.setEstado(EstadoJugador.QUIETO);
+                jugador.setEstado(EstadoJugador.QUIETO_DERECHA);
                 super.touchUp(event, x, y, pointer, button);
             }
         });
@@ -118,7 +118,7 @@ public class PantallaNivelUno extends Pantalla {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 jugador.setEstadoCaminando(EstadoCaminando.QUIETO);          //Cuando deja de presionar el boton
-                jugador.setEstado(EstadoJugador.QUIETO);
+                jugador.setEstado(EstadoJugador.QUIETO_IZQUIERDA);
                 super.touchUp(event, x, y, pointer, button);
             }
         });

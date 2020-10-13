@@ -4,5 +4,7 @@ public enum EstadoJugador
 {
     CAMINANDO,
     SALTANDO,
-    QUIETO
+    QUIETO,
+    QUIETO_DERECHA,
+    QUIETO_IZQUIERDA,
 }
