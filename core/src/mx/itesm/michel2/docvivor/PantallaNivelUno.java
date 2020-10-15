@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+//Pantalla Nivel 1
 public class PantallaNivelUno extends Pantalla {
     private final Juego juego;
 
