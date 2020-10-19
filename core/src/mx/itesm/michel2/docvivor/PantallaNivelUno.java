@@ -306,6 +306,21 @@ public class PantallaNivelUno extends Pantalla {
                 }
             });
             this.addActor(btnRegresar);
+            Texture texturaBtnMenu = new Texture("Botones/btn_jugar.png");
+            TextureRegionDrawable botonMenu = new TextureRegionDrawable(new TextureRegion(texturaBtnMenu));
+            //Aqui para el boton inverso (click)
+            ImageButton btnMenu = new ImageButton(botonMenu);
+            btnMenu.setPosition(ANCHO*0.65f, ALTO*0.6f, Align.center);
+            btnMenu.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    super.clicked(event, x, y);
+                    //Para regresar al juego
+                    estadoJuego = EstadoJuego.JUGANDO;
+                    juego.setScreen(new PantallaMenu(juego));
+                }
+            });
+            this.addActor(btnMenu);
         }
     }
 }
