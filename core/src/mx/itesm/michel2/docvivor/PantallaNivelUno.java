@@ -27,6 +27,7 @@ public class PantallaNivelUno extends Pantalla {
 
     //Vidas
     private Texture texturaVidas = new Texture("vidas.png");
+    private Texture[] arrVidas;
 
     //Enemigos
     private Texture texturaEnemigoUno;
@@ -138,8 +139,9 @@ public class PantallaNivelUno extends Pantalla {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 //Cuando le pica para atacar
-
-
+                if (jugador.getEstadoCaminando() == EstadoCaminando.QUIETO){
+                    jugador.saltarQuieto();
+                }
             }
         });
 
@@ -158,10 +160,8 @@ public class PantallaNivelUno extends Pantalla {
                 super.clicked(event, x, y);
                 //Cuando le pica salta
                 //Salta a la izquierda/derecha
-                if(jugador.getEstadoCaminando()==EstadoCaminando.DERECHA){
-                    jugador.setEstadoCaminando(EstadoCaminando.SALTANDO_DERECHA);
-                }else if(jugador.getEstadoCaminando()==EstadoCaminando.IZQUIERDA){
-                    jugador.setEstadoCaminando(EstadoCaminando.SALTANDO_IZQUIERDA);
+                if(jugador.getEstadoCaminando() == EstadoCaminando.QUIETO && jugador.getEstadoCaminando() != EstadoCaminando.SALTANDO_QUIETO ){
+                    jugador.saltarQuieto();
                 }
 
             }
@@ -192,6 +192,8 @@ public class PantallaNivelUno extends Pantalla {
         HUD.addActor(btnPausa);
 
 
+
+
     }
 
     @Override
@@ -205,10 +207,6 @@ public class PantallaNivelUno extends Pantalla {
         jugador.render(batch);
         enemigoUno.render(batch);
 
-        //Dibujo de vidas, hay que moverlas al HUD
-        batch.draw(texturaVidas,0, ALTO-texturaVidas.getHeight());
-        batch.draw(texturaVidas,0+texturaVidas.getWidth(), ALTO-texturaVidas.getHeight());
-        batch.draw(texturaVidas,0+2*(texturaVidas.getWidth()),ALTO-texturaVidas.getHeight());
 
         batch.end();
 
