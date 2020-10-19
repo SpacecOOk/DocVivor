@@ -3,6 +3,7 @@ package mx.itesm.michel2.docvivor;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -39,6 +40,13 @@ public class PantallaNivelUno extends Pantalla {
     private OrthographicCamera camaraHUD;
     private Viewport vistaHUD;
 
+    //Pausa
+    private EstadoJuego estadoJuego = EstadoJuego.JUGANDO;
+    private EscenaPausa escenaPausa;
+    private Stage escenaPausaHUD;
+    private OrthographicCamera camaraPausaHUD;
+    private Viewport vistaPausaHUD;
+
     public PantallaNivelUno(Juego juego) {
         this.juego = juego;
     }
@@ -47,10 +55,18 @@ public class PantallaNivelUno extends Pantalla {
     public void show() {
         texturaFondoNivelUno = new Texture("Fondos/level1_Background.png");
         crearHUD();
+        crearPausa();
         crearPersonaje();
         crearEnemigos();
 
         Gdx.input.setInputProcessor(HUD);
+    }
+
+    private void crearPausa() {
+        camaraPausaHUD = new OrthographicCamera(ANCHO,ALTO);
+        camaraPausaHUD.position.set(ANCHO/2,ALTO/2,0);
+        camaraPausaHUD.update();
+        vistaPausaHUD = new StretchViewport(ANCHO,ALTO,camaraPausaHUD);
     }
 
 
@@ -139,9 +155,6 @@ public class PantallaNivelUno extends Pantalla {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 //Cuando le pica para atacar
-                if (jugador.getEstadoCaminando() == EstadoCaminando.QUIETO){
-                    jugador.saltarQuieto();
-                }
             }
         });
 
@@ -160,9 +173,12 @@ public class PantallaNivelUno extends Pantalla {
                 super.clicked(event, x, y);
                 //Cuando le pica salta
                 //Salta a la izquierda/derecha
-                if(jugador.getEstadoCaminando() == EstadoCaminando.QUIETO && jugador.getEstadoCaminando() != EstadoCaminando.SALTANDO_QUIETO ){
-                    jugador.saltarQuieto();
+                if(jugador.getEstadoCaminando()==EstadoCaminando.DERECHA){
+                    jugador.setEstadoCaminando(EstadoCaminando.SALTANDO_DERECHA);
+                }else if(jugador.getEstadoCaminando()==EstadoCaminando.IZQUIERDA){
+                    jugador.setEstadoCaminando(EstadoCaminando.SALTANDO_IZQUIERDA);
                 }
+
 
             }
         });
@@ -182,14 +198,17 @@ public class PantallaNivelUno extends Pantalla {
                 super.clicked(event, x, y);
                 //Cuando le pica se pausa el juego, falta implementarlo
                 //Crea la mini pantalla de pausa
-                juego.pause();
-                juego.setScreen(new PantallaPausa(juego));
+                if (estadoJuego == EstadoJuego.JUGANDO){
+                    estadoJuego = EstadoJuego.PAUSA;
+                }
+
 
             }
         });
 
         //Le movi aqui
         HUD.addActor(btnPausa);
+
 
 
 
@@ -213,6 +232,13 @@ public class PantallaNivelUno extends Pantalla {
         //************ HUD ***************
         batch.setProjectionMatrix(camaraHUD.combined);
         HUD.draw();
+
+        //*************Pausa*****************
+        batch.setProjectionMatrix(camaraPausaHUD.combined);
+        if(estadoJuego == EstadoJuego.PAUSA){
+            escenaPausa.draw();
+            batch.end();
+        }
 
 
     }
@@ -242,5 +268,25 @@ public class PantallaNivelUno extends Pantalla {
     public void dispose() {
         texturaFondoNivelUno.dispose();
         batch.dispose();
+    }
+
+    private enum EstadoJuego {
+        JUGANDO,
+        PAUSA,
+        MUERTO,
+        VICTORIA
+    }
+
+    private class EscenaPausa extends Stage {
+
+        public EscenaPausa(Viewport vista, SpriteBatch batch) {
+            super(vista, batch);
+
+            Texture texturaFondoPausa = new Texture("");
+            Image imgFondoPausa = new Image(texturaFondoPausa);
+            imgFondoPausa.setPosition(ANCHO/2 - texturaFondoPausa.getWidth()/2,
+                    ALTO/2 - texturaFondoPausa.getHeight()/2);
+            this.addActor(imgFondoPausa);
+        }
     }
 }
