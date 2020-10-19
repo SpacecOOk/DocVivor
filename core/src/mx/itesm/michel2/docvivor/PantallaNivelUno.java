@@ -201,6 +201,10 @@ public class PantallaNivelUno extends Pantalla {
                 if (estadoJuego == EstadoJuego.JUGANDO){
                     estadoJuego = EstadoJuego.PAUSA;
                 }
+                if(escenaPausa == null){
+                    escenaPausa = new EscenaPausa(vistaPausaHUD,batch); //La vista HUD no se mueve
+                }
+                Gdx.input.setInputProcessor(escenaPausa);
 
 
             }
@@ -237,7 +241,6 @@ public class PantallaNivelUno extends Pantalla {
         batch.setProjectionMatrix(camaraPausaHUD.combined);
         if(estadoJuego == EstadoJuego.PAUSA){
             escenaPausa.draw();
-            batch.end();
         }
 
 
@@ -282,11 +285,27 @@ public class PantallaNivelUno extends Pantalla {
         public EscenaPausa(Viewport vista, SpriteBatch batch) {
             super(vista, batch);
 
-            Texture texturaFondoPausa = new Texture("");
+            Texture texturaFondoPausa = new Texture("Fondos/fondoPausa.png");
             Image imgFondoPausa = new Image(texturaFondoPausa);
             imgFondoPausa.setPosition(ANCHO/2 - texturaFondoPausa.getWidth()/2,
                     ALTO/2 - texturaFondoPausa.getHeight()/2);
             this.addActor(imgFondoPausa);
+
+            Texture texturaBtnRegresar = new Texture("Botones/btn_jugar.png");
+            TextureRegionDrawable botonRegresar = new TextureRegionDrawable(new TextureRegion(texturaBtnRegresar));
+            //Aqui para el boton inverso (click)
+            ImageButton btnRegresar = new ImageButton(botonRegresar);
+            btnRegresar.setPosition(ANCHO*0.4f, ALTO*0.6f, Align.center);
+            btnRegresar.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    super.clicked(event, x, y);
+                    //Para regresar al juego
+                    estadoJuego = EstadoJuego.JUGANDO;
+                    Gdx.input.setInputProcessor(HUD);
+                }
+            });
+            this.addActor(btnRegresar);
         }
     }
 }
