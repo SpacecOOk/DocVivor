@@ -173,11 +173,15 @@ public class PantallaNivelUno extends Pantalla {
                 super.clicked(event, x, y);
                 //Cuando le pica salta
                 //Salta a la izquierda/derecha
-                if(jugador.getEstadoCaminando()==EstadoCaminando.DERECHA){
+                if(jugador.getEstado() != EstadoJugador.SALTANDO){
+                    jugador.setEstado(EstadoJugador.SALTANDO);
+                }
+
+                /*if(jugador.getEstadoCaminando()==EstadoCaminando.DERECHA){
                     jugador.setEstadoCaminando(EstadoCaminando.SALTANDO_DERECHA);
                 }else if(jugador.getEstadoCaminando()==EstadoCaminando.IZQUIERDA){
                     jugador.setEstadoCaminando(EstadoCaminando.SALTANDO_IZQUIERDA);
-                }
+                }*/
 
 
             }
@@ -205,8 +209,6 @@ public class PantallaNivelUno extends Pantalla {
                     escenaPausa = new EscenaPausa(vistaPausaHUD,batch); //La vista HUD no se mueve
                 }
                 Gdx.input.setInputProcessor(escenaPausa);
-
-
             }
         });
 

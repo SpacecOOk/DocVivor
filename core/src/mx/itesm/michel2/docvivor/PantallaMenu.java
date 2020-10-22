@@ -1,6 +1,7 @@
 package mx.itesm.michel2.docvivor;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
@@ -25,11 +26,21 @@ public class PantallaMenu extends Pantalla {
     private Texture texturaMenu;
     private Texture titulo = new Texture("titulo.png");
 
+    //Musica
+    private boolean musicaFondoPlay;
+
     @Override
     public void show() {
         texturaMenu = new Texture("Fondos/fondo_general.png");
         crearMenu();
+        cargarMusicaFondo(); //Para la musica de fondo
         juego.musicaFondo.setVolume(0.5f);
+    }
+
+    //La preferencia de la musica de fondo
+    private void cargarMusicaFondo() {
+        Preferences prefs = Gdx.app.getPreferences("marcador");
+        musicaFondoPlay = prefs.getBoolean("MusicaPlay",true);
     }
 
     private void crearMenu() {

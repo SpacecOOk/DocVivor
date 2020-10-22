@@ -64,22 +64,10 @@ public class Jugador extends Objeto {
         sprite.setX(sprite.getX()+DX);
     }
 
-    private void saltarDerecha(){
-        estadoCaminando=EstadoCaminando.SALTANDO_DERECHA;
+    private void saltar(){
+        estado = EstadoJugador.SALTANDO;
         tAire = 0;
         tVuelo = 2*V0/G;  //Tiempo en el que permanece en el aire
-    }
-
-    private void saltarIzquierda(){
-        estadoCaminando=EstadoCaminando.SALTANDO_IZQUIERDA;
-        tAire = 0;
-        tVuelo = 2*V0/G;
-    }
-
-    private void saltarQuieto(){
-        estadoCaminando=EstadoCaminando.SALTANDO_QUIETO;
-        tAire = 0;
-        tVuelo = 2*V0/G;
     }
 
     @Override
@@ -125,12 +113,8 @@ public class Jugador extends Objeto {
                 moverIzquierda();
             } else if(estadoCaminando==EstadoCaminando.QUIETO){
                 //Para cuando el jugador esta quieto
-            }else if(estadoCaminando==EstadoCaminando.SALTANDO_DERECHA){
-                saltarDerecha();
-            }else if(estadoCaminando==EstadoCaminando.SALTANDO_IZQUIERDA){
-                saltarIzquierda();
-            }else if(estadoCaminando==EstadoCaminando.SALTANDO_QUIETO){
-                saltarQuieto();
+            }else if(estado == EstadoJugador.SALTANDO){
+                saltar();
             }
 
     }
