@@ -102,8 +102,13 @@ public class PantallaNivelUno extends Pantalla {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                jugador.setEstadoCaminando(EstadoCaminando.DERECHA);      //Cuando camina a la derecha
-                jugador.setEstado(EstadoJugador.CAMINANDO);
+                if(jugador.getEstado() == EstadoJugador.SALTANDO) {//Cuando camina a la derecha
+                    jugador.setEstadoCaminando(EstadoCaminando.DERECHA);
+                }else{
+                    jugador.setEstadoCaminando(EstadoCaminando.DERECHA);
+                    jugador.setEstado(EstadoJugador.CAMINANDO);
+                }
+                //jugador.setEstado(EstadoJugador.CAMINANDO);
                 return super.touchDown(event, x, y, pointer, button);
             }
 
@@ -128,8 +133,12 @@ public class PantallaNivelUno extends Pantalla {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                jugador.setEstadoCaminando(EstadoCaminando.IZQUIERDA);         //Cuando camina a la izquierda
-                jugador.setEstado(EstadoJugador.CAMINANDO);
+                if(jugador.getEstado() == EstadoJugador.SALTANDO) {//Cuando camina a la izquierda
+                    jugador.setEstadoCaminando(EstadoCaminando.IZQUIERDA);
+                }else{
+                    jugador.setEstadoCaminando(EstadoCaminando.IZQUIERDA);
+                    jugador.setEstado(EstadoJugador.CAMINANDO);
+                }
                 return super.touchDown(event, x, y, pointer, button);
             }
 
@@ -171,10 +180,9 @@ public class PantallaNivelUno extends Pantalla {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                //Cuando le pica salta
                 //Salta a la izquierda/derecha
                 if(jugador.getEstado() != EstadoJugador.SALTANDO){
-                    jugador.setEstado(EstadoJugador.SALTANDO);
+                    jugador.saltar();
                 }
 
                 /*if(jugador.getEstadoCaminando()==EstadoCaminando.DERECHA){

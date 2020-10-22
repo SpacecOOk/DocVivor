@@ -64,7 +64,7 @@ public class Jugador extends Objeto {
         sprite.setX(sprite.getX()+DX);
     }
 
-    private void saltar(){
+    public void saltar(){
         estado = EstadoJugador.SALTANDO;
         tAire = 0;
         tVuelo = 2*V0/G;  //Tiempo en el que permanece en el aire
@@ -72,7 +72,7 @@ public class Jugador extends Objeto {
 
     @Override
     public void render(SpriteBatch batch) {
-        actualizar();
+        actualizarCaminando();
         float delta = Gdx.graphics.getDeltaTime();
         timerAnimacion += delta;   //Aqui acumula el tiempo
         if (estado == EstadoJugador.CAMINANDO) {
@@ -106,15 +106,13 @@ public class Jugador extends Objeto {
         }
     }
 
-    private void actualizar() {
+    private void actualizarCaminando() {
             if (estadoCaminando==EstadoCaminando.DERECHA) {
                 moverDerecha();
             } else if (estadoCaminando==EstadoCaminando.IZQUIERDA){
                 moverIzquierda();
             } else if(estadoCaminando==EstadoCaminando.QUIETO){
                 //Para cuando el jugador esta quieto
-            }else if(estado == EstadoJugador.SALTANDO){
-                saltar();
             }
 
     }
