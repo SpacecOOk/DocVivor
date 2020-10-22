@@ -114,8 +114,15 @@ public class PantallaNivelUno extends Pantalla {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                jugador.setEstadoCaminando(EstadoCaminando.QUIETO);        //Cuando se deja de presionar el boton
-                jugador.setEstado(EstadoJugador.QUIETO_DERECHA);
+                if (jugador.getEstado() == EstadoJugador.SALTANDO){
+                    jugador.setEstadoCaminando(EstadoCaminando.QUIETO); //Revisar los quietos y donde van
+                }else{
+                    jugador.setEstadoCaminando(EstadoCaminando.QUIETO);          //Cuando deja de presionar el boton
+                    jugador.setEstado(EstadoJugador.QUIETO_DERECHA);
+                }
+
+                //jugador.setEstadoCaminando(EstadoCaminando.QUIETO);        //Cuando se deja de presionar el boton
+                //jugador.setEstado(EstadoJugador.QUIETO_DERECHA);
                 super.touchUp(event, x, y, pointer, button);
             }
         });
@@ -144,8 +151,15 @@ public class PantallaNivelUno extends Pantalla {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                jugador.setEstadoCaminando(EstadoCaminando.QUIETO);          //Cuando deja de presionar el boton
-                jugador.setEstado(EstadoJugador.QUIETO_IZQUIERDA);
+                if (jugador.getEstado() == EstadoJugador.SALTANDO){
+                    jugador.setEstadoCaminando(EstadoCaminando.QUIETO); //Revisar los quietos y donde van
+                }else{
+                    jugador.setEstadoCaminando(EstadoCaminando.QUIETO);          //Cuando deja de presionar el boton
+                    jugador.setEstado(EstadoJugador.QUIETO_IZQUIERDA);
+                }
+
+                //jugador.setEstadoCaminando(EstadoCaminando.QUIETO);          //Cuando deja de presionar el boton
+                //jugador.setEstado(EstadoJugador.QUIETO_IZQUIERDA);
                 super.touchUp(event, x, y, pointer, button);
             }
         });
@@ -222,11 +236,6 @@ public class PantallaNivelUno extends Pantalla {
 
         //Le movi aqui
         HUD.addActor(btnPausa);
-
-
-
-
-
     }
 
     @Override
@@ -262,7 +271,13 @@ public class PantallaNivelUno extends Pantalla {
 
     private void actualizarCamara() {
         float xCamara = camara.position.x;
-        xCamara = jugador.sprite.getX();
+        if (jugador.sprite.getX() < ANCHO/2){
+            xCamara = ANCHO/2;
+        }else if (jugador.sprite.getX() > ANCHO/2){
+            xCamara = ANCHO/2;
+        }else {
+            xCamara = jugador.sprite.getX();
+        }
         camara.position.x = xCamara;
         camara.update();
     }
