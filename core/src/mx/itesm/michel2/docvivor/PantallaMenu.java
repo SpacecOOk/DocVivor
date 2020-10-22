@@ -27,20 +27,32 @@ public class PantallaMenu extends Pantalla {
     private Texture titulo = new Texture("titulo.png");
 
     //Musica
-    private boolean musicaFondoPlay;
+    private int musicaEstado = 1;
 
     @Override
     public void show() {
         texturaMenu = new Texture("Fondos/fondo_general.png");
         crearMenu();
-        cargarMusicaFondo(); //Para la musica de fondo
+        cargarPreferencias();
+        guardarPreferencias();
+        if(musicaEstado == 0) {
+            juego.musicaFondo.play();
+            juego.musicaFondo.setVolume(0.5f);
+        }if(musicaEstado == 1){
+            juego.musicaFondo.setVolume(0);
+        }
         juego.musicaFondo.setVolume(0.5f);
     }
 
-    //La preferencia de la musica de fondo
-    private void cargarMusicaFondo() {
-        Preferences prefs = Gdx.app.getPreferences("marcador");
-        musicaFondoPlay = prefs.getBoolean("MusicaPlay",true);
+    private void cargarPreferencias() {
+        Preferences prefs = Gdx.app.getPreferences("musica");
+        musicaEstado = (int) prefs.getFloat("musica");
+    }
+
+    private void guardarPreferencias() {
+        Preferences prefs = Gdx.app.getPreferences("musica");
+        prefs.putFloat("musica", 1);
+        prefs.flush();  // OBLIGATORIO
     }
 
     private void crearMenu() {
