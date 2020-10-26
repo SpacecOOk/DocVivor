@@ -53,7 +53,7 @@ public class PantallaNivelUno extends Pantalla {
 
     @Override
     public void show() {
-        texturaFondoNivelUno = new Texture("Fondos/level1_Background.png");
+        texturaFondoNivelUno = new Texture("Level1/Level1_Background.png");
         crearHUD();
         crearPausa();
         crearPersonaje();
@@ -273,8 +273,8 @@ public class PantallaNivelUno extends Pantalla {
         float xCamara = camara.position.x;
         if (jugador.sprite.getX() < ANCHO/2){
             xCamara = ANCHO/2;
-        }else if (jugador.sprite.getX() > ANCHO/2){
-            xCamara = ANCHO/2;
+        }else if (jugador.sprite.getX() > texturaFondoNivelUno.getWidth()-ANCHO/2){
+            xCamara = texturaFondoNivelUno.getWidth() - ANCHO/2; //checar para llegar al limite del mapa
         }else {
             xCamara = jugador.sprite.getX();
         }
