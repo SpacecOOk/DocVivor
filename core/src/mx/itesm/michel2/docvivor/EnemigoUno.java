@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class EnemigoUno extends Objeto {
 
+    //Todo lo del enemigo
     //Animación
     private Animation<TextureRegion> animacion;
     private  float timerAnimacion;
