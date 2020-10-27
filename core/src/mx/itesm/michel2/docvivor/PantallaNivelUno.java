@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -32,7 +34,11 @@ public class PantallaNivelUno extends Pantalla {
 
     //Enemigos
     private Texture texturaEnemigoUno;
-    private Enemigo enemigoUno;
+    private EnemigoUno enemigo;
+    private Array<EnemigoUno> arrEnemigosIzquierda;
+    private float timerCrearEnemigo;
+    private float TIEMPO_CREA_ENEMIGO = 1;
+    private float tiempoBase = 1;
 
 
     //HUD
@@ -59,6 +65,7 @@ public class PantallaNivelUno extends Pantalla {
         crearPersonaje();
         crearEnemigos();
 
+
         Gdx.input.setInputProcessor(HUD);
     }
 
@@ -71,8 +78,8 @@ public class PantallaNivelUno extends Pantalla {
 
 
     private void crearEnemigos() {
-        texturaEnemigoUno = new Texture("Enemigos/enemigoUno.png");
-        enemigoUno = new Enemigo(texturaEnemigoUno,ANCHO-200,133);
+        texturaEnemigoUno = new Texture("Enemigos/Enemigo_1.png");
+        arrEnemigosIzquierda = new Array<>();
     }
 
     private void crearPersonaje() {
@@ -247,7 +254,7 @@ public class PantallaNivelUno extends Pantalla {
         batch.begin();
         batch.draw(texturaFondoNivelUno,0,0);
         jugador.render(batch);
-        enemigoUno.render(batch);
+        dibujarEnemigosIzquierda();
 
 
         batch.end();
@@ -265,8 +272,33 @@ public class PantallaNivelUno extends Pantalla {
 
     }
 
+    private void dibujarEnemigosIzquierda() {
+        for (EnemigoUno enemigo : arrEnemigosIzquierda) {
+            enemigo.render(batch);
+            enemigo.setEstado(EstadoEnemigo.CAMINANDO);
+            enemigo.setEstadoCaminando(EstadoEnemigoCaminando.IZQUIERDA);
+        }
+    }
+
     private void actualizar() {
         actualizarCamara();
+        actualizarEnemigosIzquierda(); //Revisar los timers
+    }
+
+    private void actualizarEnemigosIzquierda() {
+        timerCrearEnemigo += Gdx.graphics.getDeltaTime();
+        if (timerCrearEnemigo >= TIEMPO_CREA_ENEMIGO){
+            timerCrearEnemigo = 0;
+            TIEMPO_CREA_ENEMIGO = 1 + MathUtils.random()*2;
+            EnemigoUno enemigo = new EnemigoUno(texturaEnemigoUno,texturaFondoNivelUno.getWidth()-texturaEnemigoUno.getWidth(),133);
+            arrEnemigosIzquierda.add(enemigo);
+        }
+        for (int i = arrEnemigosIzquierda.size-1; i >= 0; i--) {
+            EnemigoUno enemigo = arrEnemigosIzquierda.get(i);
+            if (enemigo.sprite.getX()< jugador.sprite.getX() - ANCHO/2 -enemigo.sprite.getWidth() ){
+                arrEnemigosIzquierda.removeIndex(i);
+            }
+        }
     }
 
     private void actualizarCamara() {

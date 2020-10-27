@@ -9,7 +9,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class EnemigoUno extends Objeto {
 
-    //Todo lo del enemigo
+    //Todo lo del enemig
+
     //Animación
     private Animation<TextureRegion> animacion;
     private  float timerAnimacion;
@@ -22,18 +23,19 @@ public class EnemigoUno extends Objeto {
     private EstadoEnemigoCaminando estadoCaminando;
 
     //Movimiento lateral
-    private final int DX = 10;
+    private final int DX = 10; //Cambiar la velocidad despues
 
     public EnemigoUno(Texture textura, float x, float y) {
 
         region = new TextureRegion(textura);
-        texturasFrames = region.split(64, 64);
+        texturasFrames = region.split(100, 100);
         //Cuando esta quieto
         sprite = new Sprite(texturasFrames[0][0]);
         sprite.setPosition(x, y);
 
         //Creamos la animación
-        TextureRegion[] arrFrames = {texturasFrames[0][1], texturasFrames[0][2], texturasFrames[0][3], texturasFrames[0][4]};
+        TextureRegion[] arrFrames = {texturasFrames[0][1], texturasFrames[0][2], texturasFrames[0][3], texturasFrames[0][4],
+                texturasFrames[0][5],texturasFrames[0][6],texturasFrames[0][7]};
         animacion = new Animation<TextureRegion>(0.1f, arrFrames);
         animacion.setPlayMode(Animation.PlayMode.LOOP);
         timerAnimacion = 0;
@@ -44,13 +46,23 @@ public class EnemigoUno extends Objeto {
 
     @Override
     public void render(SpriteBatch batch) {
-        actualizarCaminando();
+        actualizar();
         float delta = Gdx.graphics.getDeltaTime();
-        timerAnimacion += delta;   //Aqui acumula el tiempo
+        timerAnimacion += delta; //Aqui acumula el tiempo
+        if(estado == EstadoEnemigo.CAMINANDO){
+            frame = animacion.getKeyFrame(timerAnimacion);
+            if (estadoCaminando== EstadoEnemigoCaminando.DERECHA && !frame.isFlipX()){
+                frame.flip(true,false);
+            } else if (estadoCaminando==EstadoEnemigoCaminando.IZQUIERDA && frame.isFlipX()) {
+                frame.flip(true, false);
+            } else {
+                frame.flip(false,false); //Normal
+            }batch.draw(frame, sprite.getX(), sprite.getY());
+        }
         super.render(batch);
     }
 
-    private void actualizarCaminando() {
+    private void actualizar() {
         if (estadoCaminando==EstadoEnemigoCaminando.DERECHA) {
             moverDerecha();
         } else if (estadoCaminando==EstadoEnemigoCaminando.IZQUIERDA){
@@ -59,6 +71,7 @@ public class EnemigoUno extends Objeto {
             //Para cuando el jugador esta quieto
         }
     }
+
 
     private void moverIzquierda() {
         sprite.setX(sprite.getX()-DX);
@@ -74,6 +87,14 @@ public class EnemigoUno extends Objeto {
 
     public EstadoEnemigo getEstado(){
         return estado;
+    }
+
+    public void setEstadoCaminando(EstadoEnemigoCaminando estado){
+        this.estadoCaminando = estado;
+    }
+
+    public EstadoEnemigoCaminando getEstadoCaminando(){
+        return estadoCaminando;
     }
 
 }

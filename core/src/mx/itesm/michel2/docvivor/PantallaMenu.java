@@ -27,7 +27,7 @@ public class PantallaMenu extends Pantalla {
     private Texture titulo = new Texture("titulo.png");
 
     //Musica
-    private int musicaEstado = 1;
+    private int musicaEstado = 1; //Checar la variable
 
     @Override
     public void show() {
