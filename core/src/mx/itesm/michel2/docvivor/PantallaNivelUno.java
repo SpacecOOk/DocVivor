@@ -122,10 +122,10 @@ public class PantallaNivelUno extends Pantalla {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 if (jugador.getEstado() == EstadoJugador.SALTANDO){
-                    jugador.setEstadoCaminando(EstadoCaminando.QUIETO); //Revisar los quietos y donde van
+                    jugador.setEstadoCaminando(EstadoCaminando.QUIETO_DERECHA); //Revisar los quietos y donde van
                 }else{
-                    jugador.setEstadoCaminando(EstadoCaminando.QUIETO);          //Cuando deja de presionar el boton
-                    jugador.setEstado(EstadoJugador.QUIETO_DERECHA);
+                    jugador.setEstadoCaminando(EstadoCaminando.QUIETO_DERECHA);          //Cuando deja de presionar el boton
+                    jugador.setEstado(EstadoJugador.QUIETO);
                 }
 
                 //jugador.setEstadoCaminando(EstadoCaminando.QUIETO);        //Cuando se deja de presionar el boton
@@ -147,7 +147,7 @@ public class PantallaNivelUno extends Pantalla {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if(jugador.getEstado() == EstadoJugador.SALTANDO) {//Cuando camina a la izquierda
+                if(jugador.getEstado() == EstadoJugador.SALTANDO) {             //Cuando camina a la izquierda
                     jugador.setEstadoCaminando(EstadoCaminando.IZQUIERDA);
                 }else{
                     jugador.setEstadoCaminando(EstadoCaminando.IZQUIERDA);
@@ -159,10 +159,10 @@ public class PantallaNivelUno extends Pantalla {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 if (jugador.getEstado() == EstadoJugador.SALTANDO){
-                    jugador.setEstadoCaminando(EstadoCaminando.QUIETO); //Revisar los quietos y donde van
+                    jugador.setEstadoCaminando(EstadoCaminando.QUIETO_IZQUIERDA); //Revisar los quietos y donde van
                 }else{
-                    jugador.setEstadoCaminando(EstadoCaminando.QUIETO);          //Cuando deja de presionar el boton
-                    jugador.setEstado(EstadoJugador.QUIETO_IZQUIERDA);
+                    jugador.setEstadoCaminando(EstadoCaminando.QUIETO_IZQUIERDA);          //Cuando deja de presionar el boton
+                    jugador.setEstado(EstadoJugador.QUIETO);
                 }
 
                 //jugador.setEstadoCaminando(EstadoCaminando.QUIETO);          //Cuando deja de presionar el boton

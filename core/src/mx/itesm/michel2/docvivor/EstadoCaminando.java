@@ -4,5 +4,6 @@ public enum EstadoCaminando
 {
     DERECHA,
     IZQUIERDA,
-    QUIETO
+    QUIETO_DERECHA,
+    QUIETO_IZQUIERDA
 }

@@ -49,10 +49,10 @@ public class Jugador extends Objeto {
 
         //Salto
         yBase = y;
-        estado= EstadoJugador.QUIETO_DERECHA;
+        estado= EstadoJugador.QUIETO;
 
         //Estado inicial del jugador
-        estadoCaminando = EstadoCaminando.QUIETO;
+        estadoCaminando = EstadoCaminando.QUIETO_DERECHA;
     }
 
 
@@ -85,39 +85,47 @@ public class Jugador extends Objeto {
             } else {
                 frame.flip(false,false); //Normal
             }batch.draw(frame, sprite.getX(), sprite.getY());
-        } else if(estado==EstadoJugador.QUIETO_DERECHA){
-            frame = texturasFrames[0][1];
-            frame.flip(true, false);
-            batch.draw(frame, sprite.getX(), sprite.getY());
-            frame.flip(true, false);
-        }else if(estado==EstadoJugador.QUIETO_IZQUIERDA){
-            frame = texturasFrames[0][1];
-            batch.draw(frame, sprite.getX(), sprite.getY());
-        }else if (estado==EstadoJugador.SALTANDO){
-            //Gdx.app.log("SALTA", "tAire: " + tAire );
-            tAire += 12*delta;
-            float y = yBase + V0*tAire - 0.5f*G*tAire*tAire;
+        } else if(estado==EstadoJugador.QUIETO) {
+            if(estadoCaminando==EstadoCaminando.QUIETO_DERECHA){
+                frame = texturasFrames[0][1];
+                frame.flip(true, false);
+                batch.draw(frame, sprite.getX(), sprite.getY());
+                frame.flip(true, false);
+            }else if(estadoCaminando==EstadoCaminando.QUIETO_IZQUIERDA){
+                frame = texturasFrames[0][1];
+                batch.draw(frame, sprite.getX(), sprite.getY());
+        }}else if (estado==EstadoJugador.SALTANDO) {
+            tAire += 12 * delta;
+            float y = yBase + V0 * tAire - 0.5f * G * tAire * tAire;
             sprite.setY(y);
-            frame = texturasFrames[0][1];
-            frame.flip(true, false);
-            batch.draw(frame, sprite.getX(), sprite.getY());
-            frame.flip(true, false);
+                if(estadoCaminando==EstadoCaminando.QUIETO_DERECHA|| estadoCaminando==EstadoCaminando.DERECHA){
+                    frame = texturasFrames[0][1];
+                    frame.flip(true, false);
+                    batch.draw(frame, sprite.getX(), sprite.getY());
+                    frame.flip(true, false);
+                }else if(estadoCaminando==EstadoCaminando.QUIETO_IZQUIERDA||estadoCaminando==EstadoCaminando.IZQUIERDA) {
+                    frame = texturasFrames[0][1];
+                    batch.draw(frame, sprite.getX(), sprite.getY());
+                }
+            //Gdx.app.log("SALTA", "tAire: " + tAire );
             if (tAire>=tVuelo) {
                 sprite.setY(yBase);
                 estado = EstadoJugador.CAMINANDO;
             }
-        }
-    }
+
+        }}
+
 
     private void actualizarCaminando() {
             if (estadoCaminando==EstadoCaminando.DERECHA) {
                 moverDerecha();
             } else if (estadoCaminando==EstadoCaminando.IZQUIERDA){
                 moverIzquierda();
-            } else if(estadoCaminando==EstadoCaminando.QUIETO){
-                //Para cuando el jugador esta quieto
+            } else if(estadoCaminando==EstadoCaminando.QUIETO_DERECHA){
+                //Para cuando el jugador esta quieto viendo a la derecha
+            }else if(estadoCaminando==EstadoCaminando.QUIETO_IZQUIERDA){
+                //Para cuando el jugador esta quieto viendo a la izquierda
             }
-
     }
 
     public void setVidas(int vidasRestantes){
