@@ -103,17 +103,29 @@ public class Jugador extends Objeto {
                     frame.flip(true, false);
                     batch.draw(frame, sprite.getX(), sprite.getY());
                     frame.flip(true, false);
+                    if (tAire>=tVuelo) {
+                        sprite.setY(yBase);
+                        if (estadoCaminando==EstadoCaminando.QUIETO_DERECHA){
+                            estado = EstadoJugador.QUIETO;
+                        }else{
+                            estado = EstadoJugador.CAMINANDO;
+                        }
+                    }
                 }else if(estadoCaminando==EstadoCaminando.QUIETO_IZQUIERDA||estadoCaminando==EstadoCaminando.IZQUIERDA) {
                     frame = texturasFrames[0][1];
                     batch.draw(frame, sprite.getX(), sprite.getY());
+                    if (tAire>=tVuelo) {
+                        sprite.setY(yBase);
+                        if (estadoCaminando==EstadoCaminando.QUIETO_IZQUIERDA){
+                            estado = EstadoJugador.QUIETO;
+                        }else{
+                            estado = EstadoJugador.CAMINANDO;
+                        }
+                    }
                 }
             //Gdx.app.log("SALTA", "tAire: " + tAire );
-            if (tAire>=tVuelo) {
-                sprite.setY(yBase);
-                estado = EstadoJugador.CAMINANDO;
-            }
-
-        }}
+        }
+    }
 
 
     private void actualizarCaminando() {
