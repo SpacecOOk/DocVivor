@@ -93,12 +93,15 @@ public class Jugador extends Objeto {
         }else if(estado==EstadoJugador.QUIETO_IZQUIERDA){
             frame = texturasFrames[0][1];
             batch.draw(frame, sprite.getX(), sprite.getY());
-        }else {
+        }else if (estado==EstadoJugador.SALTANDO){
             //Gdx.app.log("SALTA", "tAire: " + tAire );
             tAire += 12*delta;
             float y = yBase + V0*tAire - 0.5f*G*tAire*tAire;
             sprite.setY(y);
-            super.render(batch);
+            frame = texturasFrames[0][1];
+            frame.flip(true, false);
+            batch.draw(frame, sprite.getX(), sprite.getY());
+            frame.flip(true, false);
             if (tAire>=tVuelo) {
                 sprite.setY(yBase);
                 estado = EstadoJugador.CAMINANDO;
