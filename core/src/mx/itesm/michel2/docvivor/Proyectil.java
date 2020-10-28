@@ -12,9 +12,14 @@ public class Proyectil extends Objeto {
         super(textura, x, y);
     }
 
-    public void mover(){
+    public void moverDerecha(){
         float lapso = Gdx.graphics.getDeltaTime();
         float distancia = VELOCIDAD_X * lapso;
+        sprite.setX(sprite.getX() + distancia);
+    }
+    public void moverIzquierda(){
+        float lapso = Gdx.graphics.getDeltaTime();
+        float distancia = -VELOCIDAD_X * lapso;
         sprite.setX(sprite.getX() + distancia);
     }
 }

@@ -59,7 +59,6 @@ public class EnemigoUno extends Objeto {
                 frame.flip(false,false); //Normal
             }batch.draw(frame, sprite.getX(), sprite.getY());
         }
-
     }
 
     private void actualizar() {

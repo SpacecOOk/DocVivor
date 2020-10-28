@@ -29,8 +29,9 @@ public class PantallaNivelUno extends Pantalla {
     private Jugador jugador;
 
     //Proyectil
-    private Texture texturaProyectil;
+    private Texture texturaProyectilD;
     private Proyectil proyectil;
+    private Texture texturaProyectilI;
 
     //Vidas
     private Texture texturaVidas = new Texture("vidas.png");
@@ -75,7 +76,8 @@ public class PantallaNivelUno extends Pantalla {
     }
 
     private void crearProyectil() {
-        texturaProyectil = new Texture("Balas/Bala_Jeringa_D.png");
+        texturaProyectilD = new Texture("Balas/Bala_Jeringa_D.png");
+        texturaProyectilI = new Texture("Balas/Bala_Jeringa_I.png");
     }
 
     private void crearPausa() {
@@ -190,7 +192,8 @@ public class PantallaNivelUno extends Pantalla {
                 super.clicked(event, x, y);
                 //Cuando le pica para atacar
                 if (proyectil==null){ //si no existe la creo, sino no la crea
-                    proyectil = new Proyectil(texturaProyectil,jugador.sprite.getX()+jugador.sprite.getWidth()/2,
+
+                    proyectil = new Proyectil(texturaProyectilD,jugador.sprite.getX()+jugador.sprite.getWidth()/2,
                             jugador.sprite.getY()+jugador.sprite.getHeight()*0.3f);
                 }
             }
@@ -300,11 +303,20 @@ public class PantallaNivelUno extends Pantalla {
 
     private void actualizarProyectil() {
         if(proyectil != null){
-            proyectil.mover();
-            if(proyectil.sprite.getX() > texturaFondoNivelUno.getWidth()){
-                proyectil = null;
-            }else if(proyectil.sprite.getX() < 0){
-                proyectil = null;
+            if(jugador.getEstadoCaminando()== EstadoCaminando.DERECHA|| jugador.getEstadoCaminando()==EstadoCaminando.QUIETO_DERECHA){
+                    proyectil.moverDerecha();
+                    if(proyectil.sprite.getX() > jugador.sprite.getX()+ANCHO/2){
+                        proyectil = null;
+                }else if(proyectil.sprite.getX() < jugador.sprite.getX()-ANCHO/2){
+                    proyectil = null;
+                }
+            }else if(jugador.getEstadoCaminando()== EstadoCaminando.IZQUIERDA|| jugador.getEstadoCaminando()==EstadoCaminando.QUIETO_IZQUIERDA) {
+                proyectil.moverIzquierda();
+                if (proyectil.sprite.getX() > jugador.sprite.getX() + ANCHO / 2) {
+                    proyectil = null;
+                } else if (proyectil.sprite.getX() < jugador.sprite.getX() - ANCHO / 2) {
+                    proyectil = null;
+                }
             }
         }
     }
