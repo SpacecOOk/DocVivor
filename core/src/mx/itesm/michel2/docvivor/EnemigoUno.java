@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class EnemigoUno extends Objeto {
 
-    //Todo lo del enemig
+    //Todas las cosas del enemigo
 
     //Animación
     private Animation<TextureRegion> animacion;
@@ -23,7 +23,7 @@ public class EnemigoUno extends Objeto {
     private EstadoEnemigoCaminando estadoCaminando;
 
     //Movimiento lateral
-    private final int DX = 10; //Cambiar la velocidad despues
+    private final int DX = 7; //Cambiar la velocidad despues
 
     public EnemigoUno(Texture textura, float x, float y) {
 
@@ -34,8 +34,8 @@ public class EnemigoUno extends Objeto {
         sprite.setPosition(x, y);
 
         //Creamos la animación
-        TextureRegion[] arrFrames = {texturasFrames[0][1], texturasFrames[0][2], texturasFrames[0][3], texturasFrames[0][4],
-                texturasFrames[0][5],texturasFrames[0][6],texturasFrames[0][7]};
+        TextureRegion[] arrFrames = {texturasFrames[0][0],texturasFrames[0][2], texturasFrames[0][3], texturasFrames[0][4],texturasFrames[0][5],texturasFrames[0][6],
+                texturasFrames[0][7]};
         animacion = new Animation<TextureRegion>(0.1f, arrFrames);
         animacion.setPlayMode(Animation.PlayMode.LOOP);
         timerAnimacion = 0;
@@ -59,7 +59,7 @@ public class EnemigoUno extends Objeto {
                 frame.flip(false,false); //Normal
             }batch.draw(frame, sprite.getX(), sprite.getY());
         }
-        super.render(batch);
+
     }
 
     private void actualizar() {
@@ -68,7 +68,7 @@ public class EnemigoUno extends Objeto {
         } else if (estadoCaminando==EstadoEnemigoCaminando.IZQUIERDA){
             moverIzquierda();
         } else if(estadoCaminando==EstadoEnemigoCaminando.QUIETO){
-            //Para cuando el jugador esta quieto
+            //Para cuando el enemigo esta quieto
         }
     }
 
