@@ -51,7 +51,7 @@ public class PantallaMenu extends Pantalla {
 
     private void guardarPreferencias() {
         Preferences prefs = Gdx.app.getPreferences("musica");
-        prefs.putFloat("musica", 1);
+        prefs.putFloat("musica", 1); // Le pongo en uno para que no jale
         prefs.flush();  // OBLIGATORIO
     }
 

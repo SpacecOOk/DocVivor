@@ -290,7 +290,7 @@ public class PantallaNivelUno extends Pantalla {
         if (timerCrearEnemigo >= TIEMPO_CREA_ENEMIGO){
             timerCrearEnemigo = 0;
             TIEMPO_CREA_ENEMIGO = 1 + MathUtils.random()*2;
-            EnemigoUno enemigo = new EnemigoUno(texturaEnemigoUno,texturaFondoNivelUno.getWidth()-texturaEnemigoUno.getWidth(),133);
+            EnemigoUno enemigo = new EnemigoUno(texturaEnemigoUno,texturaFondoNivelUno.getWidth(),133);
             arrEnemigosIzquierda.add(enemigo);
         }
         for (int i = arrEnemigosIzquierda.size-1; i >= 0; i--) {
