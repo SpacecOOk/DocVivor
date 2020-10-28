@@ -28,6 +28,10 @@ public class PantallaNivelUno extends Pantalla {
     private Texture texturaPersonaje;
     private Jugador jugador;
 
+    //Proyectil
+    private Texture texturaProyectil;
+    private Proyectil proyectil;
+
     //Vidas
     private Texture texturaVidas = new Texture("vidas.png");
     private Texture[] arrVidas;
@@ -64,9 +68,14 @@ public class PantallaNivelUno extends Pantalla {
         crearPausa();
         crearPersonaje();
         crearEnemigos();
+        crearProyectil();
 
 
         Gdx.input.setInputProcessor(HUD);
+    }
+
+    private void crearProyectil() {
+        texturaProyectil = new Texture("Balas/Bala_Jeringa_D.png");
     }
 
     private void crearPausa() {
@@ -127,9 +136,6 @@ public class PantallaNivelUno extends Pantalla {
                     jugador.setEstadoCaminando(EstadoCaminando.QUIETO_DERECHA);          //Cuando deja de presionar el boton
                     jugador.setEstado(EstadoJugador.QUIETO);
                 }
-
-                //jugador.setEstadoCaminando(EstadoCaminando.QUIETO);        //Cuando se deja de presionar el boton
-                //jugador.setEstado(EstadoJugador.QUIETO_DERECHA);
                 super.touchUp(event, x, y, pointer, button);
             }
         });
@@ -165,8 +171,6 @@ public class PantallaNivelUno extends Pantalla {
                     jugador.setEstado(EstadoJugador.QUIETO);
                 }
 
-                //jugador.setEstadoCaminando(EstadoCaminando.QUIETO);          //Cuando deja de presionar el boton
-                //jugador.setEstado(EstadoJugador.QUIETO_IZQUIERDA);
                 super.touchUp(event, x, y, pointer, button);
             }
         });
@@ -185,6 +189,10 @@ public class PantallaNivelUno extends Pantalla {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 //Cuando le pica para atacar
+                if (proyectil==null){ //si no existe la creo, sino no la crea
+                    proyectil = new Proyectil(texturaProyectil,jugador.sprite.getX()+jugador.sprite.getWidth()/2,
+                            jugador.sprite.getY()+jugador.sprite.getHeight()*0.3f);
+                }
             }
         });
 
@@ -256,6 +264,10 @@ public class PantallaNivelUno extends Pantalla {
         jugador.render(batch);
         dibujarEnemigosIzquierda();
 
+        if(proyectil != null){
+            proyectil.render(batch);
+        }
+
 
         batch.end();
 
@@ -283,6 +295,18 @@ public class PantallaNivelUno extends Pantalla {
     private void actualizar() {
         actualizarCamara();
         actualizarEnemigosIzquierda(); //Revisar los timers
+        actualizarProyectil();
+    }
+
+    private void actualizarProyectil() {
+        if(proyectil != null){
+            proyectil.mover();
+            if(proyectil.sprite.getX() > texturaFondoNivelUno.getWidth()){
+                proyectil = null;
+            }else if(proyectil.sprite.getX() < 0){
+                proyectil = null;
+            }
+        }
     }
 
     private void actualizarEnemigosIzquierda() {
