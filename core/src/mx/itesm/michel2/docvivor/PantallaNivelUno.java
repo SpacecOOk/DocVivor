@@ -142,7 +142,7 @@ public class PantallaNivelUno extends Pantalla {
     }
 
     private void crearPersonaje() {
-        texturaPersonaje = new Texture("Doctor_moviendose_I.png");
+        texturaPersonaje = new Texture("MovimientosMelee/Doctor_M_I.png");
         jugador = new Jugador(texturaPersonaje,2000,133);
     }
 

@@ -42,7 +42,7 @@ public class Jugador extends Objeto {
     public Jugador(Texture textura, float x, float y){
 
         region = new TextureRegion(textura);
-        texturasFrames = region.split(64,64);
+        texturasFrames = region.split(160,128);
         //Cuando esta quieto
         sprite = new Sprite(texturasFrames[0][1]);
         sprite.setPosition(x,y);
