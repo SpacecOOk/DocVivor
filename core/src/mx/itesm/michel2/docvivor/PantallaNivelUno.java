@@ -74,6 +74,12 @@ public class PantallaNivelUno extends Pantalla {
     private OrthographicCamera camaraDerrotaHUD;
     private Viewport vistaDerrotaHUD;
 
+    //Victoria
+    private EscenaVictoria escenaVictoria;
+    //private Stage escenaVictoria;
+    private OrthographicCamera camaraVictoriaHUD;
+    private Viewport vistaVictoriaHUD;
+
     public PantallaNivelUno(Juego juego) {
         this.juego = juego;
     }
@@ -84,11 +90,19 @@ public class PantallaNivelUno extends Pantalla {
         crearHUD();
         crearPausa();
         crearDerrota();
+        crearVictoria();
         crearPersonaje();
         crearEnemigos();
         crearProyectil();
 
         Gdx.input.setInputProcessor(HUD);
+    }
+
+    private void crearVictoria() {
+        camaraVictoriaHUD = new OrthographicCamera(ANCHO,ALTO);
+        camaraVictoriaHUD.position.set(ANCHO/2,ALTO/2,0);
+        camaraVictoriaHUD.update();
+        vistaVictoriaHUD = new StretchViewport(ANCHO,ALTO,camaraVictoriaHUD);
     }
 
     private void crearDerrota() {
@@ -329,6 +343,12 @@ public class PantallaNivelUno extends Pantalla {
             escenaDerrota.draw();
         }
 
+        //************Victoria**********
+        batch.setProjectionMatrix(camaraVictoriaHUD.combined);
+        if(estadoJuego == EstadoJuego.VICTORIA){
+            escenaVictoria.draw();
+        }
+
 
     }
 
@@ -374,32 +394,47 @@ public class PantallaNivelUno extends Pantalla {
     }
 
     private void verificarColisionesProyectilIzquierda() {
-        if(proyectil != null){
-            for (int j = arrEnemigosIzquierda.size-1; j >= 0 ; j--) {
-                EnemigoUno enemigo = arrEnemigosIzquierda.get(j);
-                if (proyectil.sprite.getBoundingRectangle().overlaps(enemigo.sprite.getBoundingRectangle())) {
-                    //Si hay colisión
-                    arrEnemigosIzquierda.removeIndex(j);
-                    proyectil = null;
-                    kills +=1;
-                    break;
+        if(estadoJuego == EstadoJuego.JUGANDO && kills < 3){
+            if(proyectil != null){
+                for (int j = arrEnemigosIzquierda.size-1; j >= 0 ; j--) {
+                    EnemigoUno enemigo = arrEnemigosIzquierda.get(j);
+                    if (proyectil.sprite.getBoundingRectangle().overlaps(enemigo.sprite.getBoundingRectangle())) {
+                        //Si hay colisión
+                        arrEnemigosIzquierda.removeIndex(j);
+                        proyectil = null;
+                        kills +=1;
+                        break;
+                    }
                 }
             }
+        }else if(kills >= 3){
+            jugador.setEstado(EstadoJugador.QUIETO);
+            estadoJuego = EstadoJuego.VICTORIA;
+            escenaVictoria = new EscenaVictoria(vistaVictoriaHUD,batch);
+            Gdx.input.setInputProcessor(escenaVictoria);
+
         }
     }
 
     private void verificarColisionesProyectilDerecha() {
-        if(proyectil != null){
-            for (int j = arrEnemigosDerecha.size-1; j >= 0 ; j--) {
-                EnemigoUno enemigo = arrEnemigosDerecha.get(j);
-                if (proyectil.sprite.getBoundingRectangle().overlaps(enemigo.sprite.getBoundingRectangle())) {
-                    //Si hay colisión
-                    arrEnemigosDerecha.removeIndex(j);
-                    proyectil = null;
-                    kills +=1;
-                    break;
+        if(estadoJuego == EstadoJuego.JUGANDO && kills < 3){
+            if(proyectil != null){
+                for (int j = arrEnemigosDerecha.size-1; j >= 0 ; j--) {
+                    EnemigoUno enemigo = arrEnemigosDerecha.get(j);
+                    if (proyectil.sprite.getBoundingRectangle().overlaps(enemigo.sprite.getBoundingRectangle())) {
+                        //Si hay colisión
+                        arrEnemigosDerecha.removeIndex(j);
+                        proyectil = null;
+                        kills +=1;
+                        break;
+                    }
                 }
             }
+        }else if(kills >= 3){
+            jugador.setEstado(EstadoJugador.QUIETO);
+            estadoJuego = EstadoJuego.VICTORIA;
+            escenaVictoria = new EscenaVictoria(vistaVictoriaHUD,batch);
+            Gdx.input.setInputProcessor(escenaVictoria);
         }
     }
 
@@ -624,6 +659,51 @@ public class PantallaNivelUno extends Pantalla {
                 }
             });
             this.addActor(btnRetry);
+
+            Texture texturaBtnNiveles = new Texture("Botones/btn_exit.png");
+            TextureRegionDrawable botonNiveles = new TextureRegionDrawable(new TextureRegion(texturaBtnNiveles));
+            //Aqui para el boton inverso (click)
+            ImageButton btnNiveles = new ImageButton(botonNiveles);
+            btnNiveles.setPosition(ANCHO*0.65f, ALTO*0.6f, Align.center);
+            btnNiveles.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    super.clicked(event, x, y);
+                    //Para regresar al los niveles
+                    //estadoJuego = EstadoJuego.JUGANDO;
+                    juego.setScreen(new PantallaNiveles(juego));
+                }
+            });
+            this.addActor(btnNiveles);
+        }
+    }
+
+    private class EscenaVictoria extends Stage {
+        public EscenaVictoria(Viewport vista, SpriteBatch batch) {
+            super(vista, batch);
+
+            Texture texturaFondoVictoria = new Texture("Game_Over.jpg");
+            Image imgFondoVictoria = new Image(texturaFondoVictoria);
+            imgFondoVictoria.setPosition(ANCHO/2 - texturaFondoVictoria.getWidth()/2,
+                    ALTO/2 - texturaFondoVictoria.getHeight()/2);
+            this.addActor(imgFondoVictoria);
+
+            Texture texturaBtnSeguir = new Texture("Botones/btn_jugar.png");
+            TextureRegionDrawable botonSeguir = new TextureRegionDrawable(new TextureRegion(texturaBtnSeguir));
+            //Aqui para el boton inverso (click)
+            ImageButton btnSeguir = new ImageButton(botonSeguir);
+            btnSeguir.setPosition(ANCHO*0.4f, ALTO*0.6f, Align.center);
+            btnSeguir.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    super.clicked(event, x, y);
+                    //Para reintentar el nivel
+                    juego.setScreen(new PantallaNivelDos(juego));
+                    //estadoJuego = EstadoJuego.JUGANDO;
+                    //Gdx.input.setInputProcessor(HUD);
+                }
+            });
+            this.addActor(btnSeguir);
 
             Texture texturaBtnNiveles = new Texture("Botones/btn_exit.png");
             TextureRegionDrawable botonNiveles = new TextureRegionDrawable(new TextureRegion(texturaBtnNiveles));
