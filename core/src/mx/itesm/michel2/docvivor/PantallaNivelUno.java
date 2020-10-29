@@ -39,6 +39,11 @@ public class PantallaNivelUno extends Pantalla {
     private Texture texturaProyectilI;
     private int orientacion;
 
+    //Items
+    private Texture texturaTraje = new Texture("Items/Item_SuperTraje.png");
+    private Item traje;
+    private Texture texturaTrajePuesto = new Texture("MovimientosMeleeTraje/Traje_M_I.png");
+
     //Vidas
     private Image imagenVidas;
     private Sprite spriteVidas;
@@ -54,7 +59,6 @@ public class PantallaNivelUno extends Pantalla {
     private float timerCrearEnemigo;
     private float TIEMPO_CREA_ENEMIGO = 1;
     private float tiempoBase = 1;
-
 
     //HUD
     private Stage HUD;
@@ -94,8 +98,14 @@ public class PantallaNivelUno extends Pantalla {
         crearPersonaje();
         crearEnemigos();
         crearProyectil();
+        crearItem();
 
         Gdx.input.setInputProcessor(HUD);
+    }
+
+    private void crearItem() {
+        //int posicion = MathUtils.random(0,texturaFondoNivelUno.getWidth()-texturaTraje.getWidth());
+        traje = new Item(texturaTraje,1950,133,48,49);
     }
 
     private void crearVictoria() {
@@ -319,11 +329,11 @@ public class PantallaNivelUno extends Pantalla {
         jugador.render(batch);
         dibujarEnemigosDerecha();
         dibujarEnemigosIzquierda();
+        traje.render(batch);
 
         if(proyectil != null){
             proyectil.render(batch);
         }
-
 
         batch.end();
 
@@ -391,6 +401,17 @@ public class PantallaNivelUno extends Pantalla {
         verificarColisionesProyectilDerecha();
         verificarColisionesProyectilIzquierda();
 
+        //************Items***************
+        verificarColisionTraje();
+
+    }
+
+    private void verificarColisionTraje() {
+        if (traje.sprite.getBoundingRectangle().overlaps(jugador.sprite.getBoundingRectangle())){
+            int x = (int)jugador.sprite.getX();
+            jugador = new Jugador(texturaTrajePuesto,x,133);
+            jugador.setVidas(4);
+        }
     }
 
     private void verificarColisionesProyectilIzquierda() {
