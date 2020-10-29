@@ -18,6 +18,12 @@ public class Jugador extends Objeto {
 
     //VIDAS
     private int vidas;
+    private Animation<TextureRegion> animacionVidas;
+    private  float timerAnimacionVidas;
+    private TextureRegion frameVidas;
+    private TextureRegion[][] texturasFramesVidas;
+    private TextureRegion regionVidas ;
+    private Texture texturaVida = new Texture("vidas.png");
 
     //Caminar
     private final float DX =10;
@@ -53,6 +59,9 @@ public class Jugador extends Objeto {
 
         //Estado inicial del jugador
         estadoCaminando = EstadoCaminando.QUIETO_DERECHA;
+
+        //Vidas
+        vidas = 3;
     }
 
 

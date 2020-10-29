@@ -3,6 +3,8 @@ package mx.itesm.michel2.docvivor;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -34,12 +36,16 @@ public class PantallaNivelUno extends Pantalla {
     private Texture texturaProyectilI;
 
     //Vidas
-    private Texture texturaVidas = new Texture("vidas.png");
-    private Texture[] arrVidas;
+    private Image imagenVidas;
+    private Sprite spriteVidas;
+    private TextureRegion[][] texturasFramesVidas;
+    private TextureRegion regionVidas ;
+    private Texture texturaVida = new Texture("vidas.png");
 
     //Enemigos
     private Texture texturaEnemigoUno;
     private EnemigoUno enemigo;
+    private Array<EnemigoUno> arrEnemigosDerecha;
     private Array<EnemigoUno> arrEnemigosIzquierda;
     private float timerCrearEnemigo;
     private float TIEMPO_CREA_ENEMIGO = 1;
@@ -71,7 +77,6 @@ public class PantallaNivelUno extends Pantalla {
         crearEnemigos();
         crearProyectil();
 
-
         Gdx.input.setInputProcessor(HUD);
     }
 
@@ -90,12 +95,13 @@ public class PantallaNivelUno extends Pantalla {
 
     private void crearEnemigos() {
         texturaEnemigoUno = new Texture("Enemigos/Enemigo_1.png");
+        arrEnemigosDerecha = new Array<>();
         arrEnemigosIzquierda = new Array<>();
     }
 
     private void crearPersonaje() {
         texturaPersonaje = new Texture("Doctor_moviendose_I.png");
-        jugador = new Jugador(texturaPersonaje,100,133);
+        jugador = new Jugador(texturaPersonaje,2000,133);
     }
 
     private void crearHUD() {
@@ -192,9 +198,13 @@ public class PantallaNivelUno extends Pantalla {
                 super.clicked(event, x, y);
                 //Cuando le pica para atacar
                 if (proyectil==null){ //si no existe la creo, sino no la crea
-
-                    proyectil = new Proyectil(texturaProyectilD,jugador.sprite.getX()+jugador.sprite.getWidth()/2,
-                            jugador.sprite.getY()+jugador.sprite.getHeight()*0.3f);
+                    if(jugador.getEstadoCaminando()== EstadoCaminando.DERECHA|| jugador.getEstadoCaminando()==EstadoCaminando.QUIETO_DERECHA){
+                        proyectil = new Proyectil(texturaProyectilD,jugador.sprite.getX()+jugador.sprite.getWidth()/2,
+                                jugador.sprite.getY()+jugador.sprite.getHeight()*0.3f);
+                    }else if(jugador.getEstadoCaminando()== EstadoCaminando.IZQUIERDA|| jugador.getEstadoCaminando()==EstadoCaminando.QUIETO_IZQUIERDA) {
+                        proyectil = new Proyectil(texturaProyectilI,jugador.sprite.getX()+jugador.sprite.getWidth()/2,
+                                jugador.sprite.getY()+jugador.sprite.getHeight()*0.3f);
+                    }
                 }
             }
         });
@@ -254,6 +264,14 @@ public class PantallaNivelUno extends Pantalla {
 
         //Le movi aqui
         HUD.addActor(btnPausa);
+
+        regionVidas = new TextureRegion(texturaVida);
+        texturasFramesVidas = regionVidas.split(34,34);
+        spriteVidas = new Sprite(texturasFramesVidas[0][1]);
+        imagenVidas = new Image(spriteVidas);
+        imagenVidas.setPosition(50,650);
+
+        HUD.addActor(imagenVidas);
     }
 
     @Override
@@ -265,6 +283,7 @@ public class PantallaNivelUno extends Pantalla {
         batch.begin();
         batch.draw(texturaFondoNivelUno,0,0);
         jugador.render(batch);
+        dibujarEnemigosDerecha();
         dibujarEnemigosIzquierda();
 
         if(proyectil != null){
@@ -290,27 +309,64 @@ public class PantallaNivelUno extends Pantalla {
     private void dibujarEnemigosIzquierda() {
         for (EnemigoUno enemigo : arrEnemigosIzquierda) {
             enemigo.render(batch);
-            enemigo.setEstado(EstadoEnemigo.CAMINANDO);
-            enemigo.setEstadoCaminando(EstadoEnemigoCaminando.IZQUIERDA);
+            if(estadoJuego == EstadoJuego.JUGANDO){
+                enemigo.setEstado(EstadoEnemigo.CAMINANDO);
+                enemigo.setEstadoCaminando(EstadoEnemigoCaminando.DERECHA);
+            }else{
+                enemigo.setEstado(EstadoEnemigo.QUIETO);
+                enemigo.setEstadoCaminando(EstadoEnemigoCaminando.QUIETO);
+            }
+        }
+    }
+
+    private void dibujarEnemigosDerecha() {
+        for (EnemigoUno enemigo : arrEnemigosDerecha) {
+            enemigo.render(batch);
+            if(estadoJuego == EstadoJuego.JUGANDO){
+                enemigo.setEstado(EstadoEnemigo.CAMINANDO);
+                enemigo.setEstadoCaminando(EstadoEnemigoCaminando.IZQUIERDA);
+            }else{
+                enemigo.setEstado(EstadoEnemigo.QUIETO);
+                enemigo.setEstadoCaminando(EstadoEnemigoCaminando.QUIETO);
+            }
         }
     }
 
     private void actualizar() {
         actualizarCamara();
-        actualizarEnemigosIzquierda(); //Revisar los timers
+        actualizarEnemigosDerecha(); //Revisar los timers
+        actualizarEnemigosIzquierda();
         actualizarProyectil();
+    }
+
+    private void actualizarEnemigosIzquierda() {
+        timerCrearEnemigo += Gdx.graphics.getDeltaTime();
+        if(estadoJuego == EstadoJuego.JUGANDO){
+            if (timerCrearEnemigo >= TIEMPO_CREA_ENEMIGO){
+                timerCrearEnemigo = 0;
+                TIEMPO_CREA_ENEMIGO = 1 + MathUtils.random()*2;
+                EnemigoUno enemigo = new EnemigoUno(texturaEnemigoUno,0,133);
+                arrEnemigosIzquierda.add(enemigo);
+            }
+            for (int i = arrEnemigosIzquierda.size-1; i >= 0; i--) {
+                EnemigoUno enemigo = arrEnemigosIzquierda.get(i);
+                if (enemigo.sprite.getX()< jugador.sprite.getX() - ANCHO/2 -enemigo.sprite.getWidth() ){
+                    arrEnemigosIzquierda.removeIndex(i);
+                }
+            }
+        }
     }
 
     private void actualizarProyectil() {
         if(proyectil != null){
-            if(jugador.getEstadoCaminando()== EstadoCaminando.DERECHA|| jugador.getEstadoCaminando()==EstadoCaminando.QUIETO_DERECHA){
+            if(proyectil.sprite.getTexture().equals("Balas/Bala_Jeringa_D")){
                     proyectil.moverDerecha();
                     if(proyectil.sprite.getX() > jugador.sprite.getX()+ANCHO/2){
                         proyectil = null;
                 }else if(proyectil.sprite.getX() < jugador.sprite.getX()-ANCHO/2){
                     proyectil = null;
                 }
-            }else if(jugador.getEstadoCaminando()== EstadoCaminando.IZQUIERDA|| jugador.getEstadoCaminando()==EstadoCaminando.QUIETO_IZQUIERDA) {
+            }else if(proyectil.sprite.getTexture().equals("Balas/Bala_Jeringa_I")) {
                 proyectil.moverIzquierda();
                 if (proyectil.sprite.getX() > jugador.sprite.getX() + ANCHO / 2) {
                     proyectil = null;
@@ -321,18 +377,20 @@ public class PantallaNivelUno extends Pantalla {
         }
     }
 
-    private void actualizarEnemigosIzquierda() {
+    private void actualizarEnemigosDerecha() {
         timerCrearEnemigo += Gdx.graphics.getDeltaTime();
-        if (timerCrearEnemigo >= TIEMPO_CREA_ENEMIGO){
-            timerCrearEnemigo = 0;
-            TIEMPO_CREA_ENEMIGO = 1 + MathUtils.random()*2;
-            EnemigoUno enemigo = new EnemigoUno(texturaEnemigoUno,texturaFondoNivelUno.getWidth(),133);
-            arrEnemigosIzquierda.add(enemigo);
-        }
-        for (int i = arrEnemigosIzquierda.size-1; i >= 0; i--) {
-            EnemigoUno enemigo = arrEnemigosIzquierda.get(i);
-            if (enemigo.sprite.getX()< jugador.sprite.getX() - ANCHO/2 -enemigo.sprite.getWidth() ){
-                arrEnemigosIzquierda.removeIndex(i);
+        if(estadoJuego == EstadoJuego.JUGANDO){
+            if (timerCrearEnemigo >= TIEMPO_CREA_ENEMIGO){
+                timerCrearEnemigo = 0;
+                TIEMPO_CREA_ENEMIGO = 1 + MathUtils.random()*2;
+                EnemigoUno enemigo = new EnemigoUno(texturaEnemigoUno,texturaFondoNivelUno.getWidth(),133);
+                arrEnemigosDerecha.add(enemigo);
+            }
+            for (int i = arrEnemigosDerecha.size-1; i >= 0; i--) {
+                EnemigoUno enemigo = arrEnemigosDerecha.get(i);
+                if (enemigo.sprite.getX()< jugador.sprite.getX() - ANCHO/2 -enemigo.sprite.getWidth() ){
+                    arrEnemigosDerecha.removeIndex(i);
+                }
             }
         }
     }
@@ -369,7 +427,7 @@ public class PantallaNivelUno extends Pantalla {
     private enum EstadoJuego {
         JUGANDO,
         PAUSA,
-        MUERTO,
+        DERROTA,
         VICTORIA
     }
 

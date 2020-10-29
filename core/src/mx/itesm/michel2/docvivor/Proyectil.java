@@ -22,4 +22,5 @@ public class Proyectil extends Objeto {
         float distancia = -VELOCIDAD_X * lapso;
         sprite.setX(sprite.getX() + distancia);
     }
+
 }
