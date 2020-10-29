@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+
 //Pantalla Nivel 1
 public class PantallaNivelUno extends Pantalla {
     private final Juego juego;
@@ -659,7 +660,7 @@ public class PantallaNivelUno extends Pantalla {
         public EscenaDerrota(Viewport vista, SpriteBatch batch) {
             super(vista, batch);
 
-            Texture texturaFondoPausa = new Texture("Fondos/Game_Over.png");
+            Texture texturaFondoPausa = new Texture("Fondos/GameOver.png");
             Image imgFondoPausa = new Image(texturaFondoPausa);
             imgFondoPausa.setPosition(ANCHO/2 - texturaFondoPausa.getWidth()/2,
                     ALTO/2 - texturaFondoPausa.getHeight()/2);
