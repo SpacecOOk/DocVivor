@@ -23,7 +23,7 @@ public class EnemigoUno extends Objeto {
     private EstadoEnemigoCaminando estadoCaminando;
 
     //Movimiento lateral
-    private final int DX = 5; //Cambiar la velocidad despues
+    private final int DX = 6; //Cambiar la velocidad despues
 
     public EnemigoUno(Texture textura, float x, float y) {
 
