@@ -705,7 +705,7 @@ public class PantallaNivelUno extends Pantalla {
         public EscenaVictoria(Viewport vista, SpriteBatch batch) {
             super(vista, batch);
 
-            Texture texturaFondoVictoria = new Texture("Game_Over.jpg");
+            Texture texturaFondoVictoria = new Texture("Fondos/Victory.png");
             Image imgFondoVictoria = new Image(texturaFondoVictoria);
             imgFondoVictoria.setPosition(ANCHO/2 - texturaFondoVictoria.getWidth()/2,
                     ALTO/2 - texturaFondoVictoria.getHeight()/2);
@@ -715,7 +715,7 @@ public class PantallaNivelUno extends Pantalla {
             TextureRegionDrawable botonSeguir = new TextureRegionDrawable(new TextureRegion(texturaBtnSeguir));
             //Aqui para el boton inverso (click)
             ImageButton btnSeguir = new ImageButton(botonSeguir);
-            btnSeguir.setPosition(ANCHO*0.4f, ALTO*0.6f, Align.center);
+            btnSeguir.setPosition(ANCHO*0.35f, ALTO*0.2f, Align.center);
             btnSeguir.addListener(new ClickListener(){
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
@@ -732,7 +732,7 @@ public class PantallaNivelUno extends Pantalla {
             TextureRegionDrawable botonNiveles = new TextureRegionDrawable(new TextureRegion(texturaBtnNiveles));
             //Aqui para el boton inverso (click)
             ImageButton btnNiveles = new ImageButton(botonNiveles);
-            btnNiveles.setPosition(ANCHO*0.65f, ALTO*0.6f, Align.center);
+            btnNiveles.setPosition(ANCHO*0.65f, ALTO*0.2f, Align.center);
             btnNiveles.addListener(new ClickListener(){
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
