@@ -4,6 +4,6 @@ public enum EstadoJugador
 {
     CAMINANDO,
     SALTANDO,
-    QUIETO,
+    QUIETO
 
 }

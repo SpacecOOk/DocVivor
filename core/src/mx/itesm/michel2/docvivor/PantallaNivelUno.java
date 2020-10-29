@@ -337,9 +337,41 @@ public class PantallaNivelUno extends Pantalla {
         actualizarEnemigosDerecha(); //Revisar los timers
         actualizarEnemigosIzquierda();
         actualizarProyectil();
+        verificarColisionesEnemigosDerecha();
+        verificarColisionesEnemigosIzquierda();
     }
 
-    private void actualizarEnemigosIzquierda() {
+    private void verificarColisionesEnemigosIzquierda() {
+        for(int i =arrEnemigosIzquierda.size-1; i>=0; i--){
+            EnemigoUno enemigoUno= arrEnemigosIzquierda.get(i);
+            if (jugador.sprite.getBoundingRectangle().overlaps(enemigoUno.sprite.getBoundingRectangle())){
+                //PERDIO
+                if(jugador.getVidas()>0){
+                    arrEnemigosIzquierda.removeIndex(i);
+                    jugador.setVidas(jugador.getVidas()-1);
+                }else{     //Murio
+
+                }break;
+            }
+        }
+    }
+
+    private void verificarColisionesEnemigosDerecha() {
+        for(int i =arrEnemigosDerecha.size-1; i>=0; i--){
+            EnemigoUno enemigoUno= arrEnemigosDerecha.get(i);
+            if (jugador.sprite.getBoundingRectangle().overlaps(enemigoUno.sprite.getBoundingRectangle())){
+                //PERDIO
+                if(jugador.getVidas()>0){
+                    arrEnemigosDerecha.removeIndex(i);
+                    jugador.setVidas(jugador.getVidas()-1);
+                }else{     //Murio
+
+                }break;
+            }
+        }
+    }
+
+    private void actualizarEnemigosIzquierda() {        //Los que van para el lado izquierdo
         timerCrearEnemigo += Gdx.graphics.getDeltaTime();
         if(estadoJuego == EstadoJuego.JUGANDO){
             if (timerCrearEnemigo >= TIEMPO_CREA_ENEMIGO){
@@ -377,7 +409,7 @@ public class PantallaNivelUno extends Pantalla {
         }
     }
 
-    private void actualizarEnemigosDerecha() {
+    private void actualizarEnemigosDerecha() {            //Los que van para el lado derecho
         timerCrearEnemigo += Gdx.graphics.getDeltaTime();
         if(estadoJuego == EstadoJuego.JUGANDO){
             if (timerCrearEnemigo >= TIEMPO_CREA_ENEMIGO){
