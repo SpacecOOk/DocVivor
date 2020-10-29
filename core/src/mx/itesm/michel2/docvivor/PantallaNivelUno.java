@@ -104,8 +104,8 @@ public class PantallaNivelUno extends Pantalla {
     }
 
     private void crearItem() {
-        //int posicion = MathUtils.random(0,texturaFondoNivelUno.getWidth()-texturaTraje.getWidth());
-        traje = new Item(texturaTraje,1950,133,48,49);
+        int posicion = MathUtils.random(0,texturaFondoNivelUno.getWidth()-texturaTraje.getWidth());
+        traje = new Item(texturaTraje,posicion,133,48,49);
     }
 
     private void crearVictoria() {
@@ -143,7 +143,7 @@ public class PantallaNivelUno extends Pantalla {
 
     private void crearPersonaje() {
         texturaPersonaje = new Texture("MovimientosMelee/Doctor_M_I.png");
-        jugador = new Jugador(texturaPersonaje,2000,133);
+        jugador = new Jugador(texturaPersonaje,texturaFondoNivelUno.getWidth()/2,133);
     }
 
     private void crearHUD() {
@@ -402,17 +402,17 @@ public class PantallaNivelUno extends Pantalla {
         verificarColisionesProyectilIzquierda();
 
         //************Items***************
-        //verificarColisionTraje();
+        verificarColisionTraje();
 
     }
 
-    /*private void verificarColisionTraje() {
+    private void verificarColisionTraje() {
         if (traje.sprite.getBoundingRectangle().overlaps(jugador.sprite.getBoundingRectangle())){
             int x = (int)jugador.sprite.getX();
             jugador = new Jugador(texturaTrajePuesto,x,133);
             jugador.setVidas(4);
         }
-    }*/
+    }
 
     private void verificarColisionesProyectilIzquierda() {
         if(estadoJuego == EstadoJuego.JUGANDO && kills < 3){

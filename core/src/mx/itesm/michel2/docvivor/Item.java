@@ -3,6 +3,7 @@ package mx.itesm.michel2.docvivor;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -22,6 +23,9 @@ public class Item extends Objeto{
         animacion = new Animation<TextureRegion>(0.1f,arrFrames);
         animacion.setPlayMode(Animation.PlayMode.LOOP);
         timerAnimacion = 0;
+
+        sprite = new Sprite(texturasFrame[0][0]);
+        sprite.setPosition(x,y);
     }
     public void render(SpriteBatch batch){
         float delta = Gdx.graphics.getDeltaTime();
