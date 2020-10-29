@@ -199,13 +199,9 @@ public class PantallaNivelUno extends Pantalla {
                 super.clicked(event, x, y);
                 //Cuando le pica para atacar
                 if (proyectil==null){ //si no existe la creo, sino no la crea
-                    if(jugador.getEstadoCaminando()== EstadoCaminando.DERECHA|| jugador.getEstadoCaminando()==EstadoCaminando.QUIETO_DERECHA){
-                        proyectil = new Proyectil(texturaProyectilD,jugador.sprite.getX()+jugador.sprite.getWidth()/2,
-                                jugador.sprite.getY()+jugador.sprite.getHeight()*0.3f);
-                    }else if(jugador.getEstadoCaminando()== EstadoCaminando.IZQUIERDA|| jugador.getEstadoCaminando()==EstadoCaminando.QUIETO_IZQUIERDA) {
-                        proyectil = new Proyectil(texturaProyectilI,jugador.sprite.getX()+jugador.sprite.getWidth()/2,
-                                jugador.sprite.getY()+jugador.sprite.getHeight()*0.3f);
-                    }
+
+                    proyectil = new Proyectil(texturaProyectilD,jugador.sprite.getX()+jugador.sprite.getWidth()/2,
+                            jugador.sprite.getY()+jugador.sprite.getHeight()*0.3f);
                 }
             }
         });
@@ -418,14 +414,14 @@ public class PantallaNivelUno extends Pantalla {
 
     private void actualizarProyectil() {
         if(proyectil != null){
-            if(proyectil.sprite.getTexture().equals("Balas/Bala_Jeringa_D")){
-                    proyectil.moverDerecha();
-                    if(proyectil.sprite.getX() > jugador.sprite.getX()+ANCHO/2){
-                        proyectil = null;
+            if(jugador.getEstadoCaminando()== EstadoCaminando.DERECHA|| jugador.getEstadoCaminando()==EstadoCaminando.QUIETO_DERECHA){
+                proyectil.moverDerecha();
+                if(proyectil.sprite.getX() > jugador.sprite.getX()+ANCHO/2){
+                    proyectil = null;
                 }else if(proyectil.sprite.getX() < jugador.sprite.getX()-ANCHO/2){
                     proyectil = null;
                 }
-            }else if(proyectil.sprite.getTexture().equals("Balas/Bala_Jeringa_I")) {
+            }else if(jugador.getEstadoCaminando()== EstadoCaminando.IZQUIERDA|| jugador.getEstadoCaminando()==EstadoCaminando.QUIETO_IZQUIERDA) {
                 proyectil.moverIzquierda();
                 if (proyectil.sprite.getX() > jugador.sprite.getX() + ANCHO / 2) {
                     proyectil = null;
