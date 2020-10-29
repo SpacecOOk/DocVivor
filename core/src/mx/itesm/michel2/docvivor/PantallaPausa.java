@@ -17,7 +17,7 @@ public class PantallaPausa extends Pantalla {
 
     @Override
     public void show() {
-        texturaFondoPausa = new Texture("FondoA.jpg");
+        texturaFondoPausa = new Texture("fondoPausa1.png");
     }
 
     @Override
