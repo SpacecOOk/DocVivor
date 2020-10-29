@@ -70,6 +70,7 @@ public class PantallaNivelUno extends Pantalla {
 
     @Override
     public void show() {
+        estadoJuego = EstadoJuego.JUGANDO;
         texturaFondoNivelUno = new Texture("Level1/Level1_Background.png");
         crearHUD();
         crearPausa();
@@ -339,6 +340,32 @@ public class PantallaNivelUno extends Pantalla {
         actualizarProyectil();
         verificarColisionesEnemigosDerecha();
         verificarColisionesEnemigosIzquierda();
+        actualizarVidas();
+    }
+
+    private void actualizarVidas() {
+        if(jugador.getVidas() == 4){
+            spriteVidas = new Sprite(texturasFramesVidas[0][0]);
+            imagenVidas = new Image(spriteVidas);
+            imagenVidas.setPosition(50,650);
+            HUD.addActor(imagenVidas);
+        }else if(jugador.getVidas() == 3){
+            spriteVidas = new Sprite(texturasFramesVidas[0][1]);
+            imagenVidas = new Image(spriteVidas);
+            imagenVidas.setPosition(50,650);
+            HUD.addActor(imagenVidas);
+        }else if(jugador.getVidas() == 2){
+            spriteVidas = new Sprite(texturasFramesVidas[0][2]);
+            imagenVidas = new Image(spriteVidas);
+            imagenVidas.setPosition(50,650);
+            HUD.addActor(imagenVidas);
+        }else if(jugador.getVidas() == 1){
+            spriteVidas = new Sprite(texturasFramesVidas[0][3]);
+            imagenVidas = new Image(spriteVidas);
+            imagenVidas.setPosition(50,650);
+            HUD.addActor(imagenVidas);
+        }
+
     }
 
     private void verificarColisionesEnemigosIzquierda() {
