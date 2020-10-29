@@ -363,9 +363,44 @@ public class PantallaNivelUno extends Pantalla {
         actualizarEnemigosDerecha();
         actualizarEnemigosIzquierda();
         actualizarProyectil();
+        actualizarVidas();
+
+        //**********Colisiones*************
         verificarColisionesEnemigosDerecha();
         verificarColisionesEnemigosIzquierda();
-        actualizarVidas();
+        verificarColisionesProyectilDerecha();
+        verificarColisionesProyectilIzquierda();
+
+    }
+
+    private void verificarColisionesProyectilIzquierda() {
+        if(proyectil != null){
+            for (int j = arrEnemigosIzquierda.size-1; j >= 0 ; j--) {
+                EnemigoUno enemigo = arrEnemigosIzquierda.get(j);
+                if (proyectil.sprite.getBoundingRectangle().overlaps(enemigo.sprite.getBoundingRectangle())) {
+                    //Si hay colisión
+                    arrEnemigosIzquierda.removeIndex(j);
+                    proyectil = null;
+                    kills +=1;
+                    break;
+                }
+            }
+        }
+    }
+
+    private void verificarColisionesProyectilDerecha() {
+        if(proyectil != null){
+            for (int j = arrEnemigosDerecha.size-1; j >= 0 ; j--) {
+                EnemigoUno enemigo = arrEnemigosDerecha.get(j);
+                if (proyectil.sprite.getBoundingRectangle().overlaps(enemigo.sprite.getBoundingRectangle())) {
+                    //Si hay colisión
+                    arrEnemigosDerecha.removeIndex(j);
+                    proyectil = null;
+                    kills +=1;
+                    break;
+                }
+            }
+        }
     }
 
     private void actualizarVidas() {
