@@ -637,7 +637,7 @@ public class PantallaNivelUno extends Pantalla {
         public EscenaDerrota(Viewport vista, SpriteBatch batch) {
             super(vista, batch);
 
-            Texture texturaFondoPausa = new Texture("Game_Over.jpg");
+            Texture texturaFondoPausa = new Texture("Fondos/Game_Over.png");
             Image imgFondoPausa = new Image(texturaFondoPausa);
             imgFondoPausa.setPosition(ANCHO/2 - texturaFondoPausa.getWidth()/2,
                     ALTO/2 - texturaFondoPausa.getHeight()/2);
@@ -647,7 +647,7 @@ public class PantallaNivelUno extends Pantalla {
             TextureRegionDrawable botonRetry = new TextureRegionDrawable(new TextureRegion(texturaBtnRetry));
             //Aqui para el boton inverso (click)
             ImageButton btnRetry = new ImageButton(botonRetry);
-            btnRetry.setPosition(ANCHO*0.4f, ALTO*0.6f, Align.center);
+            btnRetry.setPosition(ANCHO*0.35f, ALTO*0.2f, Align.center);
             btnRetry.addListener(new ClickListener(){
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
@@ -664,13 +664,14 @@ public class PantallaNivelUno extends Pantalla {
             TextureRegionDrawable botonNiveles = new TextureRegionDrawable(new TextureRegion(texturaBtnNiveles));
             //Aqui para el boton inverso (click)
             ImageButton btnNiveles = new ImageButton(botonNiveles);
-            btnNiveles.setPosition(ANCHO*0.65f, ALTO*0.6f, Align.center);
+            btnNiveles.setPosition(ANCHO*0.65f, ALTO*0.2f, Align.center);
             btnNiveles.addListener(new ClickListener(){
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     super.clicked(event, x, y);
                     //Para regresar al los niveles
                     //estadoJuego = EstadoJuego.JUGANDO;
+                    borrarPantalla();
                     juego.setScreen(new PantallaNiveles(juego));
                 }
             });
