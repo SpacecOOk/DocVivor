@@ -402,17 +402,17 @@ public class PantallaNivelUno extends Pantalla {
         verificarColisionesProyectilIzquierda();
 
         //************Items***************
-        verificarColisionTraje();
+        //verificarColisionTraje();
 
     }
 
-    private void verificarColisionTraje() {
+    /*private void verificarColisionTraje() {
         if (traje.sprite.getBoundingRectangle().overlaps(jugador.sprite.getBoundingRectangle())){
             int x = (int)jugador.sprite.getX();
             jugador = new Jugador(texturaTrajePuesto,x,133);
             jugador.setVidas(4);
         }
-    }
+    }*/
 
     private void verificarColisionesProyectilIzquierda() {
         if(estadoJuego == EstadoJuego.JUGANDO && kills < 3){
@@ -499,6 +499,7 @@ public class PantallaNivelUno extends Pantalla {
                 }else{     //Murio
                     jugador.setVidas(jugador.getVidas()-1);
                     jugador.setEstado(EstadoJugador.QUIETO);
+                    jugador.sprite.setY(ANCHO); //Lo manda a lo alto
                     estadoJuego = EstadoJuego.DERROTA;
                     escenaDerrota = new EscenaDerrota(vistaDerrotaHUD,batch);
                     Gdx.input.setInputProcessor(escenaDerrota);
@@ -518,6 +519,7 @@ public class PantallaNivelUno extends Pantalla {
                 }else{     //Murio
                     jugador.setVidas(jugador.getVidas()-1);
                     jugador.setEstado(EstadoJugador.QUIETO);
+                    jugador.sprite.setY(ANCHO); //Lo manda a lo alto
                     estadoJuego = EstadoJuego.DERROTA;
                     escenaDerrota = new EscenaDerrota(vistaDerrotaHUD,batch);
                     Gdx.input.setInputProcessor(escenaDerrota);
