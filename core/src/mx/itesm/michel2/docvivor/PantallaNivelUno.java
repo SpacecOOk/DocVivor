@@ -412,7 +412,6 @@ public class PantallaNivelUno extends Pantalla {
             estadoJuego = EstadoJuego.VICTORIA;
             escenaVictoria = new EscenaVictoria(vistaVictoriaHUD,batch);
             Gdx.input.setInputProcessor(escenaVictoria);
-
         }
     }
 
@@ -600,7 +599,7 @@ public class PantallaNivelUno extends Pantalla {
                     ALTO/2 - texturaFondoPausa.getHeight()/2);
             this.addActor(imgFondoPausa);
 
-            Texture texturaBtnRegresar = new Texture("Botones/btn_jugar.png");
+            Texture texturaBtnRegresar = new Texture("Botones/Btn_resume.png");
             TextureRegionDrawable botonRegresar = new TextureRegionDrawable(new TextureRegion(texturaBtnRegresar));
             //Aqui para el boton inverso (click)
             ImageButton btnRegresar = new ImageButton(botonRegresar);
@@ -615,7 +614,7 @@ public class PantallaNivelUno extends Pantalla {
                 }
             });
             this.addActor(btnRegresar);
-            Texture texturaBtnMenu = new Texture("Botones/btn_jugar.png");
+            Texture texturaBtnMenu = new Texture("Botones/btn_Exit.png");
             TextureRegionDrawable botonMenu = new TextureRegionDrawable(new TextureRegion(texturaBtnMenu));
             //Aqui para el boton inverso (click)
             ImageButton btnMenu = new ImageButton(botonMenu);
@@ -660,7 +659,7 @@ public class PantallaNivelUno extends Pantalla {
             });
             this.addActor(btnRetry);
 
-            Texture texturaBtnNiveles = new Texture("Botones/btn_exit.png");
+            Texture texturaBtnNiveles = new Texture("Botones/btn_Exit.png");
             TextureRegionDrawable botonNiveles = new TextureRegionDrawable(new TextureRegion(texturaBtnNiveles));
             //Aqui para el boton inverso (click)
             ImageButton btnNiveles = new ImageButton(botonNiveles);
@@ -706,7 +705,7 @@ public class PantallaNivelUno extends Pantalla {
             });
             this.addActor(btnSeguir);
 
-            Texture texturaBtnNiveles = new Texture("Botones/btn_exit.png");
+            Texture texturaBtnNiveles = new Texture("Botones/btn_Exit.png");
             TextureRegionDrawable botonNiveles = new TextureRegionDrawable(new TextureRegion(texturaBtnNiveles));
             //Aqui para el boton inverso (click)
             ImageButton btnNiveles = new ImageButton(botonNiveles);
