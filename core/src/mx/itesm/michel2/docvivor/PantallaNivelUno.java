@@ -218,7 +218,7 @@ public class PantallaNivelUno extends Pantalla {
                             jugador.sprite.getY()+jugador.sprite.getHeight()*0.3f);
                     orientacion=1;
                 }
-            }
+            } //Jeringa
         });
 
         //Le movi aqui
