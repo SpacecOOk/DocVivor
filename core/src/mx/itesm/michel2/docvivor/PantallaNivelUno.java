@@ -437,7 +437,7 @@ public class PantallaNivelUno extends Pantalla {
         }
     }
 
-    private void actualizarProyectil() {
+    private void actualizarProyectil() {    //aqui esta el problema
         if(proyectil != null){
             if(jugador.getEstadoCaminando()== EstadoCaminando.DERECHA|| jugador.getEstadoCaminando()==EstadoCaminando.QUIETO_DERECHA){
                 proyectil.moverDerecha();
