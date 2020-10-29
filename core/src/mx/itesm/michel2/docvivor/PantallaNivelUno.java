@@ -350,7 +350,7 @@ public class PantallaNivelUno extends Pantalla {
             }
             for (int i = arrEnemigosIzquierda.size-1; i >= 0; i--) {
                 EnemigoUno enemigo = arrEnemigosIzquierda.get(i);
-                if (enemigo.sprite.getX()< jugador.sprite.getX() - ANCHO/2 -enemigo.sprite.getWidth() ){
+                if (enemigo.sprite.getX()> jugador.sprite.getX() + ANCHO/2 + enemigo.sprite.getWidth() ){
                     arrEnemigosIzquierda.removeIndex(i);
                 }
             }
