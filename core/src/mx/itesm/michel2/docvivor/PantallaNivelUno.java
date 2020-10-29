@@ -30,6 +30,9 @@ public class PantallaNivelUno extends Pantalla {
     private Texture texturaPersonaje;
     private Jugador jugador;
 
+    //Contador de kills
+    private int kills = 0;
+
     //Proyectil
     private Texture texturaProyectilD;
     private Proyectil proyectil;
@@ -213,10 +216,15 @@ public class PantallaNivelUno extends Pantalla {
                 super.clicked(event, x, y);
                 //Cuando le pica para atacar
                 if (proyectil==null){ //si no existe la creo, sino no la crea
-
-                    proyectil = new Proyectil(texturaProyectilD,jugador.sprite.getX()+jugador.sprite.getWidth()/2,
-                            jugador.sprite.getY()+jugador.sprite.getHeight()*0.3f);
-                    orientacion=1;
+                    if(jugador.getEstadoCaminando() == EstadoCaminando.DERECHA || jugador.getEstadoCaminando() == EstadoCaminando.QUIETO_DERECHA){
+                        proyectil = new Proyectil(texturaProyectilD,jugador.sprite.getX()+jugador.sprite.getWidth()/2,
+                                jugador.sprite.getY()+jugador.sprite.getHeight()*0.3f);
+                        orientacion=1;
+                    }else if(jugador.getEstadoCaminando() == EstadoCaminando.IZQUIERDA || jugador.getEstadoCaminando() == EstadoCaminando.QUIETO_IZQUIERDA){
+                        proyectil = new Proyectil(texturaProyectilI,jugador.sprite.getX()+jugador.sprite.getWidth()/2,
+                                jugador.sprite.getY()+jugador.sprite.getHeight()*0.3f);
+                        orientacion=0;
+                    }
                 }
             } //Jeringa
         });
@@ -381,6 +389,11 @@ public class PantallaNivelUno extends Pantalla {
             imagenVidas = new Image(spriteVidas);
             imagenVidas.setPosition(50,650);
             HUD.addActor(imagenVidas);
+        }else{
+            spriteVidas = new Sprite(texturasFramesVidas[0][4]);
+            imagenVidas = new Image(spriteVidas);
+            imagenVidas.setPosition(50,650);
+            HUD.addActor(imagenVidas);
         }
 
     }
@@ -394,6 +407,7 @@ public class PantallaNivelUno extends Pantalla {
                     arrEnemigosIzquierda.removeIndex(i);
                     jugador.setVidas(jugador.getVidas()-1);
                 }else{     //Murio
+                    jugador.setVidas(jugador.getVidas()-1);
                     jugador.setEstado(EstadoJugador.QUIETO);
                     estadoJuego = EstadoJuego.DERROTA;
                     escenaDerrota = new EscenaDerrota(vistaDerrotaHUD,batch);
@@ -412,6 +426,7 @@ public class PantallaNivelUno extends Pantalla {
                     arrEnemigosDerecha.removeIndex(i);
                     jugador.setVidas(jugador.getVidas()-1);
                 }else{     //Murio
+                    jugador.setVidas(jugador.getVidas()-1);
                     jugador.setEstado(EstadoJugador.QUIETO);
                     estadoJuego = EstadoJuego.DERROTA;
                     escenaDerrota = new EscenaDerrota(vistaDerrotaHUD,batch);
@@ -552,7 +567,7 @@ public class PantallaNivelUno extends Pantalla {
         public EscenaDerrota(Viewport vista, SpriteBatch batch) {
             super(vista, batch);
 
-            Texture texturaFondoPausa = new Texture("Fondos/fondoPausa.png");
+            Texture texturaFondoPausa = new Texture("Game_Over.jpg");
             Image imgFondoPausa = new Image(texturaFondoPausa);
             imgFondoPausa.setPosition(ANCHO/2 - texturaFondoPausa.getWidth()/2,
                     ALTO/2 - texturaFondoPausa.getHeight()/2);
