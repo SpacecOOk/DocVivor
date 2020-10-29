@@ -34,6 +34,7 @@ public class PantallaNivelUno extends Pantalla {
     private Texture texturaProyectilD;
     private Proyectil proyectil;
     private Texture texturaProyectilI;
+    private int orientacion;
 
     //Vidas
     private Image imagenVidas;
@@ -215,6 +216,7 @@ public class PantallaNivelUno extends Pantalla {
 
                     proyectil = new Proyectil(texturaProyectilD,jugador.sprite.getX()+jugador.sprite.getWidth()/2,
                             jugador.sprite.getY()+jugador.sprite.getHeight()*0.3f);
+                    orientacion=1;
                 }
             }
         });
@@ -438,21 +440,12 @@ public class PantallaNivelUno extends Pantalla {
     }
 
     private void actualizarProyectil() {    //aqui esta el problema
-        if(proyectil != null){
-            if(jugador.getEstadoCaminando()== EstadoCaminando.DERECHA|| jugador.getEstadoCaminando()==EstadoCaminando.QUIETO_DERECHA){
-                proyectil.moverDerecha();
-                if(proyectil.sprite.getX() > jugador.sprite.getX()+ANCHO/2){
-                    proyectil = null;
-                }else if(proyectil.sprite.getX() < jugador.sprite.getX()-ANCHO/2){
-                    proyectil = null;
-                }
-            }else if(jugador.getEstadoCaminando()== EstadoCaminando.IZQUIERDA|| jugador.getEstadoCaminando()==EstadoCaminando.QUIETO_IZQUIERDA) {
-                proyectil.moverIzquierda();
-                if (proyectil.sprite.getX() > jugador.sprite.getX() + ANCHO / 2) {
-                    proyectil = null;
-                } else if (proyectil.sprite.getX() < jugador.sprite.getX() - ANCHO / 2) {
-                    proyectil = null;
-                }
+        if(proyectil != null) {
+            proyectil.mover(orientacion);
+            if (proyectil.sprite.getX() > jugador.sprite.getX() + ANCHO / 2) {
+                proyectil = null;
+            } else if (proyectil.sprite.getX() < jugador.sprite.getX() - ANCHO / 2) {
+                proyectil = null;
             }
         }
     }
@@ -582,7 +575,7 @@ public class PantallaNivelUno extends Pantalla {
             });
             this.addActor(btnRetry);
 
-            Texture texturaBtnNiveles = new Texture("Botones/btn_jugar.png");
+            Texture texturaBtnNiveles = new Texture("Botones/btn_exit.png");
             TextureRegionDrawable botonNiveles = new TextureRegionDrawable(new TextureRegion(texturaBtnNiveles));
             //Aqui para el boton inverso (click)
             ImageButton btnNiveles = new ImageButton(botonNiveles);

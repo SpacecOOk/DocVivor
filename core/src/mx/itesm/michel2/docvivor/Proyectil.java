@@ -12,15 +12,16 @@ public class Proyectil extends Objeto {
         super(textura, x, y);
     }
 
-    public void moverDerecha(){
-        float lapso = Gdx.graphics.getDeltaTime();
-        float distancia = VELOCIDAD_X * lapso;
-        sprite.setX(sprite.getX() + distancia);
-    }
-    public void moverIzquierda(){
-        float lapso = Gdx.graphics.getDeltaTime();
-        float distancia = -VELOCIDAD_X * lapso;
-        sprite.setX(sprite.getX() + distancia);
+    public void mover(int orientacion){
+        if(orientacion == 1) {
+            float lapso = Gdx.graphics.getDeltaTime();
+            float distancia = VELOCIDAD_X * lapso;
+            sprite.setX(sprite.getX() + distancia);
+        }else if(orientacion == 0){
+            float lapso = Gdx.graphics.getDeltaTime();
+            float distancia = -VELOCIDAD_X * lapso;
+            sprite.setX(sprite.getX() + distancia);
+        }
     }
 
 }
