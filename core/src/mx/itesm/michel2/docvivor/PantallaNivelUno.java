@@ -64,21 +64,34 @@ public class PantallaNivelUno extends Pantalla {
     private OrthographicCamera camaraPausaHUD;
     private Viewport vistaPausaHUD;
 
+    //Derrota
+    private EscenaDerrota escenaDerrota;
+    //private Stage escenaDerrota;
+    private OrthographicCamera camaraDerrotaHUD;
+    private Viewport vistaDerrotaHUD;
+
     public PantallaNivelUno(Juego juego) {
         this.juego = juego;
     }
 
     @Override
     public void show() {
-        estadoJuego = EstadoJuego.JUGANDO;
         texturaFondoNivelUno = new Texture("Level1/Level1_Background.png");
         crearHUD();
         crearPausa();
+        crearDerrota();
         crearPersonaje();
         crearEnemigos();
         crearProyectil();
 
         Gdx.input.setInputProcessor(HUD);
+    }
+
+    private void crearDerrota() {
+        camaraDerrotaHUD = new OrthographicCamera(ANCHO,ALTO);
+        camaraDerrotaHUD.position.set(ANCHO/2,ALTO/2,0);
+        camaraDerrotaHUD.update();
+        vistaDerrotaHUD = new StretchViewport(ANCHO,ALTO,camaraDerrotaHUD);
     }
 
     private void crearProyectil() {
@@ -300,6 +313,12 @@ public class PantallaNivelUno extends Pantalla {
             escenaPausa.draw();
         }
 
+        //************Derrota**************
+        batch.setProjectionMatrix(camaraDerrotaHUD.combined);
+        if (estadoJuego == EstadoJuego.DERROTA){
+            escenaDerrota.draw();
+        }
+
 
     }
 
@@ -331,7 +350,7 @@ public class PantallaNivelUno extends Pantalla {
 
     private void actualizar() {
         actualizarCamara();
-        actualizarEnemigosDerecha(); //Revisar los timers
+        actualizarEnemigosDerecha();
         actualizarEnemigosIzquierda();
         actualizarProyectil();
         verificarColisionesEnemigosDerecha();
@@ -369,11 +388,14 @@ public class PantallaNivelUno extends Pantalla {
             EnemigoUno enemigoUno= arrEnemigosIzquierda.get(i);
             if (jugador.sprite.getBoundingRectangle().overlaps(enemigoUno.sprite.getBoundingRectangle())){
                 //PERDIO
-                if(jugador.getVidas()>0){
+                if(jugador.getVidas()-1>0){
                     arrEnemigosIzquierda.removeIndex(i);
                     jugador.setVidas(jugador.getVidas()-1);
                 }else{     //Murio
-
+                    jugador.setEstado(EstadoJugador.QUIETO);
+                    estadoJuego = EstadoJuego.DERROTA;
+                    escenaDerrota = new EscenaDerrota(vistaDerrotaHUD,batch);
+                    Gdx.input.setInputProcessor(escenaDerrota);
                 }break;
             }
         }
@@ -384,11 +406,14 @@ public class PantallaNivelUno extends Pantalla {
             EnemigoUno enemigoUno= arrEnemigosDerecha.get(i);
             if (jugador.sprite.getBoundingRectangle().overlaps(enemigoUno.sprite.getBoundingRectangle())){
                 //PERDIO
-                if(jugador.getVidas()>0){
+                if(jugador.getVidas()-1>0){
                     arrEnemigosDerecha.removeIndex(i);
                     jugador.setVidas(jugador.getVidas()-1);
                 }else{     //Murio
-
+                    jugador.setEstado(EstadoJugador.QUIETO);
+                    estadoJuego = EstadoJuego.DERROTA;
+                    escenaDerrota = new EscenaDerrota(vistaDerrotaHUD,batch);
+                    Gdx.input.setInputProcessor(escenaDerrota);
                 }break;
             }
         }
@@ -399,7 +424,7 @@ public class PantallaNivelUno extends Pantalla {
         if(estadoJuego == EstadoJuego.JUGANDO){
             if (timerCrearEnemigo >= TIEMPO_CREA_ENEMIGO){
                 timerCrearEnemigo = 0;
-                TIEMPO_CREA_ENEMIGO = 1 + MathUtils.random()*2;
+                TIEMPO_CREA_ENEMIGO = 2 + MathUtils.random()*2;
                 EnemigoUno enemigo = new EnemigoUno(texturaEnemigoUno,0,133);
                 arrEnemigosIzquierda.add(enemigo);
             }
@@ -437,7 +462,7 @@ public class PantallaNivelUno extends Pantalla {
         if(estadoJuego == EstadoJuego.JUGANDO){
             if (timerCrearEnemigo >= TIEMPO_CREA_ENEMIGO){
                 timerCrearEnemigo = 0;
-                TIEMPO_CREA_ENEMIGO = 1 + MathUtils.random()*2;
+                TIEMPO_CREA_ENEMIGO = 2 + MathUtils.random()*2;
                 EnemigoUno enemigo = new EnemigoUno(texturaEnemigoUno,texturaFondoNivelUno.getWidth(),133);
                 arrEnemigosDerecha.add(enemigo);
             }
@@ -527,6 +552,51 @@ public class PantallaNivelUno extends Pantalla {
                 }
             });
             this.addActor(btnMenu);
+        }
+    }
+
+    private class EscenaDerrota extends Stage {
+        public EscenaDerrota(Viewport vista, SpriteBatch batch) {
+            super(vista, batch);
+
+            Texture texturaFondoPausa = new Texture("Fondos/fondoPausa.png");
+            Image imgFondoPausa = new Image(texturaFondoPausa);
+            imgFondoPausa.setPosition(ANCHO/2 - texturaFondoPausa.getWidth()/2,
+                    ALTO/2 - texturaFondoPausa.getHeight()/2);
+            this.addActor(imgFondoPausa);
+
+            Texture texturaBtnRetry = new Texture("Botones/btn_jugar.png");
+            TextureRegionDrawable botonRetry = new TextureRegionDrawable(new TextureRegion(texturaBtnRetry));
+            //Aqui para el boton inverso (click)
+            ImageButton btnRetry = new ImageButton(botonRetry);
+            btnRetry.setPosition(ANCHO*0.4f, ALTO*0.6f, Align.center);
+            btnRetry.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    super.clicked(event, x, y);
+                    //Para reintentar el nivel
+                    juego.setScreen(new PantallaNivelUno(juego));
+                    //estadoJuego = EstadoJuego.JUGANDO;
+                    //Gdx.input.setInputProcessor(HUD);
+                }
+            });
+            this.addActor(btnRetry);
+
+            Texture texturaBtnNiveles = new Texture("Botones/btn_jugar.png");
+            TextureRegionDrawable botonNiveles = new TextureRegionDrawable(new TextureRegion(texturaBtnNiveles));
+            //Aqui para el boton inverso (click)
+            ImageButton btnNiveles = new ImageButton(botonNiveles);
+            btnNiveles.setPosition(ANCHO*0.65f, ALTO*0.6f, Align.center);
+            btnNiveles.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    super.clicked(event, x, y);
+                    //Para regresar al los niveles
+                    //estadoJuego = EstadoJuego.JUGANDO;
+                    juego.setScreen(new PantallaNiveles(juego));
+                }
+            });
+            this.addActor(btnNiveles);
         }
     }
 }
