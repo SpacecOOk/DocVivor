@@ -396,6 +396,7 @@ public class PantallaNivelUno extends Pantalla {
                     arrEnemigosIzquierda.removeIndex(i);
                     jugador.setVidas(jugador.getVidas()-1);
                 }else{     //Murio
+                    jugador.setEstado(EstadoJugador.QUIETO);
                     estadoJuego = EstadoJuego.DERROTA;
                     escenaDerrota = new EscenaDerrota(vistaDerrotaHUD,batch);
                     Gdx.input.setInputProcessor(escenaDerrota);
@@ -413,6 +414,7 @@ public class PantallaNivelUno extends Pantalla {
                     arrEnemigosDerecha.removeIndex(i);
                     jugador.setVidas(jugador.getVidas()-1);
                 }else{     //Murio
+                    jugador.setEstado(EstadoJugador.QUIETO);
                     estadoJuego = EstadoJuego.DERROTA;
                     escenaDerrota = new EscenaDerrota(vistaDerrotaHUD,batch);
                     Gdx.input.setInputProcessor(escenaDerrota);
