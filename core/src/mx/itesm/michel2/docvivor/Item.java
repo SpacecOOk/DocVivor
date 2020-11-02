@@ -10,11 +10,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public class Item extends Objeto{
     private Animation<TextureRegion> animacion;
     private float timerAnimacion;
-    private float x;
-    private float y;
+
+
     public Item(Texture textura,float x, float y,int widthTextura,int HeightTextura){
-        this.x = x;
-        this.y = y;
         TextureRegion region = new TextureRegion(textura);
         TextureRegion[][] texturasFrame = region.split(widthTextura,HeightTextura);
 
@@ -31,7 +29,7 @@ public class Item extends Objeto{
         float delta = Gdx.graphics.getDeltaTime();
         timerAnimacion += delta;
         TextureRegion frame = animacion.getKeyFrame(timerAnimacion);
-        batch.draw(frame,x,y);
+        batch.draw(frame,sprite.getX(),sprite.getY());
     }
 
 }

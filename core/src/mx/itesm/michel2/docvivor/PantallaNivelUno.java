@@ -43,7 +43,6 @@ public class PantallaNivelUno extends Pantalla {
     //Items
     private Texture texturaTraje = new Texture("Items/Item_SuperTraje.png");
     private Item traje;
-    private Texture texturaTrajePuesto = new Texture("MovimientosMeleeTraje/Traje_M_I.png");
 
     //Vidas
     private Image imagenVidas;
@@ -105,8 +104,8 @@ public class PantallaNivelUno extends Pantalla {
     }
 
     private void crearItem() {
-        int posicion = MathUtils.random(0,texturaFondoNivelUno.getWidth()-texturaTraje.getWidth());
-        traje = new Item(texturaTraje,posicion,133,48,49);
+        //int posicion = MathUtils.random(0,texturaFondoNivelUno.getWidth()-texturaTraje.getWidth());
+        traje = new Item(texturaTraje,1590,133,48,49);
     }
 
     private void crearVictoria() {
@@ -410,7 +409,8 @@ public class PantallaNivelUno extends Pantalla {
     private void verificarColisionTraje() {
         if (traje.sprite.getBoundingRectangle().overlaps(jugador.sprite.getBoundingRectangle())){
             int x = (int)jugador.sprite.getX();
-            jugador = new Jugador(texturaTrajePuesto,x,133);
+            traje.sprite.setY(ALTO);
+            jugador.setEstadoItem(EstadoItem.TRAJE);
             jugador.setVidas(4);
         }
     }
