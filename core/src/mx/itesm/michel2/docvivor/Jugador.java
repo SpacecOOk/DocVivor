@@ -16,13 +16,6 @@ public class Jugador extends Objeto {
     private TextureRegion[][] texturasFrames;
     private TextureRegion region ;
 
-    //Traje
-    private Texture texturaTraje;
-    private Animation<TextureRegion> animacionTraje;
-    private  float timerAnimacionTraje;
-    private TextureRegion frameTraje;
-    private TextureRegion[][] texturasFramesTraje;
-    private TextureRegion regionTraje ;
 
     //VIDAS
     private int vidas;
@@ -41,39 +34,21 @@ public class Jugador extends Objeto {
     //Mover DERECHA/IZQUIERDA
     private EstadoCaminando estadoCaminando;
 
-    //Traje o solito
-    private EstadoItem estadoItem;
 
     public Jugador(Texture textura, float x, float y){
-            estadoItem = EstadoItem.NORMAL;
 
-        if(estadoItem == EstadoItem.NORMAL) {
             region = new TextureRegion(textura);
             texturasFrames = region.split(160, 128);
             //Cuando esta quieto
             sprite = new Sprite(texturasFrames[0][1]);
             sprite.setPosition(x, y);
-        }else if (estadoItem == EstadoItem.TRAJE){
-            texturaTraje = new Texture("MoviminetosMeleeTraje/Traje_M_I");
-            regionTraje = new TextureRegion(texturaTraje);
-            texturasFramesTraje = regionTraje.split(160, 128);
-            //Cuando esta quieto
-            sprite = new Sprite(texturasFramesTraje[0][1]);
-            sprite.setPosition(x, y);
-        }
 
         //Creamos la animación
-        if(estadoItem == EstadoItem.NORMAL) {
             TextureRegion[] arrFrames = {texturasFrames[0][2], texturasFrames[0][0]};
             animacion = new Animation<TextureRegion>(0.1f, arrFrames);
             animacion.setPlayMode(Animation.PlayMode.LOOP);
             timerAnimacion = 0;
-        }else if( estadoItem == EstadoItem.TRAJE){
-            TextureRegion[] arrFrames = {texturasFramesTraje[0][2], texturasFramesTraje[0][0]};
-            animacionTraje = new Animation<TextureRegion>(0.1f, arrFrames);
-            animacionTraje.setPlayMode(Animation.PlayMode.LOOP);
-            timerAnimacionTraje = 0;
-        }
+
 
         //Salto
         yBase = y;
@@ -193,11 +168,4 @@ public class Jugador extends Objeto {
         return estado;
     }
 
-    public void setEstadoItem(EstadoItem estadoItem) {
-        this.estadoItem = estadoItem;
-    }
-
-    public EstadoItem getEstadoItem(){
-        return estadoItem;
-     }
 }

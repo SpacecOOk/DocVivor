@@ -30,6 +30,7 @@ public class PantallaNivelUno extends Pantalla {
     //Jugador
     private Texture texturaPersonaje;
     private Jugador jugador;
+    private Texture texturaPersonajeTraje = new Texture("MovimientosMeleeTraje/Traje_M_I.png");
 
     //Contador de kills
     private int kills = 0;
@@ -410,7 +411,7 @@ public class PantallaNivelUno extends Pantalla {
         if (traje.sprite.getBoundingRectangle().overlaps(jugador.sprite.getBoundingRectangle())){
             int x = (int)jugador.sprite.getX();
             traje.sprite.setY(ALTO);
-            jugador.setEstadoItem(EstadoItem.TRAJE);
+            jugador = new Jugador(texturaPersonajeTraje,x,133);
             jugador.setVidas(4);
         }
     }
@@ -677,8 +678,7 @@ public class PantallaNivelUno extends Pantalla {
                     super.clicked(event, x, y);
                     //Para reintentar el nivel
                     juego.setScreen(new PantallaNivelUno(juego));
-                    //estadoJuego = EstadoJuego.JUGANDO;
-                    //Gdx.input.setInputProcessor(HUD);
+
                 }
             });
             this.addActor(btnRetry);
@@ -693,7 +693,6 @@ public class PantallaNivelUno extends Pantalla {
                 public void clicked(InputEvent event, float x, float y) {
                     super.clicked(event, x, y);
                     //Para regresar al los niveles
-                    //estadoJuego = EstadoJuego.JUGANDO;
                     borrarPantalla();
                     juego.setScreen(new PantallaNiveles(juego));
                 }
@@ -721,10 +720,8 @@ public class PantallaNivelUno extends Pantalla {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     super.clicked(event, x, y);
-                    //Para reintentar el nivel
+                    //Para pasar al siguiente nivel
                     juego.setScreen(new PantallaNivelDos(juego));
-                    //estadoJuego = EstadoJuego.JUGANDO;
-                    //Gdx.input.setInputProcessor(HUD);
                 }
             });
             this.addActor(btnSeguir);
@@ -738,8 +735,7 @@ public class PantallaNivelUno extends Pantalla {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     super.clicked(event, x, y);
-                    //Para regresar al los niveles
-                    //estadoJuego = EstadoJuego.JUGANDO;
+
                     juego.setScreen(new PantallaNiveles(juego));
                 }
             });
