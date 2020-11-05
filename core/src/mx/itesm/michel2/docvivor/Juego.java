@@ -18,9 +18,9 @@ public class Juego extends Game {
 	@Override
 	public void create () {
 		AssetManager manager = new AssetManager();
-		manager.load("Musica/relacion.mp3",Music.class);
+		manager.load("Musica/Intro.mp3",Music.class);
 		manager.finishLoading();
-		musicaFondo = Gdx.audio.newMusic(Gdx.files.internal("Musica/relacion.mp3")); //Checar aqui musica
+		musicaFondo = Gdx.audio.newMusic(Gdx.files.internal("Musica/Intro.mp3")); //Checar aqui musica
 		setScreen(new PantallaMenu(this));
 	}
 

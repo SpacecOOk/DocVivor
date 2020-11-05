@@ -41,11 +41,6 @@ public class PantallaConfiguracion extends Pantalla {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                if(juego.musicaEstado == 1){
-                    juego.musicaEstado = 0;
-                }else if(juego.musicaEstado == 0){
-                    juego.musicaEstado = 1;
-                }
             }
         });
 
@@ -70,7 +65,7 @@ public class PantallaConfiguracion extends Pantalla {
         TextureRegionDrawable botonRegresarMenu = new TextureRegionDrawable(new TextureRegion(texturaRegresar));
         //Aqui para el boton inverso (click)
         ImageButton btnRegresar = new ImageButton(botonRegresarMenu);
-        btnRegresar.setPosition(0+btnRegresar.getWidth()/2,ALTO-btnRegresar.getHeight()/2, Align.center);
+        btnRegresar.setPosition(ANCHO/2,ALTO-btnRegresar.getHeight(), Align.center);
         btnRegresar.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {

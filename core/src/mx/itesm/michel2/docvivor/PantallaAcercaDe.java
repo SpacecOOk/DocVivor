@@ -68,13 +68,13 @@ public class PantallaAcercaDe extends Pantalla {
         batch.begin();
         batch.draw(texturaAcerca,0,0);
         batch.draw(Bruno,128,ALTO/6);
-        batch.draw(Diego,ANCHO/2,ALTO/6);
-        batch.draw(Roberto,128,(ALTO/6)*4);
-        batch.draw(Mich,ANCHO/2,(ALTO/6)*4);
-        batch.draw(name_Diego,ANCHO/2 + 138,ALTO/6);
-        batch.draw(name_Mich,ANCHO/2 + 138,(ALTO/6)*4);
+        batch.draw(Diego,ANCHO*0.65f,ALTO/6);
+        batch.draw(Roberto,128,ALTO*0.6f);
+        batch.draw(Mich,ANCHO*0.65f,ALTO*0.6f);
+        batch.draw(name_Diego,138+ANCHO*0.65f,ALTO/6);
+        batch.draw(name_Mich,138 + ANCHO*0.65f,ALTO*0.6f);
         batch.draw(name_Bruno,128 + 138,ALTO/6);
-        batch.draw(name_Roberto,128 + 138,(ALTO/6)*4);
+        batch.draw(name_Roberto,128 + 138,ALTO*0.6f);
         batch.end();
         escenaAcerca.draw();
     }
