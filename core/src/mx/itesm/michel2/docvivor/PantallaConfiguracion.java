@@ -23,7 +23,6 @@ public class PantallaConfiguracion extends Pantalla {
         this.juego=juego;
     }
 
-
     @Override
     public void show() {
         texturaConfiguracion = new Texture("Fondos/fondo_general.png");
@@ -42,6 +41,19 @@ public class PantallaConfiguracion extends Pantalla {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
+                if (juego.musicaEstado == 0){
+                    juego.musicaEstado = 1;
+                    Preferences prefs = Gdx.app.getPreferences("musica");
+                    prefs.putFloat("musica", juego.musicaEstado); // Le pongo en uno para que no jale
+                    prefs.flush();  // OBLIGATORIO
+                    juego.musicaFondo.stop();
+                }else{
+                    juego.musicaEstado = 0;
+                    Preferences prefs = Gdx.app.getPreferences("musica");
+                    prefs.putFloat("musica", juego.musicaEstado); // Le pongo en uno para que no jale
+                    prefs.flush();  // OBLIGATORIO
+                    juego.musicaFondo.play();
+                }
             }
         });
 
@@ -58,17 +70,7 @@ public class PantallaConfiguracion extends Pantalla {
                 super.clicked(event, x, y);
                 //Callar los efectos de sonido on/off
                 //Poner para callar los efectos de sonido
-                if (juego.musicaEstado == 0){
-                    juego.musicaEstado = 1;
-                    Preferences prefs = Gdx.app.getPreferences("musica");
-                    prefs.putFloat("musica", juego.musicaEstado); // Le pongo en uno para que no jale
-                    prefs.flush();  // OBLIGATORIO
-                }else{
-                    juego.musicaEstado = 0;
-                    Preferences prefs = Gdx.app.getPreferences("musica");
-                    prefs.putFloat("musica", juego.musicaEstado); // Le pongo en uno para que no jale
-                    prefs.flush();  // OBLIGATORIO
-                }
+
             }
         });
         escenaConfiguracion.addActor(btnCallarSonido);

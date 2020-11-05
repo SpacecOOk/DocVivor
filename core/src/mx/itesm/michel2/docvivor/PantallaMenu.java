@@ -26,8 +26,6 @@ public class PantallaMenu extends Pantalla {
     private Texture texturaMenu;
     private Texture titulo = new Texture("titulo.png");
 
-    //Musica
-
 
     @Override
     public void show() {
@@ -37,9 +35,8 @@ public class PantallaMenu extends Pantalla {
         guardarPreferencias();
         if(juego.musicaEstado == 0) {
             juego.musicaFondo.play();
-            juego.musicaFondo.setVolume(0.1f);
         }if(juego.musicaEstado == 1){
-            juego.musicaFondo.setVolume(0);
+            juego.musicaFondo.stop();
         }
         juego.musicaFondo.setVolume(0.5f);
     }
