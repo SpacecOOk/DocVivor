@@ -27,7 +27,7 @@ public class PantallaMenu extends Pantalla {
     private Texture titulo = new Texture("titulo.png");
 
     //Musica
-    private int musicaEstado = 1; //Checar la variable
+
 
     @Override
     public void show() {
@@ -35,10 +35,10 @@ public class PantallaMenu extends Pantalla {
         crearMenu();
         cargarPreferencias();
         guardarPreferencias();
-        if(musicaEstado == 0) {
+        if(juego.musicaEstado == 0) {
             juego.musicaFondo.play();
             juego.musicaFondo.setVolume(0.5f);
-        }if(musicaEstado == 1){
+        }if(juego.musicaEstado == 1){
             juego.musicaFondo.setVolume(0);
         }
         juego.musicaFondo.setVolume(0.5f);
@@ -46,12 +46,12 @@ public class PantallaMenu extends Pantalla {
 
     private void cargarPreferencias() {
         Preferences prefs = Gdx.app.getPreferences("musica");
-        musicaEstado = (int) prefs.getFloat("musica");
+        juego.musicaEstado = (int) prefs.getFloat("musica");
     }
 
     private void guardarPreferencias() {
         Preferences prefs = Gdx.app.getPreferences("musica");
-        prefs.putFloat("musica", 1); // Le pongo en uno para que no jale
+        prefs.putFloat("musica", juego.musicaEstado); // Le pongo en uno para que no jale
         prefs.flush();  // OBLIGATORIO
     }
 

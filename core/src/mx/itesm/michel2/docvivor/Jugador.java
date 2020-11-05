@@ -160,6 +160,7 @@ public class Jugador extends Objeto {
     public EstadoCaminando getEstadoCaminando() {
         return estadoCaminando;
     }
+
     public void setEstado(EstadoJugador estado) {
         this.estado = estado;
     }

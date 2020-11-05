@@ -14,6 +14,7 @@ public class Juego extends Game {
 
  	protected Music musicaFondo;
  	protected float posicionCancion;
+ 	protected int musicaEstado = 0;
 	@Override
 	public void create () {
 		AssetManager manager = new AssetManager();

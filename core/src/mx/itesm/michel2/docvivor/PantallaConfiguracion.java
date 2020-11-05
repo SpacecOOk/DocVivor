@@ -41,6 +41,11 @@ public class PantallaConfiguracion extends Pantalla {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
+                if(juego.musicaEstado == 1){
+                    juego.musicaEstado = 0;
+                }else if(juego.musicaEstado == 0){
+                    juego.musicaEstado = 1;
+                }
             }
         });
 

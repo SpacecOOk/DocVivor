@@ -48,7 +48,7 @@ public class PantallaAcercaDe extends Pantalla {
         TextureRegionDrawable botonRegresarMenu = new TextureRegionDrawable(new TextureRegion(texturaRegresar));
         //Aqui para el boton inverso (click)
         ImageButton btnRegresar = new ImageButton(botonRegresarMenu);
-        btnRegresar.setPosition(0+btnRegresar.getWidth()/2,ALTO-btnRegresar.getHeight()/2, Align.center);
+        btnRegresar.setPosition(ANCHO/2,ALTO-btnRegresar.getHeight(), Align.center);
         btnRegresar.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
