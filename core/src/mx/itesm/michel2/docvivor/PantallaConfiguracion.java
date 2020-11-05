@@ -1,6 +1,7 @@
 package mx.itesm.michel2.docvivor;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -57,6 +58,17 @@ public class PantallaConfiguracion extends Pantalla {
                 super.clicked(event, x, y);
                 //Callar los efectos de sonido on/off
                 //Poner para callar los efectos de sonido
+                if (juego.musicaEstado == 0){
+                    juego.musicaEstado = 1;
+                    Preferences prefs = Gdx.app.getPreferences("musica");
+                    prefs.putFloat("musica", juego.musicaEstado); // Le pongo en uno para que no jale
+                    prefs.flush();  // OBLIGATORIO
+                }else{
+                    juego.musicaEstado = 0;
+                    Preferences prefs = Gdx.app.getPreferences("musica");
+                    prefs.putFloat("musica", juego.musicaEstado); // Le pongo en uno para que no jale
+                    prefs.flush();  // OBLIGATORIO
+                }
             }
         });
         escenaConfiguracion.addActor(btnCallarSonido);
@@ -86,6 +98,7 @@ public class PantallaConfiguracion extends Pantalla {
         batch.draw(texturaConfiguracion,0,0);
         batch.end();
         escenaConfiguracion.draw();
+
     }
 
     @Override

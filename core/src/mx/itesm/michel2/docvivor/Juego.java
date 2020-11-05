@@ -4,6 +4,7 @@ package mx.itesm.michel2.docvivor;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
@@ -20,8 +21,10 @@ public class Juego extends Game {
 		AssetManager manager = new AssetManager();
 		manager.load("Musica/Intro.mp3",Music.class);
 		manager.finishLoading();
-		musicaFondo = Gdx.audio.newMusic(Gdx.files.internal("Musica/Intro.mp3")); //Checar aqui musica
+		musicaFondo = manager.get("Musica/Intro.mp3");
 		setScreen(new PantallaMenu(this));
+		Preferences prefs = Gdx.app.getPreferences("musica");
+		musicaEstado = (int)prefs.getFloat("musica");
 	}
 
 	@Override
