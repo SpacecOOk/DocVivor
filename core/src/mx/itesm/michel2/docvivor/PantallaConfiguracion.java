@@ -73,7 +73,7 @@ public class PantallaConfiguracion extends Pantalla {
                 if (juego.efectoSonidoEstado == 0){
                     juego.efectoSonidoEstado = 1;
                     Preferences prefs = Gdx.app.getPreferences("efectoSonido");
-                    prefs.putFloat("efectoSonido", juego.efectoSonidoEstado); // Le pongo en uno para que no jale
+                    prefs.putFloat("efectoSonido", juego.efectoSonidoEstado);
                     prefs.flush();  // OBLIGATORIO
                 }else{
                     juego.efectoSonidoEstado = 0;
