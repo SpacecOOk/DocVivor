@@ -70,6 +70,17 @@ public class PantallaConfiguracion extends Pantalla {
                 super.clicked(event, x, y);
                 //Callar los efectos de sonido on/off
                 //Poner para callar los efectos de sonido
+                if (juego.musicaEstado == 0){
+                    juego.musicaEstado = 1;
+                    Preferences prefs = Gdx.app.getPreferences("efectoSonido");
+                    prefs.putFloat("efectoSonido", juego.efectoSonidoEstado); // Le pongo en uno para que no jale
+                    prefs.flush();  // OBLIGATORIO
+                }else{
+                    juego.musicaEstado = 0;
+                    Preferences prefs = Gdx.app.getPreferences("efectoSonido");
+                    prefs.putFloat("efectoSonido", juego.efectoSonidoEstado); // Le pongo en uno para que no jale
+                    prefs.flush();  // OBLIGATORIO
+                }
 
             }
         });

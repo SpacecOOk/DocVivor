@@ -15,6 +15,8 @@ public class Juego extends Game {
 
  	protected Music musicaFondo;
  	protected int musicaEstado = 0;
+ 	protected int efectoSonidoEstado = 0;
+
 	@Override
 	public void create () {
 		AssetManager manager = new AssetManager();
@@ -24,6 +26,8 @@ public class Juego extends Game {
 		setScreen(new PantallaMenu(this));
 		Preferences prefs = Gdx.app.getPreferences("musica");
 		musicaEstado = (int)prefs.getFloat("musica");
+		prefs = Gdx.app.getPreferences("efectoSonido");
+		efectoSonidoEstado = (int)prefs.getFloat("efectoSonido");
 	}
 
 	@Override

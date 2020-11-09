@@ -1,6 +1,9 @@
 package mx.itesm.michel2.docvivor;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -85,6 +88,13 @@ public class PantallaNivelUno extends Pantalla {
     private OrthographicCamera camaraVictoriaHUD;
     private Viewport vistaVictoriaHUD;
 
+    //Musica
+    private Sound efectoSalto;
+    private Sound efectoDisparo;
+    private Sound efectoMuerte;
+    private Sound efectoMuerteEnemigo;
+    private Sound efectoPowerUp;
+
     public PantallaNivelUno(Juego juego) {
         this.juego = juego;
     }
@@ -96,12 +106,44 @@ public class PantallaNivelUno extends Pantalla {
         crearPausa();
         crearDerrota();
         crearVictoria();
+        cargarPreferencias();
+        guardarPreferencias();
         crearPersonaje();
         crearEnemigos();
         crearProyectil();
         crearItem();
+        if(juego.efectoSonidoEstado != 1){
+            crearSonidos();
+        }
+
 
         Gdx.input.setInputProcessor(HUD);
+    }
+
+    private void guardarPreferencias() {
+        Preferences prefs = Gdx.app.getPreferences("efectoSonido");
+        prefs.putFloat("efectoSonido", juego.efectoSonidoEstado);
+        prefs.flush();  // OBLIGATORIO
+    }
+
+    private void cargarPreferencias() {
+        Preferences prefs = Gdx.app.getPreferences("efectoSonido");
+        juego.efectoSonidoEstado = (int)prefs.getFloat("efectoSonido");
+    }
+
+    private void crearSonidos() {
+        AssetManager manager = new AssetManager();
+        //cargamos todos los efectos que necesitaremos
+        manager.load("Efectos_de_sonido/moneda.mp3", Sound.class);
+        manager.load("Efectos_de_sonido/muerteDoc.mp3", Sound.class); //falta acortar el sonido del la tos
+        manager.load("Efectos_de_sonido/saltoDoc.mp3", Sound.class);
+        manager.finishLoading();
+        //Asignamos los sonidos a las variables
+        efectoDisparo = manager.get("Efectos_de_sonido/moneda.mp3");
+        efectoMuerte = manager.get("Efectos_de_sonido/muerteDoc.mp3");
+        efectoMuerteEnemigo = manager.get("Efectos_de_sonido/moneda.mp3");
+        efectoPowerUp = manager.get("Efectos_de_sonido/moneda.mp3");
+        efectoSalto = manager.get("Efectos_de_sonido/saltoDoc.mp3");
     }
 
     private void crearItem() {
@@ -251,6 +293,9 @@ public class PantallaNivelUno extends Pantalla {
                         orientacion=0;
                     }
                 }
+                if (juego.efectoSonidoEstado != 1){
+                    efectoDisparo.play();
+                }
             } //Jeringa
         });
 
@@ -271,14 +316,9 @@ public class PantallaNivelUno extends Pantalla {
                 if(jugador.getEstado() != EstadoJugador.SALTANDO){
                     jugador.saltar();
                 }
-
-                /*if(jugador.getEstadoCaminando()==EstadoCaminando.DERECHA){
-                    jugador.setEstadoCaminando(EstadoCaminando.SALTANDO_DERECHA);
-                }else if(jugador.getEstadoCaminando()==EstadoCaminando.IZQUIERDA){
-                    jugador.setEstadoCaminando(EstadoCaminando.SALTANDO_IZQUIERDA);
-                }*/
-
-
+                if (juego.efectoSonidoEstado != 1){
+                    efectoSalto.play();
+                }
             }
         });
 
@@ -399,8 +439,15 @@ public class PantallaNivelUno extends Pantalla {
         //**********Colisiones*************
         verificarColisionesEnemigosDerecha();
         verificarColisionesEnemigosIzquierda();
-        verificarColisionesProyectilDerecha();
-        verificarColisionesProyectilIzquierda();
+        if(kills>=3 && estadoJuego != EstadoJuego.VICTORIA) {
+            jugador.setEstado(EstadoJugador.QUIETO);
+            estadoJuego = EstadoJuego.VICTORIA;
+            escenaVictoria = new EscenaVictoria(vistaVictoriaHUD, batch);
+            Gdx.input.setInputProcessor(escenaVictoria);
+        }else{
+            verificarColisionesProyectilDerecha();
+            verificarColisionesProyectilIzquierda();
+        }
 
         //************Items***************
         verificarColisionTraje();
@@ -409,6 +456,9 @@ public class PantallaNivelUno extends Pantalla {
 
     private void verificarColisionTraje() {
         if (traje.sprite.getBoundingRectangle().overlaps(jugador.sprite.getBoundingRectangle())){
+            if (juego.efectoSonidoEstado != 1){
+                efectoPowerUp.play();
+            }
             int x = (int)jugador.sprite.getX();
             traje.sprite.setY(ALTO);
             jugador = new Jugador(texturaPersonajeTraje,x,133);
@@ -423,6 +473,9 @@ public class PantallaNivelUno extends Pantalla {
                     EnemigoUno enemigo = arrEnemigosIzquierda.get(j);
                     if (proyectil.sprite.getBoundingRectangle().overlaps(enemigo.sprite.getBoundingRectangle())) {
                         //Si hay colisión
+                        if (juego.efectoSonidoEstado != 1){
+                            efectoMuerteEnemigo.play();
+                        }
                         arrEnemigosIzquierda.removeIndex(j);
                         proyectil = null;
                         kills +=1;
@@ -430,11 +483,6 @@ public class PantallaNivelUno extends Pantalla {
                     }
                 }
             }
-        }else if(kills >= 3){
-            jugador.setEstado(EstadoJugador.QUIETO);
-            estadoJuego = EstadoJuego.VICTORIA;
-            escenaVictoria = new EscenaVictoria(vistaVictoriaHUD,batch);
-            Gdx.input.setInputProcessor(escenaVictoria);
         }
     }
 
@@ -445,6 +493,9 @@ public class PantallaNivelUno extends Pantalla {
                     EnemigoUno enemigo = arrEnemigosDerecha.get(j);
                     if (proyectil.sprite.getBoundingRectangle().overlaps(enemigo.sprite.getBoundingRectangle())) {
                         //Si hay colisión
+                        if (juego.efectoSonidoEstado != 0){
+                            efectoMuerteEnemigo.play();
+                        }
                         arrEnemigosDerecha.removeIndex(j);
                         proyectil = null;
                         kills +=1;
@@ -452,11 +503,6 @@ public class PantallaNivelUno extends Pantalla {
                     }
                 }
             }
-        }else if(kills >= 3){
-            jugador.setEstado(EstadoJugador.QUIETO);
-            estadoJuego = EstadoJuego.VICTORIA;
-            escenaVictoria = new EscenaVictoria(vistaVictoriaHUD,batch);
-            Gdx.input.setInputProcessor(escenaVictoria);
         }
     }
 
@@ -499,6 +545,9 @@ public class PantallaNivelUno extends Pantalla {
                     arrEnemigosIzquierda.removeIndex(i);
                     jugador.setVidas(jugador.getVidas()-1);
                 }else{     //Murio
+                    if (juego.efectoSonidoEstado != 1){
+                        efectoMuerte.play();
+                    }
                     jugador.setVidas(jugador.getVidas()-1);
                     jugador.setEstado(EstadoJugador.QUIETO);
                     jugador.sprite.setY(ANCHO); //Lo manda a lo alto
@@ -735,7 +784,6 @@ public class PantallaNivelUno extends Pantalla {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     super.clicked(event, x, y);
-
                     juego.setScreen(new PantallaNiveles(juego));
                 }
             });
