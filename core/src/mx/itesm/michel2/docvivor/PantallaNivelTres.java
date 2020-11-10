@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 public class PantallaNivelTres extends Pantalla {
     private final Juego juego;
 
-    //Fondo
+    //FONDO
     private Texture texturaFondoNivelTres;
 
 
