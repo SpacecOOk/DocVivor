@@ -769,7 +769,7 @@ public class PantallaNivelTres extends Pantalla {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     super.clicked(event, x, y);
-                    //Para pasar al siguiente nivel
+                    //Para ir a los creditos
                     juego.setScreen(new PantallaAcercaDe(juego));
                 }
             });
