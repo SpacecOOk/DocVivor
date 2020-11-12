@@ -492,7 +492,7 @@ public class PantallaNivelUno extends Pantalla {
                     EnemigoUno enemigo = arrEnemigosDerecha.get(j);
                     if (proyectil.sprite.getBoundingRectangle().overlaps(enemigo.sprite.getBoundingRectangle())) {
                         //Si hay colisión
-                        if (juego.efectoSonidoEstado != 0){
+                        if (juego.efectoSonidoEstado != 1){
                             efectoMuerteEnemigo.play();
                         }
                         arrEnemigosDerecha.removeIndex(j);
