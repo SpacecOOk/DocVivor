@@ -115,8 +115,7 @@ public class PantallaNivelUno extends Pantalla {
         if(juego.efectoSonidoEstado != 1){
             crearSonidos();
         }
-
-
+        
         Gdx.input.setInputProcessor(HUD);
     }
 

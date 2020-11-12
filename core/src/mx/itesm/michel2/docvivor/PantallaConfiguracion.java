@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -33,9 +35,18 @@ public class PantallaConfiguracion extends Pantalla {
         escenaConfiguracion = new Stage(vista);
         //Boton Silenciar Música
         Texture texturaCallarMusicaOn = new Texture("Botones/boton_sonido_on.png");
-        TextureRegionDrawable botonCallarMusicaOn = new TextureRegionDrawable(new TextureRegion(texturaCallarMusicaOn));
-        //Aqui para el boton inverso (click)
-        ImageButton btnCallarMusica = new ImageButton(botonCallarMusicaOn);
+        final TextureRegionDrawable botonCallarMusicaOn = new TextureRegionDrawable(new TextureRegion(texturaCallarMusicaOn));
+
+        Texture texturaCallarMusicaOff = new Texture("Botones/boton_sonido_off.png");
+        final TextureRegionDrawable botonCallarMusicaOff = new TextureRegionDrawable(new TextureRegion(texturaCallarMusicaOff));
+
+        //Cambiar la imagen del boton
+        Button.ButtonStyle prendido = new Button.ButtonStyle(botonCallarMusicaOn,botonCallarMusicaOff,null);
+        Button.ButtonStyle apagado = new Button.ButtonStyle(botonCallarMusicaOff,botonCallarMusicaOn,null);
+        final ImageButton.ImageButtonStyle estiloPrendido = new ImageButton.ImageButtonStyle(prendido);
+        final ImageButton.ImageButtonStyle estiloApagado = new ImageButton.ImageButtonStyle(apagado);
+        final ImageButton btnCallarMusica = new ImageButton(botonCallarMusicaOn, botonCallarMusicaOff);
+
         btnCallarMusica.setPosition(ANCHO/4,(ALTO/6)*3, Align.center);
         btnCallarMusica.addListener(new ClickListener(){
             @Override
@@ -43,12 +54,14 @@ public class PantallaConfiguracion extends Pantalla {
                 super.clicked(event, x, y);
                 if (juego.musicaEstado == 0){
                     juego.musicaEstado = 1;
+                    btnCallarMusica.setStyle(estiloApagado);
                     Preferences prefs = Gdx.app.getPreferences("musica");
                     prefs.putFloat("musica", juego.musicaEstado); // Le pongo en uno para que no jale
                     prefs.flush();  // OBLIGATORIO
                     juego.musicaFondo.stop();
                 }else{
                     juego.musicaEstado = 0;
+                    btnCallarMusica.setStyle(estiloPrendido);
                     Preferences prefs = Gdx.app.getPreferences("musica");
                     prefs.putFloat("musica", juego.musicaEstado); // Le pongo en uno para que no jale
                     prefs.flush();  // OBLIGATORIO
@@ -61,8 +74,10 @@ public class PantallaConfiguracion extends Pantalla {
         //Boton Silenciar Efectos de sonido
         Texture texturaCallarSonidoOn = new Texture("Botones/boton_sonido_on.png");
         TextureRegionDrawable botonCallarSonidoOn = new TextureRegionDrawable(new TextureRegion(texturaCallarSonidoOn));
-        //Aqui para el boton inverso (click)
-        ImageButton btnCallarSonido = new ImageButton(botonCallarSonidoOn);
+        Texture texturaCallarSonidoOff = new Texture("Botones/boton_sonido_off.png");
+        TextureRegionDrawable botonCallarSonidoOff = new TextureRegionDrawable(new TextureRegion(texturaCallarSonidoOff));
+        //Cambiar la imagen del boton
+        ImageButton btnCallarSonido = new ImageButton(botonCallarSonidoOn, botonCallarMusicaOff);
         btnCallarSonido.setPosition((ANCHO/4)*3,(ALTO/6)*3, Align.center);
         btnCallarSonido.addListener(new ClickListener(){
             @Override
