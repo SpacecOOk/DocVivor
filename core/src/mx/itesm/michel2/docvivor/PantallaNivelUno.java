@@ -769,6 +769,7 @@ public class PantallaNivelUno extends Pantalla {
                 public void clicked(InputEvent event, float x, float y) {
                     super.clicked(event, x, y);
                     //Para pasar al siguiente nivel
+                    Gdx.app.log("Pantalla","Cargando pantalla del nivel 2...");
                     juego.setScreen(new PantallaNivelDos(juego));
                 }
             });
