@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -41,7 +42,7 @@ public class PantallaNivelDos extends Pantalla {
     //jugador
     private Texture texturaPersonaje;
     private JugadorPlataformas jugador;
-    public static final int TAM_CELDA = 80;
+    public static final int TAM_CELDA = 16;
 
     //vidas
     private Image imagenVidas;
@@ -339,6 +340,8 @@ public class PantallaNivelDos extends Pantalla {
         manager.finishLoading();
         mapa = manager.get("mapa_mario.tmx");
         rendererMapa = new OrthogonalTiledMapRenderer(mapa);
+        TiledMapTileLayer capa = (TiledMapTileLayer)mapa.getLayers().get(0);
+        TiledMapTileLayer.Cell celda = capa.getCell(0, 0);
     }
 
     @Override
@@ -382,9 +385,86 @@ public class PantallaNivelDos extends Pantalla {
     private void actualizar() {
         actualizarCamara();
         actualizarProyectil();
+        moverPersonaje();
     }
 
-    private void actualizarProyectil() {
+    private void moverPersonaje() {
+        // Prueba caída libre inicial o movimiento horizontal
+        switch (jugador.getEstadoMovimiento()) {
+            case INICIANDO:     // Mueve el personaje en Y hasta que se encuentre sobre un bloque
+                // Los bloques en el mapa son de 16x16
+                // Calcula la celda donde estaría después de moverlo
+                int celdaX = (int) (jugador.getX() / TAM_CELDA);
+                int celdaY = (int) ((jugador.getY() + jugador.VELOCIDAD_Y) / TAM_CELDA);
+                // Recuperamos la celda en esta posición
+                // La capa 0 es el fondo
+                TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get(1);
+                TiledMapTileLayer.Cell celda = capa.getCell(celdaX, celdaY);
+                // probar si la celda está ocupada
+                if (celda == null) {
+                    // Celda vacía, entonces el personaje puede avanzar
+                    Gdx.app.log("AKSJF","AKLSJDF");
+                    jugador.caer();
+                }
+                break;
+            case MOV_DERECHA:       // Se mueve horizontal
+            case MOV_IZQUIERDA:
+                probarChoqueParedes();      // Prueba si debe moverse
+                break;
+        }
+
+        // Prueba si debe caer por llegar a un espacio vacío
+        if (jugador.getEstadoMovimiento() != JugadorPlataformas.EstadoMovimiento.INICIANDO
+                && (jugador.getEstadoSalto() != JugadorPlataformas.EstadoSalto.SUBIENDO)) {
+            // Calcula la celda donde estaría después de moverlo
+            int celdaX = (int) (jugador.getX() / TAM_CELDA);
+            int celdaY = (int) ((jugador.getY() + jugador.VELOCIDAD_Y) / TAM_CELDA);
+            // Recuperamos la celda en esta posición
+            // La capa 0 es el fondo
+            TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get(1);
+            TiledMapTileLayer.Cell celdaAbajo = capa.getCell(celdaX, celdaY);
+            TiledMapTileLayer.Cell celdaDerecha = capa.getCell(celdaX + 1, celdaY);
+            // probar si la celda está ocupada
+            if (celdaAbajo == null && celdaDerecha == null) {
+                // Celda vacía, entonces el personaje puede avanzar
+                jugador.caer();
+                jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.CAIDA_LIBRE);
+            } else {
+                // Dejarlo sobre la celda que lo detiene
+                jugador.setPosicion(jugador.getX(), (celdaY + 1) * TAM_CELDA);
+                jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.EN_PISO);
+            }
+        }
+
+        // Saltar
+        switch (jugador.getEstadoSalto()) {
+            case SUBIENDO:
+            case BAJANDO:
+                jugador.actualizarSalto();    // Actualizar posición en 'y'
+                break;
+        }
+    }
+
+    private void probarChoqueParedes() {
+        JugadorPlataformas.EstadoMovimiento estado = jugador.getEstadoMovimiento();
+        // Quitar porque este método sólo se llama cuando se está moviendo
+        if ( estado!= JugadorPlataformas.EstadoMovimiento.MOV_DERECHA && estado!=JugadorPlataformas.EstadoMovimiento.MOV_IZQUIERDA){
+            return;
+        }
+        float px = jugador.getX();    // Posición actual
+        // Posición después de actualizar
+        px = jugador.getEstadoMovimiento()==JugadorPlataformas.EstadoMovimiento.MOV_DERECHA? px+JugadorPlataformas.VELOCIDAD_X:
+                px-JugadorPlataformas.VELOCIDAD_X;
+        int celdaX = (int)(px/TAM_CELDA);   // Casilla del personaje en X
+        if (jugador.getEstadoMovimiento()== JugadorPlataformas.EstadoMovimiento.MOV_DERECHA) {
+            celdaX++;   // Casilla del lado derecho
+        }
+        int celdaY = (int)(jugador.getY()/TAM_CELDA); // Casilla del personaje en Y
+        TiledMapTileLayer capaPlataforma = (TiledMapTileLayer) mapa.getLayers().get(1);
+
+    }
+
+    private void actualizarProyectil(){
         if(proyectil != null) {
             proyectil.mover(orientacion);
             if (proyectil.sprite.getX() > jugador.getX() + ANCHO / 2) {

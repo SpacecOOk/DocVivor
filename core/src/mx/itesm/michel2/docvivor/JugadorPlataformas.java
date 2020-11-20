@@ -47,7 +47,7 @@ public class JugadorPlataformas {
         timerAnimacion = 0;
         // Crea el sprite cuando para el personaje quieto (idle)
         sprite = new Sprite(texturaPersonaje[0][1]);    // quieto
-        estadoMovimiento = EstadoMovimiento.QUIETO;
+        estadoMovimiento = EstadoMovimiento.INICIANDO;
         estadoSalto = EstadoSalto.EN_PISO;
     }
 
@@ -56,6 +56,9 @@ public class JugadorPlataformas {
         actualizar();
         // Dibuja el personaje dependiendo del estadoMovimiento
         switch (estadoMovimiento) {
+            case INICIANDO:
+                setEstadoMovimiento(EstadoMovimiento.QUIETO);
+                break;
             case MOV_DERECHA:
             case MOV_IZQUIERDA:
                 // Incrementa el timer para calcular el frame que se dibuja
@@ -187,6 +190,7 @@ public class JugadorPlataformas {
     }
 
     public enum EstadoMovimiento {
+        INICIANDO,
         QUIETO,
         QUIETO_IZQUIERDA,
         MOV_IZQUIERDA,
