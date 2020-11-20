@@ -24,10 +24,13 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class PantallaNivelDos extends Pantalla {
     private final Juego juego;
-
+    public static final float ANCHO_MAPA = 2000; //CAMBIAR EL ANCHO CUANDO ESTE EL MAPA
     //fondo
     private TiledMap mapa;
     private OrthogonalTiledMapRenderer rendererMapa;
+
+    //Manager
+    private AssetManager manager;
 
     //HUD
     private Stage HUD;
@@ -36,7 +39,8 @@ public class PantallaNivelDos extends Pantalla {
 
     //jugador
     private Texture texturaPersonaje;
-    private Jugador jugador;
+    private JugadorPlataformas jugador;
+    public static final int TAM_CELDA = 80;
 
     //vidas
     private Image imagenVidas;
@@ -83,9 +87,42 @@ public class PantallaNivelDos extends Pantalla {
 
     @Override
     public void show() {
+        manager = new AssetManager();
+        crearPersonaje();
         crearmapa();
         crearHUD();
+        crearPausa();
+        crearDerrota();
+        crearVictoria();
 
+        Gdx.input.setInputProcessor(HUD);
+    }
+
+    private void crearPersonaje() {
+        texturaPersonaje = new Texture("MovimientosMelee/Doctor_M_D.png");
+        jugador = new JugadorPlataformas(texturaPersonaje);
+        jugador.getSprite().setPosition(100,100);
+    }
+
+    private void crearVictoria() {
+        camaraVictoriaHUD = new OrthographicCamera(ANCHO,ALTO);
+        camaraVictoriaHUD.position.set(ANCHO/2,ALTO/2,0);
+        camaraVictoriaHUD.update();
+        vistaVictoriaHUD = new StretchViewport(ANCHO,ALTO,camaraVictoriaHUD);
+    }
+
+    private void crearDerrota() {
+        camaraDerrotaHUD = new OrthographicCamera(ANCHO,ALTO);
+        camaraDerrotaHUD.position.set(ANCHO/2,ALTO/2,0);
+        camaraDerrotaHUD.update();
+        vistaDerrotaHUD = new StretchViewport(ANCHO,ALTO,camaraDerrotaHUD);
+    }
+
+    private void crearPausa() {
+        camaraPausaHUD = new OrthographicCamera(ANCHO,ALTO);
+        camaraPausaHUD.position.set(ANCHO/2,ALTO/2,0);
+        camaraPausaHUD.update();
+        vistaPausaHUD = new StretchViewport(ANCHO,ALTO,camaraPausaHUD);
     }
 
     private void crearHUD() {
@@ -110,23 +147,24 @@ public class PantallaNivelDos extends Pantalla {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if (jugador.getEstado() == EstadoJugador.SALTANDO) {//Cuando camina a la derecha
-                    jugador.setEstadoCaminando(EstadoCaminando.DERECHA);
-                } else {
-                    jugador.setEstadoCaminando(EstadoCaminando.DERECHA);
-                    jugador.setEstado(EstadoJugador.CAMINANDO);
+                if(jugador.getEstadoSalto() == JugadorPlataformas.EstadoSalto.SUBIENDO || jugador.getEstadoSalto() == JugadorPlataformas.EstadoSalto.BAJANDO){
+                    jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.MOV_DERECHA);
+                }else{
+                    jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.EN_PISO);
+                    jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.MOV_DERECHA);
                 }
+
                 //jugador.setEstado(EstadoJugador.CAMINANDO);
                 return super.touchDown(event, x, y, pointer, button);
             }
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                if (jugador.getEstado() == EstadoJugador.SALTANDO) {
-                    jugador.setEstadoCaminando(EstadoCaminando.QUIETO_DERECHA); //Revisar los quietos y donde van
-                } else {
-                    jugador.setEstadoCaminando(EstadoCaminando.QUIETO_DERECHA);          //Cuando deja de presionar el boton
-                    jugador.setEstado(EstadoJugador.QUIETO);
+                if(jugador.getEstadoSalto() == JugadorPlataformas.EstadoSalto.SUBIENDO || jugador.getEstadoSalto() == JugadorPlataformas.EstadoSalto.BAJANDO){
+                    jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
+                }else{
+                    jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.EN_PISO);
+                    jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
                 }
                 super.touchUp(event, x, y, pointer, button);
             }
@@ -144,23 +182,24 @@ public class PantallaNivelDos extends Pantalla {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if (jugador.getEstado() == EstadoJugador.SALTANDO) {             //Cuando camina a la izquierda
-                    jugador.setEstadoCaminando(EstadoCaminando.IZQUIERDA);
-                } else {
-                    jugador.setEstadoCaminando(EstadoCaminando.IZQUIERDA);
-                    jugador.setEstado(EstadoJugador.CAMINANDO);
+                if(jugador.getEstadoSalto() == JugadorPlataformas.EstadoSalto.SUBIENDO || jugador.getEstadoSalto() == JugadorPlataformas.EstadoSalto.BAJANDO){
+                    jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.MOV_IZQUIERDA);
+                }else{
+                    jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.EN_PISO);
+                    jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.MOV_IZQUIERDA);
                 }
+
 
                 return super.touchDown(event, x, y, pointer, button);
             }
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                if (jugador.getEstado() == EstadoJugador.SALTANDO) {
-                    jugador.setEstadoCaminando(EstadoCaminando.QUIETO_IZQUIERDA); //Revisar los quietos y donde van
-                } else {
-                    jugador.setEstadoCaminando(EstadoCaminando.QUIETO_IZQUIERDA);          //Cuando deja de presionar el boton
-                    jugador.setEstado(EstadoJugador.QUIETO);
+                if(jugador.getEstadoSalto() == JugadorPlataformas.EstadoSalto.SUBIENDO || jugador.getEstadoSalto() == JugadorPlataformas.EstadoSalto.BAJANDO){
+                    jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
+                }else{
+                    jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.EN_PISO);
+                    jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
                 }
 
                 super.touchUp(event, x, y, pointer, button);
@@ -182,13 +221,13 @@ public class PantallaNivelDos extends Pantalla {
                 super.clicked(event, x, y);
                 //Cuando le pica para atacar
                 if (proyectil == null) { //si no existe la creo, sino no la crea
-                    if (jugador.getEstadoCaminando() == EstadoCaminando.DERECHA || jugador.getEstadoCaminando() == EstadoCaminando.QUIETO_DERECHA) {
-                        proyectil = new Proyectil(texturaProyectilD, jugador.sprite.getX() + jugador.sprite.getWidth() / 2,
-                                jugador.sprite.getY() + jugador.sprite.getHeight() * 0.3f);
+                    if (jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.MOV_DERECHA || jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.QUIETO) {
+                        proyectil = new Proyectil(texturaProyectilD, jugador.getX() + jugador.getSprite().getWidth() / 2,
+                                jugador.getY() + jugador.getSprite().getHeight() * 0.3f);
                         orientacion = 1;
-                    } else if (jugador.getEstadoCaminando() == EstadoCaminando.IZQUIERDA || jugador.getEstadoCaminando() == EstadoCaminando.QUIETO_IZQUIERDA) {
-                        proyectil = new Proyectil(texturaProyectilI, jugador.sprite.getX() + jugador.sprite.getWidth() / 2,
-                                jugador.sprite.getY() + jugador.sprite.getHeight() * 0.3f);
+                    } else if (jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.MOV_IZQUIERDA || jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.QUIETO) {
+                        proyectil = new Proyectil(texturaProyectilI, jugador.getX() + jugador.getSprite().getWidth() / 2,
+                                jugador.getY() + jugador.getSprite().getHeight() * 0.3f);
                         orientacion = 0;
                     }
                 }
@@ -212,9 +251,7 @@ public class PantallaNivelDos extends Pantalla {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 //Salta a la izquierda/derecha
-                if (jugador.getEstado() != EstadoJugador.SALTANDO) {
                     jugador.saltar();
-                }
                 if (juego.efectoSonidoEstado != 1) {
                     efectoSalto.play();
                 }
@@ -262,21 +299,21 @@ public class PantallaNivelDos extends Pantalla {
     private void crearmapa() {
         AssetManager manager = new AssetManager();
         manager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
-        manager.load("Juego_plataformas/mapa_mario.tmx", TiledMap.class); //cambiar nombres
+        manager.load("mapa_mario.tmx", TiledMap.class); //cambiar nombres
         manager.finishLoading();
-        mapa = manager.get("Juego_plataformas/mapa_mario.tmx");
+        mapa = manager.get("mapa_mario.tmx");
         rendererMapa = new OrthogonalTiledMapRenderer(mapa);
     }
 
     @Override
     public void render(float delta) {
-        //actualizar()
+        actualizar();
         borrarPantalla(0, 0, 0.5f);
         batch.setProjectionMatrix(camara.combined);
         rendererMapa.setView(camara);
         rendererMapa.render();
         batch.begin();
-
+        jugador.render(batch);
         batch.end();
 
         //************ HUD ***************
@@ -301,6 +338,23 @@ public class PantallaNivelDos extends Pantalla {
             escenaVictoria.draw();
         }
 
+    }
+
+    private void actualizar() {
+        actualizarCamara();
+    }
+
+    private void actualizarCamara() {
+        float xCamara = camara.position.x;
+        if (jugador.getX() < ANCHO/2){
+            xCamara = ANCHO/2;
+        }else if (jugador.getX() > 2000){
+            xCamara = ANCHO/2; //checar para llegar al limite del mapa
+        }else {
+            xCamara = jugador.getX();
+        }
+        camara.position.x = xCamara;
+        camara.update();
     }
 
     @Override
