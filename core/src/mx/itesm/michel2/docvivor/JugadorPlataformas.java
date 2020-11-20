@@ -47,7 +47,7 @@ public class JugadorPlataformas {
         timerAnimacion = 0;
         // Crea el sprite cuando para el personaje quieto (idle)
         sprite = new Sprite(texturaPersonaje[0][1]);    // quieto
-        estadoMovimiento = EstadoMovimiento.INICIANDO;
+        estadoMovimiento = EstadoMovimiento.QUIETO;
         estadoSalto = EstadoSalto.EN_PISO;
     }
 
@@ -75,7 +75,7 @@ public class JugadorPlataformas {
                 // Dibuja el frame en las coordenadas del sprite
                 batch.draw(region, sprite.getX(), sprite.getY());
                 break;
-            case INICIANDO:
+
             case QUIETO:
                 if(ladoQUIETO==1){
                     ladoQUIETO=0;
@@ -91,7 +91,7 @@ public class JugadorPlataformas {
                 sprite.draw(batch);
                 break;
         }
-
+        actualizarSalto();
     }
 
     // Actualiza el sprite, de acuerdo al estadoMovimiento
@@ -123,6 +123,7 @@ public class JugadorPlataformas {
 
     // Actualiza la posición en 'y', está saltando
     public void actualizarSalto() {
+        if(estadoSalto!=EstadoSalto.EN_PISO){//POSIBLE ERROR A FUTURO
         // Ejecutar movimiento vertical
         float y = V0 * tiempoSalto - G_2 * tiempoSalto * tiempoSalto;  // Desplazamiento desde que inició el salto
         if (tiempoSalto > tiempoVuelo / 2) { // Llegó a la altura máxima?
@@ -135,6 +136,7 @@ public class JugadorPlataformas {
             // Regresó al piso
             sprite.setY(yInicial);  // Lo deja donde inició el salto
             estadoSalto = EstadoSalto.EN_PISO;  // Ya no está saltando
+        }
         }
     }
 
@@ -185,7 +187,6 @@ public class JugadorPlataformas {
     }
 
     public enum EstadoMovimiento {
-        INICIANDO,
         QUIETO,
         QUIETO_IZQUIERDA,
         MOV_IZQUIERDA,

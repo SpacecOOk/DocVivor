@@ -568,6 +568,9 @@ public class PantallaNivelUno extends Pantalla {
                     arrEnemigosDerecha.removeIndex(i);
                     jugador.setVidas(jugador.getVidas()-1);
                 }else{     //Murio
+                    if (juego.efectoSonidoEstado != 1) {
+                        efectoMuerte.play();
+                    }
                     jugador.setVidas(jugador.getVidas()-1);
                     jugador.setEstado(EstadoJugador.QUIETO);
                     jugador.sprite.setY(ANCHO); //Lo manda a lo alto

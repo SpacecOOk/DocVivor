@@ -1,6 +1,7 @@
 package mx.itesm.michel2.docvivor;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Sound;
@@ -94,8 +95,43 @@ public class PantallaNivelDos extends Pantalla {
         crearPausa();
         crearDerrota();
         crearVictoria();
-
+        crearProyectil();
+        cargarPreferencias();
+        guardarPreferencias();
+        if(juego.efectoSonidoEstado != 1){
+            crearSonidos();
+        }
         Gdx.input.setInputProcessor(HUD);
+    }
+
+    private void guardarPreferencias() {
+        Preferences prefs = Gdx.app.getPreferences("efectoSonido");
+        prefs.putFloat("efectoSonido", juego.efectoSonidoEstado);
+        prefs.flush();  // OBLIGATORIO
+    }
+
+    private void cargarPreferencias() {
+        Preferences prefs = Gdx.app.getPreferences("efectoSonido");
+        juego.efectoSonidoEstado = (int)prefs.getFloat("efectoSonido");
+    }
+
+    private void crearSonidos() {
+        //cargamos todos los efectos que necesitaremos
+        manager.load("Efectos_de_sonido/moneda.mp3", Sound.class);
+        manager.load("Efectos_de_sonido/muerteDoc.mp3", Sound.class);
+        manager.load("Efectos_de_sonido/saltoDoc.mp3", Sound.class);
+        manager.finishLoading();
+        //Asignamos los sonidos a las variables
+        efectoDisparo = manager.get("Efectos_de_sonido/moneda.mp3");
+        efectoMuerte = manager.get("Efectos_de_sonido/muerteDoc.mp3");
+        efectoMuerteEnemigo = manager.get("Efectos_de_sonido/moneda.mp3");
+        efectoPowerUp = manager.get("Efectos_de_sonido/moneda.mp3");
+        efectoSalto = manager.get("Efectos_de_sonido/saltoDoc.mp3");
+    }
+
+    private void crearProyectil() {
+        texturaProyectilD = new Texture("Balas/Bala_Jeringa_D.png");
+        texturaProyectilI = new Texture("Balas/Bala_Jeringa_I.png");
     }
 
     private void crearPersonaje() {
@@ -314,6 +350,9 @@ public class PantallaNivelDos extends Pantalla {
         rendererMapa.render();
         batch.begin();
         jugador.render(batch);
+        if(proyectil!=null){
+            proyectil.render(batch);
+        }
         batch.end();
 
         //************ HUD ***************
@@ -342,6 +381,18 @@ public class PantallaNivelDos extends Pantalla {
 
     private void actualizar() {
         actualizarCamara();
+        actualizarProyectil();
+    }
+
+    private void actualizarProyectil() {
+        if(proyectil != null) {
+            proyectil.mover(orientacion);
+            if (proyectil.sprite.getX() > jugador.getX() + ANCHO / 2) {
+                proyectil = null;
+            } else if (proyectil.sprite.getX() < jugador.getX() - ANCHO / 2) {
+                proyectil = null;
+            }
+        }
     }
 
     private void actualizarCamara() {
