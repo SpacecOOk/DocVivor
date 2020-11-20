@@ -62,7 +62,11 @@ public class Jugador extends Objeto {
     }
 
     private void moverIzquierda() {
-        sprite.setX(sprite.getX()-DX);
+        if(sprite.getX()<10){
+            setEstadoCaminando(EstadoCaminando.QUIETO_IZQUIERDA);
+        }else {
+            sprite.setX(sprite.getX() - DX);
+        }
     }
 
     private void moverDerecha() {

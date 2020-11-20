@@ -251,6 +251,7 @@ public class PantallaNivelUno extends Pantalla {
                     jugador.setEstadoCaminando(EstadoCaminando.IZQUIERDA);
                     jugador.setEstado(EstadoJugador.CAMINANDO);
                 }
+
                 return super.touchDown(event, x, y, pointer, button);
             }
 
