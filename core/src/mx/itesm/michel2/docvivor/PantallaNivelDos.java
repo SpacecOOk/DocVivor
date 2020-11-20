@@ -196,10 +196,10 @@ public class PantallaNivelDos extends Pantalla {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 if(jugador.getEstadoSalto() == JugadorPlataformas.EstadoSalto.SUBIENDO || jugador.getEstadoSalto() == JugadorPlataformas.EstadoSalto.BAJANDO){
-                    jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
+                    jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO_IZQUIERDA);
                 }else{
                     jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.EN_PISO);
-                    jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
+                    jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO_IZQUIERDA);
                 }
 
                 super.touchUp(event, x, y, pointer, button);
@@ -225,7 +225,7 @@ public class PantallaNivelDos extends Pantalla {
                         proyectil = new Proyectil(texturaProyectilD, jugador.getX() + jugador.getSprite().getWidth() / 2,
                                 jugador.getY() + jugador.getSprite().getHeight() * 0.3f);
                         orientacion = 1;
-                    } else if (jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.MOV_IZQUIERDA || jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.QUIETO) {
+                    } else if (jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.MOV_IZQUIERDA || jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.QUIETO_IZQUIERDA) {
                         proyectil = new Proyectil(texturaProyectilI, jugador.getX() + jugador.getSprite().getWidth() / 2,
                                 jugador.getY() + jugador.getSprite().getHeight() * 0.3f);
                         orientacion = 0;

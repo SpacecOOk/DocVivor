@@ -20,6 +20,7 @@ public class JugadorPlataformas {
     // Estados del personaje
     private EstadoMovimiento estadoMovimiento;
     private EstadoSalto estadoSalto;
+    public int ladoQUIETO;
 
     // SALTO del personaje
     private static final float V0 = 65;     // Velocidad inicial del salto
@@ -76,7 +77,18 @@ public class JugadorPlataformas {
                 break;
             case INICIANDO:
             case QUIETO:
-                sprite.draw(batch); // Dibuja el sprite
+                if(ladoQUIETO==1){
+                    ladoQUIETO=0;
+                    sprite.flip(true,false);
+                }
+                sprite.draw(batch);
+                break;
+            case QUIETO_IZQUIERDA:
+                if(ladoQUIETO==0){
+                    ladoQUIETO=1;
+                    sprite.flip(true,false);
+                }
+                sprite.draw(batch);
                 break;
         }
 
@@ -175,6 +187,7 @@ public class JugadorPlataformas {
     public enum EstadoMovimiento {
         INICIANDO,
         QUIETO,
+        QUIETO_IZQUIERDA,
         MOV_IZQUIERDA,
         MOV_DERECHA
     }
