@@ -70,8 +70,13 @@ public class Jugador extends Objeto {
     }
 
     private void moverDerecha() {
-        sprite.setX(sprite.getX()+DX);
+        if(sprite.getX()>3850){
+            setEstadoCaminando(EstadoCaminando.QUIETO_DERECHA);
+        }else {
+            sprite.setX(sprite.getX() + DX);
+        }
     }
+
 
     public void saltar(){
         estado = EstadoJugador.SALTANDO;
