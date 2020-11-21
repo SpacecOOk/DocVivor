@@ -46,12 +46,12 @@ public class PantallaConfiguracion extends Pantalla {
         final ImageButton.ImageButtonStyle estiloPrendido = new ImageButton.ImageButtonStyle(prendido);
         final ImageButton.ImageButtonStyle estiloApagado = new ImageButton.ImageButtonStyle(apagado);
         final ImageButton btnCallarMusica = new ImageButton(botonCallarMusicaOn, botonCallarMusicaOff);
-        //Boton de activar o desactivar musica
         if(juego.musicaEstado == 0){
             btnCallarMusica.setStyle(estiloPrendido);
         }else{
             btnCallarMusica.setStyle(estiloApagado);
         }
+
         btnCallarMusica.setPosition(ANCHO/4,(ALTO/6)*3, Align.center);
         btnCallarMusica.addListener(new ClickListener(){
             @Override
@@ -84,15 +84,14 @@ public class PantallaConfiguracion extends Pantalla {
 
         //Cambiar la imagen del boton
         Button.ButtonStyle efectosPrendido = new Button.ButtonStyle(botonCallarSonidoOn,botonCallarSonidoOff,null);
-        Button.ButtonStyle efectosApagado = new Button.ButtonStyle(botonCallarSonidoOff,botonCallarSonidoOn,null);
+        Button.ButtonStyle efectosApagado = new Button.ButtonStyle(botonCallarSonidoOn,botonCallarSonidoOff,null);
         final ImageButton.ImageButtonStyle estiloEfectoPrendido = new ImageButton.ImageButtonStyle(efectosPrendido);
         final ImageButton.ImageButtonStyle estiloEfectoApagado = new ImageButton.ImageButtonStyle(efectosApagado);
         final ImageButton btnCallarSonido = new ImageButton(botonCallarSonidoOn, botonCallarSonidoOff);
-        //Activar o desactivar efectos de sonido
-        if(juego.efectoSonidoEstado != 0){
-            btnCallarSonido.setStyle(estiloEfectoApagado);
-        }else{
+        if(juego.efectoSonidoEstado == 0){
             btnCallarSonido.setStyle(estiloEfectoPrendido);
+        }else{
+            btnCallarSonido.setStyle(estiloEfectoApagado);
         }
         btnCallarSonido.setPosition((ANCHO/4)*3,(ALTO/6)*3, Align.center);
         btnCallarSonido.addListener(new ClickListener(){
@@ -102,16 +101,16 @@ public class PantallaConfiguracion extends Pantalla {
                 //Callar los efectos de sonido on/off
                 //Poner para callar los efectos de sonido
                 if (juego.efectoSonidoEstado == 0){
+                    juego.efectoSonidoEstado = 1;
                     btnCallarSonido.setStyle(estiloEfectoApagado);
-                    juego.efectoSonidoEstado = 1; //Con uno silenciamos los efectos
                     Preferences prefs = Gdx.app.getPreferences("efectoSonido");
                     prefs.putFloat("efectoSonido", juego.efectoSonidoEstado);
                     prefs.flush();  // OBLIGATORIO
                 }else{
-                    btnCallarSonido.setStyle(estiloEfectoPrendido);
                     juego.efectoSonidoEstado = 0;
+                    btnCallarSonido.setStyle(estiloEfectoPrendido);
                     Preferences prefs = Gdx.app.getPreferences("efectoSonido");
-                    prefs.putFloat("efectoSonido", juego.efectoSonidoEstado);
+                    prefs.putFloat("efectoSonido", juego.efectoSonidoEstado); // Le pongo en uno para que no jale
                     prefs.flush();  // OBLIGATORIO
                 }
 

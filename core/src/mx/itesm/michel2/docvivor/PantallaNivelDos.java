@@ -42,7 +42,7 @@ public class PantallaNivelDos extends Pantalla {
     //jugador
     private Texture texturaPersonaje;
     private JugadorPlataformas jugador;
-    public static final int TAM_CELDA = 16;
+    public static final int TAM_CELDA = 32;
 
     //vidas
     private Image imagenVidas;
@@ -340,7 +340,7 @@ public class PantallaNivelDos extends Pantalla {
         manager.finishLoading();
         mapa = manager.get("mapa_mario.tmx");
         rendererMapa = new OrthogonalTiledMapRenderer(mapa);
-        TiledMapTileLayer capa = (TiledMapTileLayer)mapa.getLayers().get(0);
+        TiledMapTileLayer capa = (TiledMapTileLayer)mapa.getLayers().get(0); //tal vez podemos quitar estas lineas
         TiledMapTileLayer.Cell celda = capa.getCell(0, 0);
     }
 
@@ -392,7 +392,7 @@ public class PantallaNivelDos extends Pantalla {
         // Prueba caída libre inicial o movimiento horizontal
         switch (jugador.getEstadoMovimiento()) {
             case INICIANDO:     // Mueve el personaje en Y hasta que se encuentre sobre un bloque
-                // Los bloques en el mapa son de 16x16
+                // Los bloques en el mapa son de 32x32
                 // Calcula la celda donde estaría después de moverlo
                 int celdaX = (int) (jugador.getX() / TAM_CELDA);
                 int celdaY = (int) ((jugador.getY() + jugador.VELOCIDAD_Y) / TAM_CELDA);
