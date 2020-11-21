@@ -4,6 +4,5 @@ public enum EstadoEnemigo {
 
     CAMINANDO,
     QUIETO,
-    MUERTO
 
 }

@@ -14,6 +14,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -21,12 +22,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class PantallaNivelDos extends Pantalla {
     private final Juego juego;
-    public static final float ANCHO_MAPA = 6000; //CAMBIAR EL ANCHO CUANDO ESTE EL MAPA
+    public static final float ANCHO_MAPA = 899*32; //CAMBIAR EL ANCHO CUANDO ESTE EL MAPA
     //fondo
     private TiledMap mapa;
     private OrthogonalTiledMapRenderer rendererMapa;
@@ -83,6 +85,10 @@ public class PantallaNivelDos extends Pantalla {
     private OrthographicCamera camaraVictoriaHUD;
     private Viewport vistaVictoriaHUD;
 
+    //Enemigos
+    private Texture texturaEnemigoUno;
+    private Array<EnemigoUnoPlataformas> arrEnemigosUno;
+
     public PantallaNivelDos(Juego juego) {
         this.juego = juego;
     }
@@ -99,10 +105,22 @@ public class PantallaNivelDos extends Pantalla {
         crearProyectil();
         cargarPreferencias();
         guardarPreferencias();
+        crearEnemigos();
         if(juego.efectoSonidoEstado != 1){
             crearSonidos();
         }
         Gdx.input.setInputProcessor(HUD);
+    }
+
+    private void crearEnemigos() {
+        texturaEnemigoUno = new Texture("Enemigos/Enemigo_1.png");
+        arrEnemigosUno = new Array<>();
+        for (int i = 0; i < 5; i++) {
+            EnemigoUnoPlataformas enemigo = new EnemigoUnoPlataformas(texturaEnemigoUno);
+            int x = MathUtils.random(40*32,859*32);
+            enemigo.getSprite().setPosition(x,21*32);
+            arrEnemigosUno.add(enemigo);
+        }
     }
 
     private void guardarPreferencias() {
@@ -353,6 +371,7 @@ public class PantallaNivelDos extends Pantalla {
         rendererMapa.render();
         batch.begin();
         jugador.render(batch);
+        dibujarEnemigos();
         if(proyectil!=null){
             proyectil.render(batch);
         }
@@ -382,10 +401,92 @@ public class PantallaNivelDos extends Pantalla {
 
     }
 
+    private void dibujarEnemigos() {
+        for (EnemigoUnoPlataformas enemigo : arrEnemigosUno) {
+            enemigo.render(batch);
+            if(estadoJuego == EstadoJuego.JUGANDO){
+                enemigo.setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.INICIANDO);
+            }else {
+                enemigo.setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.QUIETO_IZQUIERDA);
+            }
+        }
+    }
+
     private void actualizar() {
         actualizarCamara();
         actualizarProyectil();
         moverPersonaje();
+        moverEnemigos();
+    }
+
+    private void moverEnemigos() {
+        // Prueba caída libre inicial o movimiento horizontal
+        for (EnemigoUnoPlataformas enemigo:arrEnemigosUno) {
+            switch (enemigo.getEstadoMov()) {
+                case INICIANDO:     // Mueve el personaje en Y hasta que se encuentre sobre un bloque
+                    // Los bloques en el mapa son de 32x32
+                    // Calcula la celda donde estaría después de moverlo
+                    int celdaX = (int) (enemigo.getX() / TAM_CELDA);
+                    int celdaY = (int) ((enemigo.getY() + enemigo.VELOCIDAD_Y) / TAM_CELDA);
+                    // Recuperamos la celda en esta posición
+                    // La capa 0 son las plataformas
+                    TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get(7);
+                    TiledMapTileLayer.Cell celda = capa.getCell(celdaX, celdaY);
+                    // probar si la celda está ocupada
+                    if (celda == null) {
+                        // Celda vacía, entonces el personaje puede avanzar
+                        Gdx.app.log("AKSJF", "AKLSJDF");
+                        enemigo.caer();
+                    }
+                    break;
+                case MOV_DERECHA:       // Se mueve horizontal
+                case MOV_IZQUIERDA:
+                    probarChoqueParedesEnemigos();      // Prueba si debe moverse
+                    break;
+            }
+
+            // Prueba si debe caer por llegar a un espacio vacío
+            if (enemigo.getEstadoMov() != EnemigoUnoPlataformas.estadoMovimiento.INICIANDO) {
+                // Calcula la celda donde estaría después de moverlo
+                int celdaX = (int) (enemigo.getX() / TAM_CELDA);
+                int celdaY = (int) ((enemigo.getY() + enemigo.VELOCIDAD_Y) / TAM_CELDA);
+                // Recuperamos la celda en esta posición
+                // La capa 0 son las plataformas
+                TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get(7);
+                TiledMapTileLayer.Cell celdaAbajo = capa.getCell(celdaX, celdaY);
+                TiledMapTileLayer.Cell celdaDerecha = capa.getCell(celdaX + 1, celdaY);
+                // probar si la celda está ocupada
+                if (celdaAbajo == null && celdaDerecha == null) {
+                    // Celda vacía, entonces el personaje puede avanzar
+                    enemigo.caer();
+                    //jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.CAIDA_LIBRE); ******revisar******
+                } else {
+                    // Dejarlo sobre la celda que lo detiene
+                    enemigo.setPosicion(enemigo.getX(), (celdaY + 1) * TAM_CELDA);
+                    //jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.EN_PISO);*******revisar*******
+                }
+            }
+        }
+    }
+
+    private void probarChoqueParedesEnemigos() {
+        for (EnemigoUnoPlataformas enemigo:arrEnemigosUno) {
+            EnemigoUnoPlataformas.estadoMovimiento estado = enemigo.getEstadoMov();
+            // Quitar porque este método sólo se llama cuando se está moviendo
+            if (estado != EnemigoUnoPlataformas.estadoMovimiento.MOV_DERECHA && estado != EnemigoUnoPlataformas.estadoMovimiento.MOV_IZQUIERDA) {
+                return;
+            }
+            float px = enemigo.getX();    // Posición actual
+            // Posición después de actualizar
+            px = enemigo.getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_DERECHA ? px + EnemigoUnoPlataformas.VELOCIDAD_X :
+                    px - EnemigoUnoPlataformas.VELOCIDAD_X;
+            int celdaX = (int) (px / TAM_CELDA);   // Casilla del personaje en X
+            if (enemigo.getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_DERECHA) {
+                celdaX++;   // Casilla del lado derecho
+            }
+            int celdaY = (int) (enemigo.getY() / TAM_CELDA); // Casilla del personaje en Y
+            TiledMapTileLayer capaPlataforma = (TiledMapTileLayer) mapa.getLayers().get(7); //***** VERIFICAR CAPA*****
+        }
     }
 
     private void moverPersonaje() {
@@ -398,7 +499,7 @@ public class PantallaNivelDos extends Pantalla {
                 int celdaY = (int) ((jugador.getY() + jugador.VELOCIDAD_Y) / TAM_CELDA);
                 // Recuperamos la celda en esta posición
                 // La capa 0 son las plataformas
-                TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get(0);
+                TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get(7);
                 TiledMapTileLayer.Cell celda = capa.getCell(celdaX, celdaY);
                 // probar si la celda está ocupada
                 if (celda == null) {
@@ -421,7 +522,7 @@ public class PantallaNivelDos extends Pantalla {
             int celdaY = (int) ((jugador.getY() + jugador.VELOCIDAD_Y) / TAM_CELDA);
             // Recuperamos la celda en esta posición
             // La capa 0 son las plataformas
-            TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get(0);
+            TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get(7);
             TiledMapTileLayer.Cell celdaAbajo = capa.getCell(celdaX, celdaY);
             TiledMapTileLayer.Cell celdaDerecha = capa.getCell(celdaX + 1, celdaY);
             // probar si la celda está ocupada
@@ -479,7 +580,7 @@ public class PantallaNivelDos extends Pantalla {
         float xCamara = camara.position.x;
         if (jugador.getX() < ANCHO/2){
             xCamara = ANCHO/2;
-        }else if (jugador.getX() > 4000){ //checar la condicion del mapa
+        }else if (jugador.getX() > 899*32){ //checar la condicion del mapa
             xCamara = ANCHO/2; //checar para llegar al limite del mapa
         }else {
             xCamara = jugador.getX();

@@ -26,7 +26,7 @@ public class Jugador extends Objeto {
     //Lo del salto
     private float yBase; //es la 'y' del piso
     private float tAire; // tiempo de simulacion (tiempo en el aire)
-    private final float V0 = 65; // 80 pixeles por segundo
+    private final float V0 = 65; // 65 pixeles por segundo
     private final float G = 10;
     private  float tVuelo;
     private EstadoJugador estado;
