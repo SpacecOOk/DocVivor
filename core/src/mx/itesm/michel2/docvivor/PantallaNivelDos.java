@@ -336,9 +336,9 @@ public class PantallaNivelDos extends Pantalla {
     private void crearmapa() {
         AssetManager manager = new AssetManager();
         manager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
-        manager.load("mapa_mario.tmx", TiledMap.class); //cambiar nombres
+        manager.load("Level2/Lvl2_mapaFinal.tmx", TiledMap.class); //cambiar nombres
         manager.finishLoading();
-        mapa = manager.get("mapa_mario.tmx");
+        mapa = manager.get("Level2/Lvl2_mapaFinal.tmx");
         rendererMapa = new OrthogonalTiledMapRenderer(mapa);
         TiledMapTileLayer capa = (TiledMapTileLayer)mapa.getLayers().get(0);
         TiledMapTileLayer.Cell celda = capa.getCell(0, 0);
