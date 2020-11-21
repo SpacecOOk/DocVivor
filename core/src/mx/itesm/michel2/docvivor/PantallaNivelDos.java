@@ -26,7 +26,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class PantallaNivelDos extends Pantalla {
     private final Juego juego;
-    public static final float ANCHO_MAPA = 2000; //CAMBIAR EL ANCHO CUANDO ESTE EL MAPA
+    public static final float ANCHO_MAPA = 6000; //CAMBIAR EL ANCHO CUANDO ESTE EL MAPA
     //fondo
     private TiledMap mapa;
     private OrthogonalTiledMapRenderer rendererMapa;
@@ -42,7 +42,7 @@ public class PantallaNivelDos extends Pantalla {
     //jugador
     private Texture texturaPersonaje;
     private JugadorPlataformas jugador;
-    public static final int TAM_CELDA = 16;
+    public static final int TAM_CELDA = 32;
 
     //vidas
     private Image imagenVidas;
@@ -336,12 +336,12 @@ public class PantallaNivelDos extends Pantalla {
     private void crearmapa() {
         AssetManager manager = new AssetManager();
         manager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
-        manager.load("Level2/Lvl2_mapaFinal.tmx", TiledMap.class); //cambiar nombres
+        manager.load("Level2/Lvl2_mapaFinal.tmx", TiledMap.class);
         manager.finishLoading();
         mapa = manager.get("Level2/Lvl2_mapaFinal.tmx");
         rendererMapa = new OrthogonalTiledMapRenderer(mapa);
-        TiledMapTileLayer capa = (TiledMapTileLayer)mapa.getLayers().get(0);
-        TiledMapTileLayer.Cell celda = capa.getCell(0, 0);
+        //TiledMapTileLayer capa = (TiledMapTileLayer)mapa.getLayers().get(0); //tal vez podemos quitar estas lineas
+        //TiledMapTileLayer.Cell celda = capa.getCell(0, 0);
     }
 
     @Override
@@ -392,13 +392,13 @@ public class PantallaNivelDos extends Pantalla {
         // Prueba caída libre inicial o movimiento horizontal
         switch (jugador.getEstadoMovimiento()) {
             case INICIANDO:     // Mueve el personaje en Y hasta que se encuentre sobre un bloque
-                // Los bloques en el mapa son de 16x16
+                // Los bloques en el mapa son de 32x32
                 // Calcula la celda donde estaría después de moverlo
                 int celdaX = (int) (jugador.getX() / TAM_CELDA);
                 int celdaY = (int) ((jugador.getY() + jugador.VELOCIDAD_Y) / TAM_CELDA);
                 // Recuperamos la celda en esta posición
-                // La capa 0 es el fondo
-                TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get(1);
+                // La capa 0 son las plataformas
+                TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get(0);
                 TiledMapTileLayer.Cell celda = capa.getCell(celdaX, celdaY);
                 // probar si la celda está ocupada
                 if (celda == null) {
@@ -420,8 +420,8 @@ public class PantallaNivelDos extends Pantalla {
             int celdaX = (int) (jugador.getX() / TAM_CELDA);
             int celdaY = (int) ((jugador.getY() + jugador.VELOCIDAD_Y) / TAM_CELDA);
             // Recuperamos la celda en esta posición
-            // La capa 0 es el fondo
-            TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get(1);
+            // La capa 0 son las plataformas
+            TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get(0);
             TiledMapTileLayer.Cell celdaAbajo = capa.getCell(celdaX, celdaY);
             TiledMapTileLayer.Cell celdaDerecha = capa.getCell(celdaX + 1, celdaY);
             // probar si la celda está ocupada
@@ -460,11 +460,11 @@ public class PantallaNivelDos extends Pantalla {
             celdaX++;   // Casilla del lado derecho
         }
         int celdaY = (int)(jugador.getY()/TAM_CELDA); // Casilla del personaje en Y
-        TiledMapTileLayer capaPlataforma = (TiledMapTileLayer) mapa.getLayers().get(1);
+        TiledMapTileLayer capaPlataforma = (TiledMapTileLayer) mapa.getLayers().get(1); //***** VERIFICAR CAPA*****
 
     }
 
-    private void actualizarProyectil(){
+    private void actualizarProyectil(){ //Va a pasar a traves de las celdas
         if(proyectil != null) {
             proyectil.mover(orientacion);
             if (proyectil.sprite.getX() > jugador.getX() + ANCHO / 2) {
@@ -479,7 +479,7 @@ public class PantallaNivelDos extends Pantalla {
         float xCamara = camara.position.x;
         if (jugador.getX() < ANCHO/2){
             xCamara = ANCHO/2;
-        }else if (jugador.getX() > 2000){
+        }else if (jugador.getX() > 4000){ //checar la condicion del mapa
             xCamara = ANCHO/2; //checar para llegar al limite del mapa
         }else {
             xCamara = jugador.getX();

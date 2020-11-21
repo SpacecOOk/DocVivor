@@ -6,7 +6,6 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -242,12 +241,11 @@ public class PantallaNivelUno extends Pantalla {
         btnMoverIzquierda.setPosition(0+btnMoverIzquierda.getWidth()/2,0+btnMoverIzquierda.getHeight()/2, Align.center);
         btnMoverIzquierda.addListener(new ClickListener(){
 
-
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if(jugador.getEstado() == EstadoJugador.SALTANDO) {             //Cuando camina a la izquierda
                     jugador.setEstadoCaminando(EstadoCaminando.IZQUIERDA);
-                }else{
+                }else {
                     jugador.setEstadoCaminando(EstadoCaminando.IZQUIERDA);
                     jugador.setEstado(EstadoJugador.CAMINANDO);
                 }
@@ -399,8 +397,6 @@ public class PantallaNivelUno extends Pantalla {
         if(estadoJuego == EstadoJuego.VICTORIA){
             escenaVictoria.draw();
         }
-
-
     }
 
     private void dibujarEnemigosIzquierda() {
