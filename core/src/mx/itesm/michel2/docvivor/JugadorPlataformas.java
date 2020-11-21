@@ -25,7 +25,7 @@ public class JugadorPlataformas {
 
     // SALTO del personaje
     private static final float V0 = 65;     // Velocidad inicial del salto
-    private static final float G = 9.81f;
+    private static final float G = 9.81f;   //Checar valor cuando esten los enemigos
     private static final float G_2 = G/2;   // Gravedad
     private float yInicial;         // 'y' donde inicia el salto
     private float tiempoVuelo;       // Tiempo que estará en el aire
@@ -132,7 +132,7 @@ public class JugadorPlataformas {
         float y = V0 * tiempoSalto - G_2 * tiempoSalto * tiempoSalto;  // Desplazamiento desde que inició el salto
         if (tiempoSalto > tiempoVuelo / 2) { // Llegó a la altura máxima?
             // Inicia caída
-            estadoSalto = EstadoSalto.BAJANDO;
+            caer();
         }
         tiempoSalto += 10 * Gdx.graphics.getDeltaTime();  // Actualiza tiempo
         sprite.setY(yInicial + y);    // Actualiza posición
