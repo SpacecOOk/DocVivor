@@ -84,7 +84,7 @@ public class PantallaConfiguracion extends Pantalla {
 
         //Cambiar la imagen del boton
         Button.ButtonStyle efectosPrendido = new Button.ButtonStyle(botonCallarSonidoOn,botonCallarSonidoOff,null);
-        Button.ButtonStyle efectosApagado = new Button.ButtonStyle(botonCallarSonidoOn,botonCallarSonidoOff,null);
+        Button.ButtonStyle efectosApagado = new Button.ButtonStyle(botonCallarSonidoOff,botonCallarSonidoOn,null);
         final ImageButton.ImageButtonStyle estiloEfectoPrendido = new ImageButton.ImageButtonStyle(efectosPrendido);
         final ImageButton.ImageButtonStyle estiloEfectoApagado = new ImageButton.ImageButtonStyle(efectosApagado);
         final ImageButton btnCallarSonido = new ImageButton(botonCallarSonidoOn, botonCallarSonidoOff);

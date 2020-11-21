@@ -154,7 +154,7 @@ public class PantallaNivelDos extends Pantalla {
     }
 
     private void crearPersonaje() {
-        texturaPersonaje = new Texture("MovimientosMelee/Doctor_M_D.png");
+        texturaPersonaje = new Texture("Doctor_moviendose_I.png");//MovimientosMelee/Doctor_Quiero_D.png
         jugador = new JugadorPlataformas(texturaPersonaje);
         jugador.getSprite().setPosition(100,100);
     }
@@ -435,7 +435,6 @@ public class PantallaNivelDos extends Pantalla {
                     // probar si la celda está ocupada
                     if (celda == null) {
                         // Celda vacía, entonces el personaje puede avanzar
-                        Gdx.app.log("AKSJF", "AKLSJDF");
                         enemigo.caer();
                     }
                     break;
@@ -504,16 +503,27 @@ public class PantallaNivelDos extends Pantalla {
                 // probar si la celda está ocupada
                 if (celda == null) {
                     // Celda vacía, entonces el personaje puede avanzar
-                    Gdx.app.log("AKSJF","AKLSJDF");
                     jugador.caer();
                 }
                 break;
-            case MOV_DERECHA:       // Se mueve horizontal
+            case MOV_DERECHA:// Se mueve horizontal
+                probarChoqueParedes();      // Prueba si debe moverse
+                break;
             case MOV_IZQUIERDA:
                 probarChoqueParedes();      // Prueba si debe moverse
                 break;
         }
-
+        switch (jugador.getEstadoSalto()){
+            case EN_PISO:
+                //probarChoqueParedes();
+                break;
+            case SUBIENDO:
+                probarChoqueParedes();
+                break;
+            case BAJANDO:
+                probarChoqueParedes();
+                break;
+        }
         // Prueba si debe caer por llegar a un espacio vacío
         if (jugador.getEstadoMovimiento() != JugadorPlataformas.EstadoMovimiento.INICIANDO
                 && (jugador.getEstadoSalto() != JugadorPlataformas.EstadoSalto.SUBIENDO)) {
@@ -548,8 +558,9 @@ public class PantallaNivelDos extends Pantalla {
 
     private void probarChoqueParedes() {
         JugadorPlataformas.EstadoMovimiento estado = jugador.getEstadoMovimiento();
+        JugadorPlataformas.EstadoSalto estadoSalto = jugador.getEstadoSalto();
         // Quitar porque este método sólo se llama cuando se está moviendo
-        if ( estado!= JugadorPlataformas.EstadoMovimiento.MOV_DERECHA && estado!=JugadorPlataformas.EstadoMovimiento.MOV_IZQUIERDA){
+        if ( estado!= JugadorPlataformas.EstadoMovimiento.MOV_DERECHA && estado!=JugadorPlataformas.EstadoMovimiento.MOV_IZQUIERDA && estadoSalto!=JugadorPlataformas.EstadoSalto.SUBIENDO){
             return;
         }
         float px = jugador.getX();    // Posición actual
@@ -557,11 +568,31 @@ public class PantallaNivelDos extends Pantalla {
         px = jugador.getEstadoMovimiento()==JugadorPlataformas.EstadoMovimiento.MOV_DERECHA? px+JugadorPlataformas.VELOCIDAD_X:
                 px-JugadorPlataformas.VELOCIDAD_X;
         int celdaX = (int)(px/TAM_CELDA);   // Casilla del personaje en X
-        if (jugador.getEstadoMovimiento()== JugadorPlataformas.EstadoMovimiento.MOV_DERECHA) {
-            celdaX++;   // Casilla del lado derecho
-        }
+        Gdx.app.log("Posicion celda del personaje"+celdaX,"");
         int celdaY = (int)(jugador.getY()/TAM_CELDA); // Casilla del personaje en Y
-        TiledMapTileLayer capaPlataforma = (TiledMapTileLayer) mapa.getLayers().get(1); //***** VERIFICAR CAPA*****
+        TiledMapTileLayer capaPlataforma = (TiledMapTileLayer) mapa.getLayers().get("Plataformas"); //***** VERIFICAR CAPA*****
+        TiledMapTileLayer.Cell celdaDerecha = capaPlataforma.getCell(celdaX+2, celdaY);
+        TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX-1, celdaY);
+        TiledMapTileLayer.Cell celdaAbajo = capaPlataforma.getCell(celdaX+1, celdaY-1);
+        TiledMapTileLayer.Cell celdaArriba = capaPlataforma.getCell(celdaX+1, celdaY+2);//CHECAR EL +2 CUANDO ACTUALIZEMOS EL ENEMIGO
+        if(celdaDerecha != null){
+            jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
+        }
+        if(celdaIzquierda != null){
+            jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
+        }
+        if(celdaArriba != null){
+            jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.BAJANDO);
+        }
+        if(celdaAbajo == null && estadoSalto==JugadorPlataformas.EstadoSalto.BAJANDO){
+            Gdx.app.log("CAYENDO","");
+            jugador.caer();
+        }
+        if(celdaAbajo != null && estadoSalto== JugadorPlataformas.EstadoSalto.BAJANDO){
+            Gdx.app.log("plataforma inmediatamente abajo","");
+            jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.EN_PISO);
+        }
+
 
     }
 
