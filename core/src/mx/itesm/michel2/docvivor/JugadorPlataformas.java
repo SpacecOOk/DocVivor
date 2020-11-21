@@ -12,6 +12,7 @@ public class JugadorPlataformas {
     public static final float VELOCIDAD_X = 10;     // Velocidad horizontal
 
     private Sprite sprite;  // Sprite cuando no se mueve
+    //hola
 
     // Animación
     private Animation animacion;    // Caminando
