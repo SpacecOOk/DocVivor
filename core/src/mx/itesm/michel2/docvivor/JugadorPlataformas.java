@@ -127,12 +127,15 @@ public class JugadorPlataformas {
 
     // Actualiza la posición en 'y', está saltando
     public void actualizarSalto() {
+        if(estadoSalto == EstadoSalto.BAJANDO){
+            caer();
+        }
         if(estadoSalto!=EstadoSalto.EN_PISO){//POSIBLE ERROR A FUTURO
         // Ejecutar movimiento vertical
         float y = V0 * tiempoSalto - G_2 * tiempoSalto * tiempoSalto;  // Desplazamiento desde que inició el salto
         if (tiempoSalto > tiempoVuelo / 2) { // Llegó a la altura máxima?
             // Inicia caída
-            caer();
+            estadoSalto = EstadoSalto.BAJANDO;
         }
         tiempoSalto += 10 * Gdx.graphics.getDeltaTime();  // Actualiza tiempo
         sprite.setY(yInicial + y);    // Actualiza posición
@@ -140,7 +143,7 @@ public class JugadorPlataformas {
             // Regresó al piso
             sprite.setY(yInicial);  // Lo deja donde inició el salto
             estadoSalto = EstadoSalto.EN_PISO;  // Ya no está saltando
-        }
+            }
         }
     }
 

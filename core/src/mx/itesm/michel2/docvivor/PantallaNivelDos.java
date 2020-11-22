@@ -533,13 +533,15 @@ public class PantallaNivelDos extends Pantalla {
             // Recuperamos la celda en esta posición
             // La capa 0 son las plataformas
             TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get(7);
-            TiledMapTileLayer.Cell celdaAbajo = capa.getCell(celdaX, celdaY);
-            TiledMapTileLayer.Cell celdaDerecha = capa.getCell(celdaX + 1, celdaY);
+            TiledMapTileLayer.Cell celdaAbajoIzq = capa.getCell(celdaX, celdaY);
+            TiledMapTileLayer.Cell celdaAbajoDer = capa.getCell(celdaX+1, celdaY);
+            TiledMapTileLayer.Cell celdaDerecha = capa.getCell(celdaX + 2, celdaY);
+            TiledMapTileLayer.Cell celdaIzquierda = capa.getCell(celdaX - 1, celdaY);
             // probar si la celda está ocupada
-            if (celdaAbajo == null && celdaDerecha == null) {
+            if (celdaAbajoIzq == null && (celdaDerecha == null || celdaIzquierda == null) && celdaAbajoDer == null) {
                 // Celda vacía, entonces el personaje puede avanzar
                 jugador.caer();
-                jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.CAIDA_LIBRE);
+                //jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.CAIDA_LIBRE);
             } else {
                 // Dejarlo sobre la celda que lo detiene
                 jugador.setPosicion(jugador.getX(), (celdaY + 1) * TAM_CELDA);
@@ -573,22 +575,25 @@ public class PantallaNivelDos extends Pantalla {
         TiledMapTileLayer capaPlataforma = (TiledMapTileLayer) mapa.getLayers().get("Plataformas"); //***** VERIFICAR CAPA*****
         TiledMapTileLayer.Cell celdaDerecha = capaPlataforma.getCell(celdaX+2, celdaY);
         TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX-1, celdaY);
-        TiledMapTileLayer.Cell celdaAbajo = capaPlataforma.getCell(celdaX+1, celdaY-1);
-        TiledMapTileLayer.Cell celdaArriba = capaPlataforma.getCell(celdaX+1, celdaY+2);//CHECAR EL +2 CUANDO ACTUALIZEMOS EL ENEMIGO
+        TiledMapTileLayer.Cell celdaAbajoDer = capaPlataforma.getCell(celdaX+1, celdaY-1);
+        TiledMapTileLayer.Cell celdaAbajoIzq = capaPlataforma.getCell(celdaX, celdaY-1);
+        TiledMapTileLayer.Cell celdaArribaDer = capaPlataforma.getCell(celdaX+1, celdaY+2);//CHECAR EL +2 CUANDO ACTUALIZEMOS EL ENEMIGO
+        TiledMapTileLayer.Cell celdaArribaIzq = capaPlataforma.getCell(celdaX+1, celdaY+2);
+        //Revisar la lógica para la parte pasando la montaña
         if(celdaDerecha != null){
             jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
         }
         if(celdaIzquierda != null){
             jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
         }
-        if(celdaArriba != null){
+        if(celdaArribaDer != null && celdaArribaIzq != null){
             jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.BAJANDO);
         }
-        if(celdaAbajo == null && estadoSalto==JugadorPlataformas.EstadoSalto.BAJANDO){
-            Gdx.app.log("CAYENDO","");
+        if(celdaAbajoDer == null && celdaAbajoIzq == null && estadoSalto==JugadorPlataformas.EstadoSalto.BAJANDO){ //No funciona del todo, adelante de la montaña
+            Gdx.app.log("CAYENDO","");                                                                //no jala bien
             jugador.caer();
         }
-        if(celdaAbajo != null && estadoSalto== JugadorPlataformas.EstadoSalto.BAJANDO){
+        if(celdaAbajoDer != null && celdaAbajoIzq != null && estadoSalto== JugadorPlataformas.EstadoSalto.BAJANDO){
             Gdx.app.log("plataforma inmediatamente abajo","");
             jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.EN_PISO);
         }
