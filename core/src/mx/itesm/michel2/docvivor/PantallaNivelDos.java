@@ -561,7 +561,7 @@ public class PantallaNivelDos extends Pantalla {
     private void probarChoqueParedes() {
         JugadorPlataformas.EstadoMovimiento estado = jugador.getEstadoMovimiento();
         JugadorPlataformas.EstadoSalto estadoSalto = jugador.getEstadoSalto();
-        // Quitar porque este método sólo se llama cuando se está moviendo
+        // Si el jugador no esta en movimiento no es necesario llamar a este metodo
         if ( estado!= JugadorPlataformas.EstadoMovimiento.MOV_DERECHA && estado!=JugadorPlataformas.EstadoMovimiento.MOV_IZQUIERDA && estadoSalto!=JugadorPlataformas.EstadoSalto.SUBIENDO){
             return;
         }
@@ -570,9 +570,8 @@ public class PantallaNivelDos extends Pantalla {
         px = jugador.getEstadoMovimiento()==JugadorPlataformas.EstadoMovimiento.MOV_DERECHA? px+JugadorPlataformas.VELOCIDAD_X:
                 px-JugadorPlataformas.VELOCIDAD_X;
         int celdaX = (int)(px/TAM_CELDA);   // Casilla del personaje en X
-        Gdx.app.log("Posicion celda del personaje"+celdaX,"");
         int celdaY = (int)(jugador.getY()/TAM_CELDA); // Casilla del personaje en Y
-        TiledMapTileLayer capaPlataforma = (TiledMapTileLayer) mapa.getLayers().get("Plataformas"); //***** VERIFICAR CAPA*****
+        TiledMapTileLayer capaPlataforma = (TiledMapTileLayer) mapa.getLayers().get("Plataformas");
         TiledMapTileLayer.Cell celdaDerecha = capaPlataforma.getCell(celdaX+2, celdaY);
         TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX-1, celdaY);
         TiledMapTileLayer.Cell celdaAbajoDer = capaPlataforma.getCell(celdaX+1, celdaY-1);
@@ -580,17 +579,16 @@ public class PantallaNivelDos extends Pantalla {
         TiledMapTileLayer.Cell celdaArribaDer = capaPlataforma.getCell(celdaX+1, celdaY+2);//CHECAR EL +2 CUANDO ACTUALIZEMOS EL ENEMIGO
         TiledMapTileLayer.Cell celdaArribaIzq = capaPlataforma.getCell(celdaX+1, celdaY+2);
         //Revisar la lógica para la parte pasando la montaña
-        if(celdaDerecha != null){
+        if(celdaDerecha != null && jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.MOV_DERECHA){
             jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
         }
-        if(celdaIzquierda != null){
+        if(celdaIzquierda != null && jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.MOV_IZQUIERDA){
             jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
         }
         if(celdaArribaDer != null && celdaArribaIzq != null){
             jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.BAJANDO);
         }
-        if(celdaAbajoDer == null && celdaAbajoIzq == null && estadoSalto==JugadorPlataformas.EstadoSalto.BAJANDO){ //No funciona del todo, adelante de la montaña
-            Gdx.app.log("CAYENDO","");                                                                //no jala bien
+        if(celdaAbajoDer == null && celdaAbajoIzq == null && estadoSalto==JugadorPlataformas.EstadoSalto.BAJANDO){
             jugador.caer();
         }
         if(celdaAbajoDer != null && celdaAbajoIzq != null && estadoSalto== JugadorPlataformas.EstadoSalto.BAJANDO){
