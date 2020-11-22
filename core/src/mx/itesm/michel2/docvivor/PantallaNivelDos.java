@@ -89,6 +89,11 @@ public class PantallaNivelDos extends Pantalla {
     private Texture texturaEnemigoUno;
     private Array<EnemigoUnoPlataformas> arrEnemigosUno;
 
+    //Items
+    //item - supertraje
+    private Texture texturaTraje;
+    private Item traje;
+
     public PantallaNivelDos(Juego juego) {
         this.juego = juego;
     }
@@ -106,10 +111,17 @@ public class PantallaNivelDos extends Pantalla {
         cargarPreferencias();
         guardarPreferencias();
         crearEnemigos();
+        crearItems();
         if(juego.efectoSonidoEstado != 1){
             crearSonidos();
         }
         Gdx.input.setInputProcessor(HUD);
+    }
+
+    private void crearItems() {
+        //SuperTraje
+        texturaTraje = new Texture("Items/Item_SuperTraje.png");
+        traje = new Item(texturaTraje,100,150,48,49);
     }
 
     private void crearEnemigos() {
@@ -372,6 +384,8 @@ public class PantallaNivelDos extends Pantalla {
         batch.begin();
         jugador.render(batch);
         dibujarEnemigos();
+        dibujarItems();
+        verificarColisiones();
         if(proyectil!=null){
             proyectil.render(batch);
         }
@@ -389,6 +403,9 @@ public class PantallaNivelDos extends Pantalla {
 
         //************Derrota**************
         batch.setProjectionMatrix(camaraDerrotaHUD.combined);
+        if(jugador.getY()<5){                   //Con esta condicion checamos si el jugador salio de la pantalla por abajo
+            estadoJuego = EstadoJuego.DERROTA;
+        }
         if (estadoJuego == EstadoJuego.DERROTA) {
             escenaDerrota.draw();
         }
@@ -399,6 +416,46 @@ public class PantallaNivelDos extends Pantalla {
             escenaVictoria.draw();
         }
 
+    }
+
+    private void verificarColisiones() {
+        // *** COLISION ITEMS ***
+        if (traje.sprite.getBoundingRectangle().overlaps(jugador.getSprite().getBoundingRectangle())) {
+            if (juego.efectoSonidoEstado != 1) {
+                efectoPowerUp.play();
+            }
+            Gdx.app.log("Equipando traje...","");
+            //Implementar la textura del personaje, checarlo si movemos el tamaño del mapa
+            /*
+            int x = (int)jugador.sprite.getX();
+            traje.sprite.setY(ALTO);
+            jugador = new Jugador(texturaPersonajeTraje,x,133);
+            jugador.setVidas(4);
+             */
+        }
+        // ***  COLISION BALA-ENEMIGOS ***
+        //if(estadoJuego == PantallaNivelUno.EstadoJuego.JUGANDO && kills < 3){
+            if(proyectil != null){
+                for (int j = arrEnemigosUno.size-1; j >= 0 ; j--) {
+                    EnemigoUnoPlataformas enemigo = arrEnemigosUno.get(j);
+                    if (proyectil.sprite.getBoundingRectangle().overlaps(enemigo.getSprite().getBoundingRectangle())) {
+                        //Si hay colisión
+                        if (juego.efectoSonidoEstado != 1){
+                            efectoMuerteEnemigo.play();
+                        }
+                        arrEnemigosUno.removeIndex(j);
+                        proyectil = null;
+                        //kills +=1;
+                        break;
+                    }
+                }
+            }
+        //}
+    }
+
+    private void dibujarItems() {
+        //SuperTraje
+        traje.render(batch);
     }
 
     private void dibujarEnemigos() {
@@ -578,7 +635,6 @@ public class PantallaNivelDos extends Pantalla {
         TiledMapTileLayer.Cell celdaAbajoIzq = capaPlataforma.getCell(celdaX, celdaY-1);
         TiledMapTileLayer.Cell celdaArribaDer = capaPlataforma.getCell(celdaX+1, celdaY+2);//CHECAR EL +2 CUANDO ACTUALIZEMOS EL ENEMIGO
         TiledMapTileLayer.Cell celdaArribaIzq = capaPlataforma.getCell(celdaX+1, celdaY+2);
-        //Revisar la lógica para la parte pasando la montaña
         if(celdaDerecha != null && jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.MOV_DERECHA){
             jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
         }
@@ -592,7 +648,6 @@ public class PantallaNivelDos extends Pantalla {
             jugador.caer();
         }
         if(celdaAbajoDer != null && celdaAbajoIzq != null && estadoSalto== JugadorPlataformas.EstadoSalto.BAJANDO){
-            Gdx.app.log("plataforma inmediatamente abajo","");
             jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.EN_PISO);
         }
 
@@ -697,16 +752,16 @@ public class PantallaNivelDos extends Pantalla {
 
             Texture texturaFondoPausa = new Texture("Fondos/GameOver.png");
             Image imgFondoPausa = new Image(texturaFondoPausa);
-            imgFondoPausa.setPosition(ANCHO / 2 - texturaFondoPausa.getWidth() / 2,
-                    ALTO / 2 - texturaFondoPausa.getHeight() / 2);
+            imgFondoPausa.setPosition(ANCHO/2 - texturaFondoPausa.getWidth()/2,
+                    ALTO/2 - texturaFondoPausa.getHeight()/2);
             this.addActor(imgFondoPausa);
 
             Texture texturaBtnRetry = new Texture("Botones/btn_jugar.png");
             TextureRegionDrawable botonRetry = new TextureRegionDrawable(new TextureRegion(texturaBtnRetry));
             //Aqui para el boton inverso (click)
             ImageButton btnRetry = new ImageButton(botonRetry);
-            btnRetry.setPosition(ANCHO * 0.35f, ALTO * 0.2f, Align.center);
-            btnRetry.addListener(new ClickListener() {
+            btnRetry.setPosition(ANCHO*0.35f, ALTO*0.2f, Align.center);
+            btnRetry.addListener(new ClickListener(){
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     super.clicked(event, x, y);
@@ -721,8 +776,8 @@ public class PantallaNivelDos extends Pantalla {
             TextureRegionDrawable botonNiveles = new TextureRegionDrawable(new TextureRegion(texturaBtnNiveles));
             //Aqui para el boton inverso (click)
             ImageButton btnNiveles = new ImageButton(botonNiveles);
-            btnNiveles.setPosition(ANCHO * 0.65f, ALTO * 0.2f, Align.center);
-            btnNiveles.addListener(new ClickListener() {
+            btnNiveles.setPosition(ANCHO*0.65f, ALTO*0.2f, Align.center);
+            btnNiveles.addListener(new ClickListener(){
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     super.clicked(event, x, y);
