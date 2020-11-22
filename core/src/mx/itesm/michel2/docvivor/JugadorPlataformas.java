@@ -38,7 +38,7 @@ public class JugadorPlataformas {
         // Lee la textura como región
         TextureRegion texturaCompleta = new TextureRegion(textura);
         // La divide en frames de 16x32 (ver marioSprite.png)
-        TextureRegion[][] texturaPersonaje = texturaCompleta.split(64,64);//CAMBIAR LOS PERSONAJES
+        TextureRegion[][] texturaPersonaje = texturaCompleta.split(80,64);//CAMBIAR LOS PERSONAJES
         // Crea la animación con tiempo de 0.25 segundos entre frames.
         animacion = new Animation(0.1f,texturaPersonaje[0][2],
                 texturaPersonaje[0][0]);

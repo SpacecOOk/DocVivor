@@ -125,7 +125,7 @@ public class PantallaNivelDos extends Pantalla {
     }
 
     private void crearEnemigos() {
-        texturaEnemigoUno = new Texture("Enemigos/Enemigo_1.png");
+        texturaEnemigoUno = new Texture("Level2/AssetsPersonajes/Enemigo_lvl2.png");
         arrEnemigosUno = new Array<>();
         for (int i = 0; i < 5; i++) {
             EnemigoUnoPlataformas enemigo = new EnemigoUnoPlataformas(texturaEnemigoUno);
@@ -166,7 +166,7 @@ public class PantallaNivelDos extends Pantalla {
     }
 
     private void crearPersonaje() {
-        texturaPersonaje = new Texture("Doctor_moviendose_I.png");//MovimientosMelee/Doctor_Quiero_D.png
+        texturaPersonaje = new Texture("Level2/AssetsPersonajes/Doctor2_moviendose.png");
         jugador = new JugadorPlataformas(texturaPersonaje);
         jugador.getSprite().setPosition(100,100);
     }
