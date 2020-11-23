@@ -503,33 +503,32 @@ public class PantallaNivelUno extends Pantalla {
     }
 
     private void actualizarVidas() {
-        if(jugador.getVidas() == 4){
-            spriteVidas = new Sprite(texturasFramesVidas[0][0]);
-            imagenVidas = new Image(spriteVidas);
-            imagenVidas.setPosition(50,650);
-            HUD.addActor(imagenVidas);
-        }else if(jugador.getVidas() == 3){
-            spriteVidas = new Sprite(texturasFramesVidas[0][1]);
-            imagenVidas = new Image(spriteVidas);
-            imagenVidas.setPosition(50,650);
-            HUD.addActor(imagenVidas);
-        }else if(jugador.getVidas() == 2){
-            spriteVidas = new Sprite(texturasFramesVidas[0][2]);
-            imagenVidas = new Image(spriteVidas);
-            imagenVidas.setPosition(50,650);
-            HUD.addActor(imagenVidas);
-        }else if(jugador.getVidas() == 1){
-            spriteVidas = new Sprite(texturasFramesVidas[0][3]);
-            imagenVidas = new Image(spriteVidas);
-            imagenVidas.setPosition(50,650);
-            HUD.addActor(imagenVidas);
-        }else{
-            spriteVidas = new Sprite(texturasFramesVidas[0][4]);
-            imagenVidas = new Image(spriteVidas);
-            imagenVidas.setPosition(50,650);
-            HUD.addActor(imagenVidas);
+        switch (jugador.getVidas()){
+            case 4:
+                spriteVidas = new Sprite(texturasFramesVidas[0][0]);
+                imagenVidas = new Image(spriteVidas);
+                imagenVidas.setPosition(50,650);
+                HUD.addActor(imagenVidas);
+                break;
+            case 3:
+                spriteVidas = new Sprite(texturasFramesVidas[0][1]);
+                imagenVidas = new Image(spriteVidas);
+                imagenVidas.setPosition(50,650);
+                HUD.addActor(imagenVidas);
+                break;
+            case 2:
+                spriteVidas = new Sprite(texturasFramesVidas[0][2]);
+                imagenVidas = new Image(spriteVidas);
+                imagenVidas.setPosition(50,650);
+                HUD.addActor(imagenVidas);
+                break;
+            case 1:
+                spriteVidas = new Sprite(texturasFramesVidas[0][3]);
+                imagenVidas = new Image(spriteVidas);
+                imagenVidas.setPosition(50,650);
+                HUD.addActor(imagenVidas);
+                break;
         }
-
     }
 
     private void verificarColisionesEnemigosIzquierda() {

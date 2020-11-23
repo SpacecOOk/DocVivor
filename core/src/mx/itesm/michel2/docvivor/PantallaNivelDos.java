@@ -452,6 +452,9 @@ public class PantallaNivelDos extends Pantalla {
 
     private void verificarCaida() {
         if(jugador.getY() < 5){
+            if (juego.efectoSonidoEstado != 1){
+                efectoMuerte.play();
+            }
             jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
             //jugador(ANCHO); //Lo manda a lo alto
             estadoJuego = EstadoJuego.DERROTA;
@@ -511,33 +514,6 @@ public class PantallaNivelDos extends Pantalla {
                 HUD.addActor(imagenVidas);
                 break;
         }
-        /*
-        if(jugador.getVidas() == 4){
-            spriteVidas = new Sprite(texturasFramesVidas[0][0]);
-            imagenVidas = new Image(spriteVidas);
-            imagenVidas.setPosition(50,650);
-            HUD.addActor(imagenVidas);
-        }else if(jugador.getVidas() == 3){
-            spriteVidas = new Sprite(texturasFramesVidas[0][1]);
-            imagenVidas = new Image(spriteVidas);
-            imagenVidas.setPosition(50,650);
-            HUD.addActor(imagenVidas);
-        }else if(jugador.getVidas() == 2){
-            spriteVidas = new Sprite(texturasFramesVidas[0][2]);
-            imagenVidas = new Image(spriteVidas);
-            imagenVidas.setPosition(50,650);
-            HUD.addActor(imagenVidas);
-        }else if(jugador.getVidas() == 1){
-            spriteVidas = new Sprite(texturasFramesVidas[0][3]);
-            imagenVidas = new Image(spriteVidas);
-            imagenVidas.setPosition(50,650);
-            HUD.addActor(imagenVidas);
-        }else{
-            spriteVidas = new Sprite(texturasFramesVidas[0][4]);
-            imagenVidas = new Image(spriteVidas);
-            imagenVidas.setPosition(50,650);
-            HUD.addActor(imagenVidas);
-        }*/
     }
 
     private void moverEnemigos() {
