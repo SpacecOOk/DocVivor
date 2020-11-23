@@ -12,7 +12,9 @@ public class JugadorPlataformas {
     public static final float VELOCIDAD_X = 10;     // Velocidad horizontal
 
     private Sprite sprite;  // Sprite cuando no se mueve
-    //hola
+
+    //VIDAS
+    private int vidas;
 
     // Animación
     private Animation animacion;    // Caminando
@@ -31,9 +33,11 @@ public class JugadorPlataformas {
     private float tiempoVuelo;       // Tiempo que estará en el aire
     private float tiempoSalto;      // Tiempo actual de vuelo
 
+
+
     /*
-    Constructor del personaje, recibe una imagen con varios frames, (ver imagen marioSprite.png)
-     */
+        Constructor del personaje, recibe una imagen con varios frames, (ver imagen marioSprite.png)
+         */
     public JugadorPlataformas(Texture textura) {
         // Lee la textura como región
         TextureRegion texturaCompleta = new TextureRegion(textura);
@@ -50,6 +54,7 @@ public class JugadorPlataformas {
         sprite = new Sprite(texturaPersonaje[0][1]);    // quieto
         estadoMovimiento = EstadoMovimiento.INICIANDO;
         estadoSalto = EstadoSalto.EN_PISO;
+        vidas = 3;
     }
 
     // Dibuja el personaje
@@ -193,6 +198,13 @@ public class JugadorPlataformas {
         return estadoSalto;
     }
 
+    public int getVidas() {
+        return vidas;
+    }
+
+    public void setVidas(int vidas) {
+        this.vidas = vidas;
+    }
     public enum EstadoMovimiento {
         INICIANDO,
         QUIETO,
