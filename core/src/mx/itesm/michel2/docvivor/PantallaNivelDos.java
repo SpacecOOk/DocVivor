@@ -403,9 +403,6 @@ public class PantallaNivelDos extends Pantalla {
 
         //************Derrota**************
         batch.setProjectionMatrix(camaraDerrotaHUD.combined);
-        if(jugador.getY()<5){                   //Con esta condicion checamos si el jugador salio de la pantalla por abajo
-            estadoJuego = EstadoJuego.DERROTA;
-        }
         if (estadoJuego == EstadoJuego.DERROTA) {
             escenaDerrota.draw();
         }
@@ -419,6 +416,7 @@ public class PantallaNivelDos extends Pantalla {
     }
 
     private void verificarColisiones() {
+        verificarCaida();
         // *** COLISION ITEMS ***
         if (traje.sprite.getBoundingRectangle().overlaps(jugador.getSprite().getBoundingRectangle())) {
             if (juego.efectoSonidoEstado != 1) {
@@ -445,12 +443,21 @@ public class PantallaNivelDos extends Pantalla {
                         }
                         arrEnemigosUno.removeIndex(j);
                         proyectil = null;
-                        //kills +=1;
                         break;
                     }
                 }
             }
         //}
+    }
+
+    private void verificarCaida() {
+        if(jugador.getY() < 5){
+            jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
+            //jugador(ANCHO); //Lo manda a lo alto
+            estadoJuego = EstadoJuego.DERROTA;
+            escenaDerrota = new PantallaNivelDos.EscenaDerrota(vistaDerrotaHUD,batch);
+            Gdx.input.setInputProcessor(escenaDerrota);
+        }
     }
 
     private void dibujarItems() {
@@ -474,6 +481,63 @@ public class PantallaNivelDos extends Pantalla {
         actualizarProyectil();
         moverPersonaje();
         moverEnemigos();
+        actualizarVidas();
+    }
+
+    private void actualizarVidas() { //Verificar bien el funcionamiento
+        switch (jugador.getVidas()){
+            case 4:
+                spriteVidas = new Sprite(texturasFramesVidas[0][0]);
+                imagenVidas = new Image(spriteVidas);
+                imagenVidas.setPosition(50,650);
+                HUD.addActor(imagenVidas);
+                break;
+            case 3:
+                spriteVidas = new Sprite(texturasFramesVidas[0][1]);
+                imagenVidas = new Image(spriteVidas);
+                imagenVidas.setPosition(50,650);
+                HUD.addActor(imagenVidas);
+                break;
+            case 2:
+                spriteVidas = new Sprite(texturasFramesVidas[0][2]);
+                imagenVidas = new Image(spriteVidas);
+                imagenVidas.setPosition(50,650);
+                HUD.addActor(imagenVidas);
+                break;
+            case 1:
+                spriteVidas = new Sprite(texturasFramesVidas[0][3]);
+                imagenVidas = new Image(spriteVidas);
+                imagenVidas.setPosition(50,650);
+                HUD.addActor(imagenVidas);
+                break;
+        }
+        /*
+        if(jugador.getVidas() == 4){
+            spriteVidas = new Sprite(texturasFramesVidas[0][0]);
+            imagenVidas = new Image(spriteVidas);
+            imagenVidas.setPosition(50,650);
+            HUD.addActor(imagenVidas);
+        }else if(jugador.getVidas() == 3){
+            spriteVidas = new Sprite(texturasFramesVidas[0][1]);
+            imagenVidas = new Image(spriteVidas);
+            imagenVidas.setPosition(50,650);
+            HUD.addActor(imagenVidas);
+        }else if(jugador.getVidas() == 2){
+            spriteVidas = new Sprite(texturasFramesVidas[0][2]);
+            imagenVidas = new Image(spriteVidas);
+            imagenVidas.setPosition(50,650);
+            HUD.addActor(imagenVidas);
+        }else if(jugador.getVidas() == 1){
+            spriteVidas = new Sprite(texturasFramesVidas[0][3]);
+            imagenVidas = new Image(spriteVidas);
+            imagenVidas.setPosition(50,650);
+            HUD.addActor(imagenVidas);
+        }else{
+            spriteVidas = new Sprite(texturasFramesVidas[0][4]);
+            imagenVidas = new Image(spriteVidas);
+            imagenVidas.setPosition(50,650);
+            HUD.addActor(imagenVidas);
+        }*/
     }
 
     private void moverEnemigos() {
@@ -739,7 +803,7 @@ public class PantallaNivelDos extends Pantalla {
                     super.clicked(event, x, y);
                     //Para regresar al juego
                     estadoJuego = EstadoJuego.JUGANDO;
-                    juego.setScreen(new PantallaMenu(juego));
+                    juego.setScreen(new PantallaNiveles(juego));
                 }
             });
             this.addActor(btnMenu);
@@ -811,7 +875,7 @@ public class PantallaNivelDos extends Pantalla {
                     super.clicked(event, x, y);
                     //Para pasar al siguiente nivel
                     Gdx.app.log("Pantalla", "Cargando pantalla del nivel 2...");
-                    juego.setScreen(new PantallaNivelDos(juego));
+                    juego.setScreen(new PantallaNivelTres(juego));
                 }
             });
             this.addActor(btnSeguir);
