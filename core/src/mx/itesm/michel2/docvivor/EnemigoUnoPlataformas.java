@@ -100,6 +100,7 @@ public class EnemigoUnoPlataformas {
             case MOV_IZQUIERDA:
                 // Prueba que no salga del mundo
                 nuevaX -= VELOCIDAD_X;
+                sprite.setX(nuevaX);
                 break;
         }
     }
