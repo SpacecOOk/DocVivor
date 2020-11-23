@@ -45,6 +45,7 @@ public class PantallaNivelDos extends Pantalla {
     private Texture texturaPersonaje;
     private JugadorPlataformas jugador;
     public static final int TAM_CELDA = 32;
+    private Texture texturaJugadorMetralleta = new Texture("arma1_Personaje/arma1_M_D.png");
 
     //vidas
     private Image imagenVidas;
@@ -89,10 +90,9 @@ public class PantallaNivelDos extends Pantalla {
     private Texture texturaEnemigoUno;
     private Array<EnemigoUnoPlataformas> arrEnemigosUno;
 
-    //Items
-    //item - supertraje
-    private Texture texturaTraje;
-    private Item traje;
+    //item - metralleta
+    private Texture texturaMetralleta;
+    private Item metralleta;
 
     public PantallaNivelDos(Juego juego) {
         this.juego = juego;
@@ -120,8 +120,8 @@ public class PantallaNivelDos extends Pantalla {
 
     private void crearItems() {
         //SuperTraje
-        texturaTraje = new Texture("Items/Item_SuperTraje.png");
-        traje = new Item(texturaTraje,100,150,48,49);
+        texturaMetralleta = new Texture("Items/metralleta.png");
+        metralleta = new Item(texturaMetralleta,32*10,100,139,56);
     }
 
     private void crearEnemigos() {
@@ -386,6 +386,7 @@ public class PantallaNivelDos extends Pantalla {
         dibujarEnemigos();
         dibujarItems();
         verificarColisiones();
+        metralleta.render(batch);
         if(proyectil!=null){
             proyectil.render(batch);
         }
@@ -417,12 +418,13 @@ public class PantallaNivelDos extends Pantalla {
 
     private void verificarColisiones() {
         verificarCaida();
+        verificarColisionItems();
         // *** COLISION ITEMS ***
-        if (traje.sprite.getBoundingRectangle().overlaps(jugador.getSprite().getBoundingRectangle())) {
+        /*if (metralleta.sprite.getBoundingRectangle().overlaps(jugador.getSprite().getBoundingRectangle())) {
             if (juego.efectoSonidoEstado != 1) {
                 efectoPowerUp.play();
             }
-            Gdx.app.log("Equipando traje...","");
+            Gdx.app.log("Equipando traje...","");*/
             //Implementar la textura del personaje, checarlo si movemos el tamaño del mapa
             /*
             int x = (int)jugador.sprite.getX();
@@ -430,7 +432,7 @@ public class PantallaNivelDos extends Pantalla {
             jugador = new Jugador(texturaPersonajeTraje,x,133);
             jugador.setVidas(4);
              */
-        }
+        //}
         // ***  COLISION BALA-ENEMIGOS ***
         //if(estadoJuego == PantallaNivelUno.EstadoJuego.JUGANDO && kills < 3){
             if(proyectil != null){
@@ -450,6 +452,21 @@ public class PantallaNivelDos extends Pantalla {
         //}
     }
 
+    private void verificarColisionItems() {
+        if (metralleta.sprite.getBoundingRectangle().overlaps(jugador.getSprite().getBoundingRectangle())) {
+            if (juego.efectoSonidoEstado != 1) {
+                efectoPowerUp.play();
+            }
+            //estas lineas no funcionan bien
+            float x = jugador.getX();
+            float y = jugador.getY();
+            metralleta.sprite.setY(ALTO);
+            jugador = new JugadorPlataformas(texturaJugadorMetralleta);
+            jugador.getSprite().setPosition(x,y);
+
+        }
+    }
+
     private void verificarCaida() {
         if(jugador.getY() < 5){
             if (juego.efectoSonidoEstado != 1){
@@ -465,7 +482,7 @@ public class PantallaNivelDos extends Pantalla {
 
     private void dibujarItems() {
         //SuperTraje
-        traje.render(batch);
+        metralleta.render(batch);
     }
 
     private void dibujarEnemigos() {
