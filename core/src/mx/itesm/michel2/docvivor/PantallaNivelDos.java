@@ -662,7 +662,7 @@ public class PantallaNivelDos extends Pantalla {
             TiledMapTileLayer.Cell celdaAbajoIzq = capa.getCell(celdaX, celdaY);
             TiledMapTileLayer.Cell celdaAbajoDer = capa.getCell(celdaX+1, celdaY);
             TiledMapTileLayer.Cell celdaDerecha = capa.getCell(celdaX + 2, celdaY);
-            TiledMapTileLayer.Cell celdaIzquierda = capa.getCell(celdaX - 1, celdaY);
+            TiledMapTileLayer.Cell celdaIzquierda = capa.getCell(celdaX +1 , celdaY); // revisar la hitbox de las jeringas
             // probar si la celda está ocupada
             if (celdaAbajoIzq == null && (celdaDerecha == null || celdaIzquierda == null) && celdaAbajoDer == null) {
                 // Celda vacía, entonces el personaje puede avanzar
