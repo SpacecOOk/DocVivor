@@ -724,15 +724,26 @@ public class PantallaNivelDos extends Pantalla {
     private void actualizarProyectil(){ //Va a pasar a traves de las celdas
         if(proyectil != null) {
             proyectil.mover(orientacion);
+            float px = proyectil.sprite.getX();    // Posición actual
+            // Posición después de actualizar
+            px = orientacion==1? px+proyectil.VELOCIDAD_X:
+                    px-proyectil.VELOCIDAD_X;
             int celdaX = (int) (proyectil.sprite.getX() / TAM_CELDA);
             int celdaY = (int) ((proyectil.sprite.getY() + proyectil.VELOCIDAD_X) / TAM_CELDA);
-            TiledMapTileLayer capaPlataforma = (TiledMapTileLayer) mapa.getLayers().get("Plataformas");
+            TiledMapTileLayer capaPlataforma = (TiledMapTileLayer) mapa.getLayers().get(7);
             TiledMapTileLayer.Cell celdaDerecha = capaPlataforma.getCell(celdaX+1, celdaY);
+            TiledMapTileLayer.Cell celdaDerechaUno = capaPlataforma.getCell(celdaX+1, celdaY+1);
             TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX-1, celdaY); //verificar el signo por la orientacion
-            if(celdaDerecha != null || celdaIzquierda != null){
+            TiledMapTileLayer.Cell celdaIzquierdaUno = capaPlataforma.getCell(celdaX-1, celdaY+1);
+            Gdx.app.log(""+celdaX,"bajoDer");
+            Gdx.app.log(""+celdaDerechaUno,"altoDer");
+            if(celdaDerecha != null && celdaDerechaUno != null){
                 proyectil = null;
             }
-            if (proyectil.sprite.getX() > jugador.getX() + ANCHO / 2 ||proyectil.sprite.getX() < jugador.getX() - ANCHO / 2) {
+            if (celdaIzquierda != null && celdaIzquierdaUno != null){
+                proyectil = null;
+            }
+            if (proyectil.sprite.getX() > jugador.getX() + ANCHO/2 ||proyectil.sprite.getX() < jugador.getX() - ANCHO/2) {
                 proyectil = null;
             }
         }

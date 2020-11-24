@@ -24,5 +24,4 @@ public class Proyectil extends Objeto {
         }
     }
 
-
 }
