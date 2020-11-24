@@ -40,7 +40,7 @@ public class PantallaNiveles extends Pantalla {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 //Para poder regresar al menu principal
-                juego.setScreen(new PantallaMenu(juego));
+                juego.setScreen(new PantallaCargando(juego,Pantallas.MENU));
             }
         });
         escenaNiveles.addActor(btnRegresar);
@@ -55,7 +55,7 @@ public class PantallaNiveles extends Pantalla {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 //Para poder entrar al nivel uno
-                juego.setScreen(new PantallaNivelUno(juego));
+                juego.setScreen(new PantallaCargando(juego,Pantallas.NIVEL1));
             }
         });
         escenaNiveles.addActor(btnNivelUno);
@@ -70,7 +70,7 @@ public class PantallaNiveles extends Pantalla {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 //Para poder entrar al nivel uno
-                juego.setScreen(new PantallaNivelDos(juego));
+                juego.setScreen(new PantallaCargando(juego,Pantallas.NIVEL2));
             }
         });
         escenaNiveles.addActor(btnNivelDos);

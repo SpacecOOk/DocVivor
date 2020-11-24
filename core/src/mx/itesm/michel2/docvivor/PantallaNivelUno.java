@@ -133,7 +133,7 @@ public class PantallaNivelUno extends Pantalla {
         AssetManager manager = new AssetManager();
         //cargamos todos los efectos que necesitaremos
         manager.load("Efectos_de_sonido/moneda.mp3", Sound.class);
-        manager.load("Efectos_de_sonido/muerteDoc.mp3", Sound.class); //falta acortar el sonido del la tos
+        manager.load("Efectos_de_sonido/muerteDoc.mp3", Sound.class);
         manager.load("Efectos_de_sonido/saltoDoc.mp3", Sound.class);
         manager.finishLoading();
         //Asignamos los sonidos a las variables
@@ -768,7 +768,6 @@ public class PantallaNivelUno extends Pantalla {
                 public void clicked(InputEvent event, float x, float y) {
                     super.clicked(event, x, y);
                     //Para pasar al siguiente nivel
-                    Gdx.app.log("Pantalla","Cargando pantalla del nivel 2...");
                     juego.setScreen(new PantallaNivelDos(juego));
                     dispose();
                 }

@@ -51,6 +51,9 @@ public class PantallaCargando extends Pantalla
             case NIVEL1:
                 cargarRecursosNivel1();
             break;
+            case NIVEL2:
+                cargarRecursosNivel2();
+             break;
 
             /*case REVISARENUMPANTALLAS:
                 cargarRecursosNOMBREDELAPANTALLA();
@@ -60,8 +63,53 @@ public class PantallaCargando extends Pantalla
         }
     }
 
-    private void cargarRecursosNivel1() {
+    private void cargarRecursosNivel2() {
+        manager.load("arma1_Personaje/arma1_M_D.png",Texture.class);
+        manager.load("vidas.png",Texture.class);
+        manager.load("Items/metralleta.png",Texture.class);
+        manager.load("Level2/AssetsPersonajes/Enemigo_lvl2.png",Texture.class);
+        manager.load("Balas/Bala_Jeringa_D.png",Texture.class);
+        manager.load("Balas/Bala_Jeringa_I.png",Texture.class);
+        manager.load("Level2/AssetsPersonajes/Doctor2_moviendose.png",Texture.class);
+        manager.load("Botones/Boton_der_negro.png",Texture.class);
+        manager.load("Botones/Boton_izq_negro.png",Texture.class);
+        manager.load("Botones/Boton_disparo.png",Texture.class);
+        manager.load("Botones/Boton_saltar_negro.png",Texture.class);
+        manager.load("Botones/Boton_pausa.png",Texture.class);
+        manager.load("Fondos/fondoPausa.png",Texture.class);
+        manager.load("Botones/Btn_resume.png",Texture.class);
+        manager.load("Botones/btn_Exit.png",Texture.class);
+        manager.load("Fondos/GameOver.png",Texture.class);
+        manager.load("Botones/btn_jugar.png",Texture.class);
+        manager.load("Botones/btn_Exit.png",Texture.class);
+        manager.load("Fondos/Victory.png",Texture.class);
+        manager.load("Botones/btn_jugar.png",Texture.class);
+        manager.load("Botones/btn_Exit.png",Texture.class);
+    }
 
+    private void cargarRecursosNivel1() {
+        manager.load("MovimientosMeleeTraje/Traje_M_I.png",Texture.class);
+        manager.load("Items/Item_SuperTraje.png",Texture.class);
+        manager.load("vidas.png",Texture.class);
+        manager.load("Level1/Level1_Background.png",Texture.class);
+        manager.load("Balas/Bala_Jeringa_D.png",Texture.class);
+        manager.load("Balas/Bala_Jeringa_I.png",Texture.class);
+        manager.load("Enemigos/Enemigo_1.png",Texture.class);
+        manager.load("MovimientosMelee/Doctor_M_I.png",Texture.class);
+        manager.load("Botones/Boton_der_negro.png",Texture.class);
+        manager.load("Botones/Boton_izq_negro.png",Texture.class);
+        manager.load("Botones/Boton_disparo.png",Texture.class);
+        manager.load("Botones/Boton_saltar_negro.png",Texture.class);
+        manager.load("Botones/Boton_pausa.png",Texture.class);
+        manager.load("Fondos/fondoPausa.png",Texture.class);
+        manager.load("Botones/Btn_resume.png",Texture.class);
+        manager.load("Botones/btn_Exit.png",Texture.class);
+        manager.load("Fondos/GameOver.png",Texture.class);
+        manager.load("Botones/btn_jugar.png",Texture.class);
+        manager.load("Botones/btn_Exit.png",Texture.class);
+        manager.load("Fondos/Victory.png",Texture.class);
+        manager.load("Botones/btn_jugar.png",Texture.class);
+        manager.load("Botones/btn_Exit.png",Texture.class);
     }
 
     private void cargarRecursosMenu() {
@@ -103,6 +151,12 @@ public class PantallaCargando extends Pantalla
             switch (siguientePantalla) {
                 case MENU:
                     juego.setScreen(new PantallaMenu(juego));
+                    break;
+                case NIVEL1:
+                    juego.setScreen(new PantallaNivelUno(juego));
+                    break;
+                case NIVEL2:
+                    juego.setScreen(new PantallaNivelDos(juego));
                     break;
                 // Agregar las otras pantallas
             }
