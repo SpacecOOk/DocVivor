@@ -167,7 +167,7 @@ public class PantallaNivelDos extends Pantalla {
 
     private void crearPersonaje() {
         texturaPersonaje = new Texture("Level2/AssetsPersonajes/Doctor2_moviendose.png");
-        jugador = new JugadorPlataformas(texturaPersonaje);
+        jugador = new JugadorPlataformas(texturaPersonaje,56,55);
         jugador.getSprite().setPosition(100,100);
     }
 
@@ -461,7 +461,7 @@ public class PantallaNivelDos extends Pantalla {
             float x = jugador.getX();
             float y = jugador.getY();
             metralleta.sprite.setY(ALTO);
-            jugador = new JugadorPlataformas(texturaJugadorMetralleta);
+            //jugador = new JugadorPlataformas(texturaJugadorMetralleta); ******insertar tamaños de frames
             jugador.getSprite().setPosition(x,y);
 
         }
@@ -635,7 +635,7 @@ public class PantallaNivelDos extends Pantalla {
                 probarChoqueParedes();      // Prueba si debe moverse
                 break;
             case MOV_IZQUIERDA:
-                probarChoqueParedes();      // Prueba si debe moverse
+                probarChoqueParedes(); // Prueba si debe moverse
                 break;
         }
         switch (jugador.getEstadoSalto()){
@@ -713,14 +713,12 @@ public class PantallaNivelDos extends Pantalla {
         if(celdaArribaDer != null && celdaArribaIzq != null){
             jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.BAJANDO);
         }
-        if(celdaAbajoDer == null && celdaAbajoIzq == null && estadoSalto==JugadorPlataformas.EstadoSalto.BAJANDO){
+        if(celdaAbajoDer == null && celdaAbajoIzq == null && estadoSalto == JugadorPlataformas.EstadoSalto.BAJANDO){
             jugador.caer();
         }
-        if(celdaAbajoDer != null && celdaAbajoIzq != null && estadoSalto== JugadorPlataformas.EstadoSalto.BAJANDO){
+        if(celdaAbajoDer != null && celdaAbajoIzq != null && estadoSalto == JugadorPlataformas.EstadoSalto.BAJANDO){
             jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.EN_PISO);
         }
-
-
     }
 
     private void actualizarProyectil(){ //Va a pasar a traves de las celdas

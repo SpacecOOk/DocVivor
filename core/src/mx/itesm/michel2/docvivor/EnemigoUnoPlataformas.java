@@ -86,7 +86,6 @@ public class EnemigoUnoPlataformas {
     }
 
 
-
     private void actualizarMovimientoHorizontal() {
         float nuevaX = sprite.getX();
         switch (estadoMov) {

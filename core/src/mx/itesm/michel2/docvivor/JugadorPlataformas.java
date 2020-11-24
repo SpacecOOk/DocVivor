@@ -16,6 +16,10 @@ public class JugadorPlataformas {
     //VIDAS
     private int vidas;
 
+    //Parametros
+    private int ancho;
+    private int alto;
+
     // Animación
     private Animation animacion;    // Caminando
     private float timerAnimacion;   // tiempo para calcular el frame
@@ -38,11 +42,11 @@ public class JugadorPlataformas {
     /*
         Constructor del personaje, recibe una imagen con varios frames, (ver imagen marioSprite.png)
          */
-    public JugadorPlataformas(Texture textura) {
+    public JugadorPlataformas(Texture textura,int ancho, int alto) {
         // Lee la textura como región
         TextureRegion texturaCompleta = new TextureRegion(textura);
         // La divide en frames de 16x32 (ver marioSprite.png)
-        TextureRegion[][] texturaPersonaje = texturaCompleta.split(56,55);//CAMBIAR LOS PERSONAJES
+        TextureRegion[][] texturaPersonaje = texturaCompleta.split(ancho,alto);//CAMBIAR LOS PERSONAJES
         // Crea la animación con tiempo de 0.25 segundos entre frames.
         animacion = new Animation(0.1f,texturaPersonaje[0][2],
                 texturaPersonaje[0][0]);
