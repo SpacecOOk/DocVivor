@@ -777,9 +777,9 @@ public class PantallaNivelDos extends Pantalla {
         if (jugador.getY() < ALTO / 2){
             yCamara = ALTO/2;
         }else if(jugador.getY() + ALTO/2 > 32*30){
-            yCamara = 32*30-ALTO/2;
-        }else{
             yCamara = jugador.getY();
+        }else{
+            yCamara = ALTO/2;
         }
         camara.position.x = xCamara;
         camara.position.y = yCamara;
