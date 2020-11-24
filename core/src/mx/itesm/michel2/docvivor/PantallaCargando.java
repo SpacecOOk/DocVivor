@@ -48,6 +48,10 @@ public class PantallaCargando extends Pantalla
             case MENU:
                 cargarRecursosMenu();
                 break;
+            case NIVEL1:
+                cargarRecursosNivel1();
+            break;
+
             /*case REVISARENUMPANTALLAS:
                 cargarRecursosNOMBREDELAPANTALLA();
                 break;
@@ -56,8 +60,17 @@ public class PantallaCargando extends Pantalla
         }
     }
 
+    private void cargarRecursosNivel1() {
+
+    }
+
     private void cargarRecursosMenu() {
         manager.load("Fondos/fondo_general.png",Texture.class);
+        manager.load("titulo.png",Texture.class);
+        manager.load("Botones/btn_jugar.png",Texture.class);
+        manager.load("Botones/btn_Configuracion.png",Texture.class);
+        manager.load("Botones/btn_Acerca.png",Texture.class);
+        manager.load("Botones/btn_Help.png",Texture.class);
     }
 
 
