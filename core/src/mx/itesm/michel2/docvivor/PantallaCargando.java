@@ -14,6 +14,9 @@ public class PantallaCargando extends Pantalla
     private float timerAnimacion = TIEMPO_ENTRE_FRAMES;
     private Texture texturaCargando;
 
+    //fondo
+    private Texture texturaFondo;
+
     // AssetManager
     private AssetManager manager;
 
@@ -35,6 +38,7 @@ public class PantallaCargando extends Pantalla
     @Override
     public void show() {
         texturaCargando = new Texture("cargando/loading.png");
+        texturaFondo = new Texture("Fondos/fondo_general.png");
         spriteCargando = new Sprite(texturaCargando);
         spriteCargando.setPosition(ANCHO/2 - spriteCargando.getWidth()/2,
                 ALTO/2 - spriteCargando.getHeight()/2);
@@ -130,6 +134,7 @@ public class PantallaCargando extends Pantalla
         batch.setProjectionMatrix(camara.combined);
 
         batch.begin();
+        batch.draw(texturaFondo,0,0);
         spriteCargando.draw(batch);
         batch.end();
 
@@ -178,5 +183,6 @@ public class PantallaCargando extends Pantalla
     @Override
     public void dispose() {
         texturaCargando.dispose();
+        texturaFondo.dispose();
     }
 }

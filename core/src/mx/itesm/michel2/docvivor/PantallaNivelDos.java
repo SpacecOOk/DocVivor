@@ -560,16 +560,17 @@ public class PantallaNivelDos extends Pantalla {
                     }
                     break;
                 case MOV_DERECHA:
+                    //********REVISAR CONDICIONES MOVIMIENTOS****************
                     probarChoqueParedesEnemigos();// Se mueve horizontal
-                    if(enemigo.getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_DERECHA && enemigo.getX() +ANCHO/3 > jugador.getX()){
+                    /*if (enemigo.getX() + ANCHO/3 > jugador.getX() && enemigo.getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_DERECHA){
                         enemigo.setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.QUIETO_IZQUIERDA);
-                    }
+                    }*/
                     break;
                 case MOV_IZQUIERDA:
                     probarChoqueParedesEnemigos();      // Prueba si debe moverse
-                    if(enemigo.getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_IZQUIERDA && enemigo.getX() +ANCHO/3 < jugador.getX()){
+                    /*if (enemigo.getX() + ANCHO/3 < jugador.getX() && enemigo.getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_IZQUIERDA){
                         enemigo.setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.QUIETO);
-                    }
+                    }*/
                     break;
                 case QUIETO_IZQUIERDA:
                     if(jugador.getX() + ANCHO/2 >= enemigo.getX()){
@@ -619,11 +620,20 @@ public class PantallaNivelDos extends Pantalla {
             px = arrEnemigosUno.get(i).getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_DERECHA ? px + EnemigoUnoPlataformas.VELOCIDAD_X :
                     px - EnemigoUnoPlataformas.VELOCIDAD_X;
             int celdaX = (int) (px / TAM_CELDA);   // Casilla del personaje en X
+            int celdaY = (int) (arrEnemigosUno.get(i).getY() / TAM_CELDA); // Casilla del personaje en Y
+            TiledMapTileLayer capaPlataforma = (TiledMapTileLayer) mapa.getLayers().get(7);
             if (arrEnemigosUno.get(i).getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_DERECHA) {
                 celdaX++;   // Casilla del lado derecho
             }
-            int celdaY = (int) (arrEnemigosUno.get(i).getY() / TAM_CELDA); // Casilla del personaje en Y
-            TiledMapTileLayer capaPlataforma = (TiledMapTileLayer) mapa.getLayers().get(7); //***** VERIFICAR CAPA*****
+            TiledMapTileLayer.Cell celdaDerecha = capaPlataforma.getCell(celdaX+2, celdaY);
+            TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX-1, celdaY);
+            if(celdaDerecha != null && arrEnemigosUno.get(i).getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_DERECHA){
+                arrEnemigosUno.get(i).setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.QUIETO);
+            }
+            if(celdaIzquierda != null && arrEnemigosUno.get(i).getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_IZQUIERDA){
+                arrEnemigosUno.get(i).setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.QUIETO_IZQUIERDA);
+            }
+
         }
     }
 
@@ -717,7 +727,6 @@ public class PantallaNivelDos extends Pantalla {
         TiledMapTileLayer.Cell celdaAbajoIzq = capaPlataforma.getCell(celdaX, celdaY-1);
         TiledMapTileLayer.Cell celdaArribaDer = capaPlataforma.getCell(celdaX+1, celdaY+2);
         TiledMapTileLayer.Cell celdaArribaIzq = capaPlataforma.getCell(celdaX+1, celdaY+2);
-
         if(celdaDerecha != null && jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.MOV_DERECHA){
             jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
         }
@@ -748,8 +757,8 @@ public class PantallaNivelDos extends Pantalla {
             TiledMapTileLayer capaPlataforma = (TiledMapTileLayer) mapa.getLayers().get(7);
             TiledMapTileLayer.Cell celdaDerecha = capaPlataforma.getCell(celdaX+1, celdaY);
             TiledMapTileLayer.Cell celdaDerechaUno = capaPlataforma.getCell(celdaX+1, celdaY+1);
-            TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX-1, celdaY); //verificar el signo por la orientacion
-            TiledMapTileLayer.Cell celdaIzquierdaUno = capaPlataforma.getCell(celdaX-1, celdaY+1);
+            TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX, celdaY); //verificar el signo por la orientacion
+            TiledMapTileLayer.Cell celdaIzquierdaUno = capaPlataforma.getCell(celdaX, celdaY+1);
 
             if (proyectil.sprite.getX() > jugador.getX() + ANCHO/2 ||proyectil.sprite.getX() < jugador.getX() - ANCHO/2) {
                 proyectil = null;
@@ -776,7 +785,7 @@ public class PantallaNivelDos extends Pantalla {
         }
         if (jugador.getY() < ALTO / 2){
             yCamara = ALTO/2;
-        }else if(jugador.getY() + ALTO/2 > 32*30){
+        }else if(jugador.getY() + ALTO > 32*30){
             yCamara = jugador.getY();
         }else{
             yCamara = ALTO/2;
