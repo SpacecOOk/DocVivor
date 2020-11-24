@@ -7,5 +7,4 @@ public enum Pantallas {
     NIVEL1,
     NIVEL2,
     NIVEL3,
-    PAUSA,
 }

@@ -643,6 +643,7 @@ public class PantallaNivelDos extends Pantalla {
                 //probarChoqueParedes();
                 break;
             case SUBIENDO:
+                Gdx.app.log("POSICION JUGADOR",jugador.getY()+"");
                 probarChoqueParedes();
                 break;
             case BAJANDO:
@@ -675,12 +676,12 @@ public class PantallaNivelDos extends Pantalla {
         }
 
         // Saltar
-        switch (jugador.getEstadoSalto()) {
+        /*switch (jugador.getEstadoSalto()) {
             case SUBIENDO:
             case BAJANDO:
                 jugador.actualizarSalto();    // Actualizar posición en 'y'
                 break;
-        }
+        }*/
     }
 
     private void probarChoqueParedes() {
@@ -701,7 +702,7 @@ public class PantallaNivelDos extends Pantalla {
         TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX-1, celdaY);
         TiledMapTileLayer.Cell celdaAbajoDer = capaPlataforma.getCell(celdaX+1, celdaY-1);
         TiledMapTileLayer.Cell celdaAbajoIzq = capaPlataforma.getCell(celdaX, celdaY-1);
-        TiledMapTileLayer.Cell celdaArribaDer = capaPlataforma.getCell(celdaX+1, celdaY+2);//CHECAR EL +2 CUANDO ACTUALIZEMOS EL ENEMIGO
+        TiledMapTileLayer.Cell celdaArribaDer = capaPlataforma.getCell(celdaX+1, celdaY+2);
         TiledMapTileLayer.Cell celdaArribaIzq = capaPlataforma.getCell(celdaX+1, celdaY+2);
         if(celdaDerecha != null && jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.MOV_DERECHA){
             jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
