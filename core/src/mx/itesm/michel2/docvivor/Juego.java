@@ -13,21 +13,28 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Juego extends Game {
 
+	private AssetManager manager;
+
  	protected Music musicaFondo;
  	protected int musicaEstado = 0;
  	protected int efectoSonidoEstado = 0;
 
 	@Override
 	public void create () {
-		AssetManager manager = new AssetManager();
+		manager = new AssetManager();
 		manager.load("Musica/Intro.mp3",Music.class);
 		manager.finishLoading();
 		musicaFondo = manager.get("Musica/Intro.mp3");
-		setScreen(new PantallaMenu(this));
+		//setScreen(new PantallaMenu(this));
+		setScreen(new PantallaCargando(this,Pantallas.MENU));
 		Preferences prefs = Gdx.app.getPreferences("musica");
 		musicaEstado = (int)prefs.getFloat("musica");
 		prefs = Gdx.app.getPreferences("efectoSonido");
 		efectoSonidoEstado = (int)prefs.getFloat("efectoSonido");
+	}
+
+	public AssetManager getManager() {
+		return manager;
 	}
 
 	@Override
