@@ -71,7 +71,7 @@ public class PantallaCargando extends Pantalla
         manager.load("arma1_Personaje/arma1_M_D.png",Texture.class);
         manager.load("vidas.png",Texture.class);
         manager.load("Items/metralleta.png",Texture.class);
-        manager.load("Level2/AssetsPersonajes/Enemigo_lvl2.png",Texture.class);
+        manager.load("Enemigo_LvL2Prueba.png",Texture.class);
         manager.load("Balas/Bala_Jeringa_D.png",Texture.class);
         manager.load("Balas/Bala_Jeringa_I.png",Texture.class);
         manager.load("Level2/AssetsPersonajes/Doctor2_moviendose.png",Texture.class);

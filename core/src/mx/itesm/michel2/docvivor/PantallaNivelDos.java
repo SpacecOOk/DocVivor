@@ -125,7 +125,7 @@ public class PantallaNivelDos extends Pantalla {
     }
 
     private void crearEnemigos() {
-        texturaEnemigoUno = new Texture("Level2/AssetsPersonajes/Enemigo_lvl2.png");
+        texturaEnemigoUno = new Texture("Enemigo_LvL2Prueba.png");
         arrEnemigosUno = new Array<>();
         for (int i = 0; i < 5; i++) {
             EnemigoUnoPlataformas enemigo = new EnemigoUnoPlataformas(texturaEnemigoUno);
@@ -366,9 +366,9 @@ public class PantallaNivelDos extends Pantalla {
     private void crearmapa() {
         AssetManager manager = new AssetManager();
         manager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
-        manager.load("Level2/Lvl2_mapaFinal.tmx", TiledMap.class);
+        manager.load("Lvl2_mapaFinal.tmx", TiledMap.class);
         manager.finishLoading();
-        mapa = manager.get("Level2/Lvl2_mapaFinal.tmx");
+        mapa = manager.get("Lvl2_mapaFinal.tmx");
         rendererMapa = new OrthogonalTiledMapRenderer(mapa);
     }
 

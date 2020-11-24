@@ -34,10 +34,10 @@ public class PantallaConfiguracion extends Pantalla {
     private void crearConfiguracion() {
         escenaConfiguracion = new Stage(vista);
         //Boton Silenciar Música
-        Texture texturaCallarMusicaOn = new Texture("Botones/boton_sonido_on.png");
+        Texture texturaCallarMusicaOn = new Texture("Botones/Boton_sonido_on.png");
         final TextureRegionDrawable botonCallarMusicaOn = new TextureRegionDrawable(new TextureRegion(texturaCallarMusicaOn));
 
-        Texture texturaCallarMusicaOff = new Texture("Botones/boton_sonido_off.png");
+        Texture texturaCallarMusicaOff = new Texture("Botones/Boton_sonido_off.png");
         final TextureRegionDrawable botonCallarMusicaOff = new TextureRegionDrawable(new TextureRegion(texturaCallarMusicaOff));
 
         //Cambiar la imagen del boton
