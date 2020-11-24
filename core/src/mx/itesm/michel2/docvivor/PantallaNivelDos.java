@@ -753,6 +753,7 @@ public class PantallaNivelDos extends Pantalla {
 
     private void actualizarCamara() {
         float xCamara = camara.position.x;
+        float yCamara = camara.position.y;
         if (jugador.getX() < ANCHO/2){
             xCamara = ANCHO/2;
         }else if (jugador.getX() > 899*32){ //checar la condicion del mapa
@@ -760,7 +761,15 @@ public class PantallaNivelDos extends Pantalla {
         }else {
             xCamara = jugador.getX();
         }
+        if (jugador.getY() < ALTO / 2){
+            yCamara = ALTO/2;
+        }else if(jugador.getY() + ALTO/2 > 32*30){
+            yCamara = 32*30-ALTO/2;
+        }else{
+            yCamara = jugador.getY();
+        }
         camara.position.x = xCamara;
+        camara.position.y = yCamara;
         camara.update();
     }
 
