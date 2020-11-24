@@ -35,14 +35,16 @@ public class EnemigoUnoPlataformas {
         timerAnimacion = 0;
         // Crea el sprite cuando para el personaje quieto (idle)
         sprite = new Sprite(texturasFrames[0][0]);    // quieto
-        estadoMov = estadoMovimiento.QUIETO_IZQUIERDA;
+        estadoMov = estadoMovimiento.INICIANDO;
     }
 
     public void render(SpriteBatch batch){
         actualizar();
         switch (estadoMov) {
             case INICIANDO:
-                setEstadoMov(estadoMovimiento.QUIETO_IZQUIERDA);
+                //batch.draw(region, sprite.getX(), sprite.getY());
+                //setEstadoMov(estadoMovimiento.QUIETO_IZQUIERDA);
+                //break;
             case MOV_DERECHA:
             case MOV_IZQUIERDA:
                 // Incrementa el timer para calcular el frame que se dibuja
@@ -61,6 +63,7 @@ public class EnemigoUnoPlataformas {
                 }
                 // Dibuja el frame en las coordenadas del sprite
                 batch.draw(region, sprite.getX(), sprite.getY());
+                Gdx.app.log("render enemigo",""+getEstadoMov());
                 break;
 
             case QUIETO:
