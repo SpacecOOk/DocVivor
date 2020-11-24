@@ -643,7 +643,6 @@ public class PantallaNivelDos extends Pantalla {
                 //probarChoqueParedes();
                 break;
             case SUBIENDO:
-                Gdx.app.log("POSICION JUGADOR",jugador.getY()+"");
                 probarChoqueParedes();
                 break;
             case BAJANDO:
@@ -688,7 +687,7 @@ public class PantallaNivelDos extends Pantalla {
         JugadorPlataformas.EstadoMovimiento estado = jugador.getEstadoMovimiento();
         JugadorPlataformas.EstadoSalto estadoSalto = jugador.getEstadoSalto();
         // Si el jugador no esta en movimiento no es necesario llamar a este metodo
-        if ( estado!= JugadorPlataformas.EstadoMovimiento.MOV_DERECHA && estado!=JugadorPlataformas.EstadoMovimiento.MOV_IZQUIERDA && estadoSalto!=JugadorPlataformas.EstadoSalto.SUBIENDO){
+        if ( estado == JugadorPlataformas.EstadoMovimiento.QUIETO && estadoSalto == JugadorPlataformas.EstadoSalto.EN_PISO){
             return;
         }
         float px = jugador.getX();    // Posición actual
@@ -704,6 +703,9 @@ public class PantallaNivelDos extends Pantalla {
         TiledMapTileLayer.Cell celdaAbajoIzq = capaPlataforma.getCell(celdaX, celdaY-1);
         TiledMapTileLayer.Cell celdaArribaDer = capaPlataforma.getCell(celdaX+1, celdaY+2);
         TiledMapTileLayer.Cell celdaArribaIzq = capaPlataforma.getCell(celdaX+1, celdaY+2);
+        Gdx.app.log(""+celdaY,"");
+        Gdx.app.log(""+celdaArribaDer,"");
+        Gdx.app.log(""+celdaArribaIzq,"");
         if(celdaDerecha != null && jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.MOV_DERECHA){
             jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
         }
@@ -711,6 +713,7 @@ public class PantallaNivelDos extends Pantalla {
             jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
         }
         if(celdaArribaDer != null && celdaArribaIzq != null){
+            Gdx.app.log("Hay una celda arriba, deberia empezar a bajar","");
             jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.BAJANDO);
         }
         if(celdaAbajoDer == null && celdaAbajoIzq == null && estadoSalto == JugadorPlataformas.EstadoSalto.BAJANDO){

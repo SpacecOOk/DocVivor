@@ -125,7 +125,7 @@ public class PantallaCargando extends Pantalla
 
     @Override
     public void render(float delta) {
-        borrarPantalla(0.5f, 0.2f, 0.5f);
+        borrarPantalla(0.1f, 0.5f, 0.1f);
 
         batch.setProjectionMatrix(camara.combined);
 

@@ -104,7 +104,11 @@ public class JugadorPlataformas {
                 sprite.draw(batch);
                 break;
         }
-        actualizarSalto();
+        if(estadoSalto == EstadoSalto.BAJANDO){
+            caer();
+        }else {
+            actualizarSalto();
+        }
     }
 
     // Actualiza el sprite, de acuerdo al estadoMovimiento
@@ -136,9 +140,6 @@ public class JugadorPlataformas {
 
     // Actualiza la posición en 'y', está saltando
     public void actualizarSalto() {
-        if(estadoSalto == EstadoSalto.BAJANDO){
-            caer();
-        }
         if(estadoSalto!=EstadoSalto.EN_PISO){//POSIBLE ERROR A FUTURO
         // Ejecutar movimiento vertical
         float y = V0 * tiempoSalto - G_2 * tiempoSalto * tiempoSalto;  // Desplazamiento desde que inició el salto
