@@ -724,9 +724,22 @@ public class PantallaNivelDos extends Pantalla {
     private void actualizarProyectil(){ //Va a pasar a traves de las celdas
         if(proyectil != null) {
             proyectil.mover(orientacion);
+            //verificarColisionConTerreno();
             if (proyectil.sprite.getX() > jugador.getX() + ANCHO / 2) {
                 proyectil = null;
-            } else if (proyectil.sprite.getX() < jugador.getX() - ANCHO / 2) {
+            }
+            if (proyectil.sprite.getX() < jugador.getX() - ANCHO / 2) {
+                proyectil = null;
+            }
+            int celdaX = (int) (proyectil.sprite.getX() / TAM_CELDA);
+            int celdaY = (int) ((proyectil.sprite.getY() + proyectil.VELOCIDAD_X) / TAM_CELDA);
+            TiledMapTileLayer capaPlataforma = (TiledMapTileLayer) mapa.getLayers().get("Plataformas");
+            TiledMapTileLayer.Cell celdaDerecha = capaPlataforma.getCell(celdaX+1, celdaY);
+            TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX+1, celdaY); //verificar el signo por la orientacion
+            if(celdaDerecha != null){
+                proyectil = null;
+            }
+            if(celdaIzquierda != null){
                 proyectil = null;
             }
         }
