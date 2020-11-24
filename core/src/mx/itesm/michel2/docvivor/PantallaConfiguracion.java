@@ -77,9 +77,9 @@ public class PantallaConfiguracion extends Pantalla {
 
         escenaConfiguracion.addActor(btnCallarMusica);
         //Boton Silenciar Efectos de sonido
-        Texture texturaCallarSonidoOn = new Texture("Botones/boton_sonido_on.png");
+        Texture texturaCallarSonidoOn = new Texture("Botones/Boton_sonido_on.png");
         TextureRegionDrawable botonCallarSonidoOn = new TextureRegionDrawable(new TextureRegion(texturaCallarSonidoOn));
-        Texture texturaCallarSonidoOff = new Texture("Botones/boton_sonido_off.png");
+        Texture texturaCallarSonidoOff = new Texture("Botones/Boton_sonido_off.png");
         TextureRegionDrawable botonCallarSonidoOff = new TextureRegionDrawable(new TextureRegion(texturaCallarSonidoOff));
 
         //Cambiar la imagen del boton
