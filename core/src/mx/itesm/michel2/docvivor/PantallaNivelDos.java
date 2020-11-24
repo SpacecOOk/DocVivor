@@ -385,7 +385,6 @@ public class PantallaNivelDos extends Pantalla {
         jugador.render(batch);
         dibujarEnemigos();
         dibujarItems();
-        verificarColisiones();
         metralleta.render(batch);
         if(proyectil!=null){
             proyectil.render(batch);
@@ -405,6 +404,7 @@ public class PantallaNivelDos extends Pantalla {
         //************Derrota**************
         batch.setProjectionMatrix(camaraDerrotaHUD.combined);
         if (estadoJuego == EstadoJuego.DERROTA) {
+            Gdx.app.log("pierdes ","pierdes");
             escenaDerrota.draw();
         }
 
@@ -502,6 +502,14 @@ public class PantallaNivelDos extends Pantalla {
         moverPersonaje();
         moverEnemigos();
         actualizarVidas();
+        verificarColisiones();
+        if(estadoJuego != EstadoJuego.DERROTA&&jugador.getY()<5) {
+            jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
+            estadoJuego = EstadoJuego.DERROTA;
+            escenaDerrota = new PantallaNivelDos.EscenaDerrota(vistaDerrotaHUD, batch);
+            Gdx.input.setInputProcessor(escenaDerrota);
+        }
+
     }
 
     private void actualizarVidas() { //Verificar bien el funcionamiento
@@ -703,9 +711,7 @@ public class PantallaNivelDos extends Pantalla {
         TiledMapTileLayer.Cell celdaAbajoIzq = capaPlataforma.getCell(celdaX, celdaY-1);
         TiledMapTileLayer.Cell celdaArribaDer = capaPlataforma.getCell(celdaX+1, celdaY+2);
         TiledMapTileLayer.Cell celdaArribaIzq = capaPlataforma.getCell(celdaX+1, celdaY+2);
-        Gdx.app.log(""+celdaY,"");
-        Gdx.app.log(""+celdaArribaDer,"");
-        Gdx.app.log(""+celdaArribaIzq,"");
+
         if(celdaDerecha != null && jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.MOV_DERECHA){
             jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
         }
@@ -713,7 +719,7 @@ public class PantallaNivelDos extends Pantalla {
             jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
         }
         if(celdaArribaDer != null && celdaArribaIzq != null){
-            Gdx.app.log("Hay una celda arriba, deberia empezar a bajar","");
+
             jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.BAJANDO);
         }
         if(celdaAbajoDer == null && celdaAbajoIzq == null && estadoSalto == JugadorPlataformas.EstadoSalto.BAJANDO){
@@ -738,9 +744,7 @@ public class PantallaNivelDos extends Pantalla {
             TiledMapTileLayer.Cell celdaDerechaUno = capaPlataforma.getCell(celdaX+1, celdaY+1);
             TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX-1, celdaY); //verificar el signo por la orientacion
             TiledMapTileLayer.Cell celdaIzquierdaUno = capaPlataforma.getCell(celdaX-1, celdaY+1);
-            Gdx.app.log(""+celdaX,"bajoDer");
-            Gdx.app.log(""+celdaY,"altura ");
-            Gdx.app.log(""+celdaDerechaUno,"altoDer");
+
             if (proyectil.sprite.getX() > jugador.getX() + ANCHO/2 ||proyectil.sprite.getX() < jugador.getX() - ANCHO/2) {
                 proyectil = null;
             }
@@ -880,6 +884,7 @@ public class PantallaNivelDos extends Pantalla {
                 public void clicked(InputEvent event, float x, float y) {
                     super.clicked(event, x, y);
                     //Para regresar al los niveles
+                    Gdx.app.log("exit ","exit");
                     borrarPantalla();
                     juego.setScreen(new PantallaNiveles(juego));
                 }
