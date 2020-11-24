@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class JugadorPlataformas {
-    public static final float VELOCIDAD_Y = -4f;   // Velocidad de caída
+    public static final float VELOCIDAD_Y = -2f;   // Velocidad de caída
     public static final float VELOCIDAD_X = 10;     // Velocidad horizontal
 
     private Sprite sprite;  // Sprite cuando no se mueve
