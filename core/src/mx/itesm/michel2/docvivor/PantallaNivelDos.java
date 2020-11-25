@@ -89,6 +89,7 @@ public class PantallaNivelDos extends Pantalla {
     //Enemigos
     private Texture texturaEnemigoUno;
     private Array<EnemigoUnoPlataformas> arrEnemigosUno;
+    private int[] posicionesEnemigos;
 
     //item - metralleta
     private Texture texturaMetralleta;
@@ -110,12 +111,40 @@ public class PantallaNivelDos extends Pantalla {
         crearProyectil();
         cargarPreferencias();
         guardarPreferencias();
+        crearPosiciones();
         crearEnemigos();
         crearItems();
         if(juego.efectoSonidoEstado != 1){
             crearSonidos();
         }
         Gdx.input.setInputProcessor(HUD);
+    }
+
+    private void crearPosiciones() {
+        int a = MathUtils.random(85*32,96*32);
+        posicionesEnemigos[0] = a;
+        int b = MathUtils.random(126*32, 149*32);
+        posicionesEnemigos[1] = b;
+        int c = MathUtils.random(212*32,229*32);
+        posicionesEnemigos[2] = c;
+        int d = MathUtils.random(233*32,256*32);
+        posicionesEnemigos[3] = d;
+        int e = MathUtils.random(320*32,364*32);
+        posicionesEnemigos[4] = e;
+        int f = MathUtils.random(429*32, 442*32);
+        posicionesEnemigos[5] = f;
+        int g = MathUtils.random(484*32,497*32);
+        posicionesEnemigos[6] = g;
+        int h = MathUtils.random(516*32,541*32);
+        posicionesEnemigos[7] = h;
+        int i = MathUtils.random(578*32,615*32);
+        posicionesEnemigos[8] = i;
+        int j = MathUtils.random(623*32,641*32);
+        posicionesEnemigos[9] = j;
+        int k = MathUtils.random(687*32,801*32);
+        posicionesEnemigos[10] = k;
+        int l = MathUtils.random(811*32,834*32);
+        posicionesEnemigos[11] = l;
     }
 
     private void crearItems() {
@@ -129,8 +158,8 @@ public class PantallaNivelDos extends Pantalla {
         arrEnemigosUno = new Array<>();
         for (int i = 0; i < 5; i++) {
             EnemigoUnoPlataformas enemigo = new EnemigoUnoPlataformas(texturaEnemigoUno);
-            //int x = MathUtils.random(40*32,859*32);
-            enemigo.getSprite().setPosition(32*30,21*32);
+            int x = MathUtils.random(0,posicionesEnemigos.length);
+            enemigo.getSprite().setPosition(posicionesEnemigos[x],21*32);
             arrEnemigosUno.add(enemigo);
         }
     }
