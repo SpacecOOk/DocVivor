@@ -63,7 +63,6 @@ public class EnemigoUnoPlataformas {
                 }
                 // Dibuja el frame en las coordenadas del sprite
                 batch.draw(region, sprite.getX(), sprite.getY());
-                Gdx.app.log("render enemigo",""+getEstadoMov());
                 break;
 
             case QUIETO:

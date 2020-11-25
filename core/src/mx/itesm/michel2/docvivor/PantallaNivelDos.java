@@ -161,7 +161,7 @@ public class PantallaNivelDos extends Pantalla {
         arrEnemigosUno = new Array<>();
         for (int i = 0; i < 10; i++) {
             EnemigoUnoPlataformas enemigo = new EnemigoUnoPlataformas(texturaEnemigoUno);
-            int x = MathUtils.random(0,posicionesEnemigos.length);
+            int x = MathUtils.random(0,11);
             enemigo.getSprite().setPosition(posicionesEnemigos[x],16*32);
             arrEnemigosUno.add(enemigo);
         }
@@ -450,17 +450,17 @@ public class PantallaNivelDos extends Pantalla {
         verificarCaida();
         verificarColisionItems();
         // *** COLISION ITEMS ***
-        /*if (metralleta.sprite.getBoundingRectangle().overlaps(jugador.getSprite().getBoundingRectangle())) {
+        /*
+        if (metralleta.sprite.getBoundingRectangle().overlaps(jugador.getSprite().getBoundingRectangle())) {
             if (juego.efectoSonidoEstado != 1) {
                 efectoPowerUp.play();
             }
-            Gdx.app.log("Equipando traje...","");*/
+        */
             //Implementar la textura del personaje, checarlo si movemos el tamaño del mapa
             /*
-            int x = (int)jugador.sprite.getX();
-            traje.sprite.setY(ALTO);
-            jugador = new Jugador(texturaPersonajeTraje,x,133);
-            jugador.setVidas(4);
+            int x = (int)jugador.getSprite().getX();
+            texturaJugadorMetralleta.setY(ALTO);
+            jugador = new JugadorPlataformas(texturaJugadorMetralleta,x,133);
              */
         //}
         // ***  COLISION BALA-ENEMIGOS ***
@@ -498,7 +498,7 @@ public class PantallaNivelDos extends Pantalla {
     }
 
     private void verificarCaida() {
-        if(jugador.getY() < 5){
+        if(jugador.getY() < 5 && estadoJuego!=EstadoJuego.DERROTA){
             if (juego.efectoSonidoEstado != 1){
                 efectoMuerte.play();
             }
@@ -533,13 +533,6 @@ public class PantallaNivelDos extends Pantalla {
         moverEnemigos();
         actualizarVidas();
         verificarColisiones();
-        if(estadoJuego != EstadoJuego.DERROTA&&jugador.getY()<5) {
-            jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
-            estadoJuego = EstadoJuego.DERROTA;
-            escenaDerrota = new PantallaNivelDos.EscenaDerrota(vistaDerrotaHUD, batch);
-            Gdx.input.setInputProcessor(escenaDerrota);
-        }
-
     }
 
     private void actualizarVidas() { //Verificar bien el funcionamiento
