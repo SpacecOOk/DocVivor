@@ -153,7 +153,7 @@ public class PantallaNivelDos extends Pantalla {
     private void crearItems() {
         //SuperTraje
         texturaMetralleta = new Texture("Items/metralleta.png");
-        metralleta = new Item(texturaMetralleta,5000,100,139,56);
+        metralleta = new Item(texturaMetralleta,700,100,139,56);
     }
 
     private void crearEnemigos() {
@@ -420,7 +420,6 @@ public class PantallaNivelDos extends Pantalla {
         if(proyectil!=null){
             proyectil.render(batch);
         }
-        Gdx.app.log(""+jugador.getVidas(),"Vidas");
         batch.end();
 
         //************ HUD ***************
@@ -516,7 +515,7 @@ public class PantallaNivelDos extends Pantalla {
             float y = jugador.getY();
             metralleta.sprite.setY(ALTO+100);
             texturaJugadorMetralleta = new Texture ("Level2/AssetsPersonajes/personajeArma1.png");
-            jugador = new JugadorPlataformas(texturaJugadorMetralleta,54,55);
+            jugador = new JugadorPlataformas(texturaJugadorMetralleta,64,55);
             jugador.getSprite().setPosition(x,y);
 
         }
