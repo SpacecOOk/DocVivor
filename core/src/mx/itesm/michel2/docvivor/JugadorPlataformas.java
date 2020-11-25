@@ -8,7 +8,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class JugadorPlataformas {
-    public static final float VELOCIDAD_Y = -2f;   // Velocidad de caída
+    public static final float VELOCIDAD_YCAIDA = -4.5f;
+    public static final float VELOCIDAD_Y = -2.4f;   // Velocidad de caída
     public static final float VELOCIDAD_X = 10;     // Velocidad horizontal
 
     private Sprite sprite;  // Sprite cuando no se mueve
@@ -63,6 +64,7 @@ public class JugadorPlataformas {
 
     // Dibuja el personaje
     public void render(SpriteBatch batch) {
+        Gdx.app.log(""+getEstadoSalto(),"");
         actualizar();
         // Dibuja el personaje dependiendo del estadoMovimiento
         switch (estadoMovimiento) {
@@ -104,11 +106,23 @@ public class JugadorPlataformas {
                 sprite.draw(batch);
                 break;
         }
-        if(estadoSalto == EstadoSalto.BAJANDO){
-            caer();
-        }else {
-            actualizarSalto();
+        switch (estadoSalto){
+            case EN_PISO:
+                break;
+            case SUBIENDO:
+                actualizarSalto();
+                break;
+            case BAJANDO:
+                caer();
+                break;
+            case CAIDA_LIBRE:
+                caidaLibre();
+                break;
         }
+    }
+
+    public void caidaLibre() {
+        sprite.setY(sprite.getY() + VELOCIDAD_YCAIDA);
     }
 
     // Actualiza el sprite, de acuerdo al estadoMovimiento
@@ -140,7 +154,7 @@ public class JugadorPlataformas {
 
     // Actualiza la posición en 'y', está saltando
     public void actualizarSalto() {
-        if(estadoSalto!=EstadoSalto.EN_PISO){//POSIBLE ERROR A FUTURO
+        if(estadoSalto!=EstadoSalto.EN_PISO || estadoSalto!=EstadoSalto.CAIDA_LIBRE){//POSIBLE ERROR A FUTURO
         // Ejecutar movimiento vertical
         float y = V0 * tiempoSalto - G_2 * tiempoSalto * tiempoSalto;  // Desplazamiento desde que inició el salto
         if (tiempoSalto > tiempoVuelo / 2) { // Llegó a la altura máxima?

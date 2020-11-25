@@ -697,6 +697,9 @@ public class PantallaNivelDos extends Pantalla {
             case BAJANDO:
                 probarChoqueParedes();
                 break;
+            case CAIDA_LIBRE:
+                probarChoqueParedes();
+                break;
         }
         // Prueba si debe caer por llegar a un espacio vacío
         if (jugador.getEstadoMovimiento() != JugadorPlataformas.EstadoMovimiento.INICIANDO
@@ -714,8 +717,8 @@ public class PantallaNivelDos extends Pantalla {
             // probar si la celda está ocupada
             if (celdaAbajoIzq == null && (celdaDerecha == null || celdaIzquierda == null) && celdaAbajoDer == null) {
                 // Celda vacía, entonces el personaje puede avanzar
-                jugador.caer();
-                //jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.CAIDA_LIBRE);
+                //jugador.caer();
+                jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.CAIDA_LIBRE);
             } else {
                 // Dejarlo sobre la celda que lo detiene
                 jugador.setPosicion(jugador.getX(), (celdaY + 1) * TAM_CELDA);
@@ -759,13 +762,15 @@ public class PantallaNivelDos extends Pantalla {
             jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
         }
         if(celdaArribaDer != null && celdaArribaIzq != null){
-
             jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.BAJANDO);
         }
         if(celdaAbajoDer == null && celdaAbajoIzq == null && estadoSalto == JugadorPlataformas.EstadoSalto.BAJANDO){
             jugador.caer();
         }
-        if(celdaAbajoDer != null && celdaAbajoIzq != null && estadoSalto == JugadorPlataformas.EstadoSalto.BAJANDO){
+        if(celdaAbajoDer == null && celdaAbajoIzq == null && jugador.getEstadoSalto() == JugadorPlataformas.EstadoSalto.EN_PISO){
+            jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.CAIDA_LIBRE);
+        }
+        if(celdaAbajoDer != null && celdaAbajoIzq != null && (estadoSalto == JugadorPlataformas.EstadoSalto.BAJANDO || estadoSalto ==  JugadorPlataformas.EstadoSalto.CAIDA_LIBRE)){
             jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.EN_PISO);
         }
     }
@@ -908,7 +913,7 @@ public class PantallaNivelDos extends Pantalla {
                 public void clicked(InputEvent event, float x, float y) {
                     super.clicked(event, x, y);
                     //Para reintentar el nivel
-                    juego.setScreen(new PantallaNivelUno(juego));
+                    juego.setScreen(new PantallaNivelDos(juego));
 
                 }
             });
