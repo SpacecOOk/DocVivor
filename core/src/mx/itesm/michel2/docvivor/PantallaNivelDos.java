@@ -161,9 +161,10 @@ public class PantallaNivelDos extends Pantalla {
         arrEnemigosUno = new Array<>();
         for (int i = 0; i < 10; i++) {
             EnemigoUnoPlataformas enemigo = new EnemigoUnoPlataformas(texturaEnemigoUno);
-            int x = MathUtils.random(0,11);
+            int x = MathUtils.random(0,posicionesEnemigos.length-1);
             enemigo.getSprite().setPosition(posicionesEnemigos[x],16*32);
             arrEnemigosUno.add(enemigo);
+            crearPosiciones();
         }
     }
 
