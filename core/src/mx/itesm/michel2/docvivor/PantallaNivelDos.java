@@ -66,6 +66,7 @@ public class PantallaNivelDos extends Pantalla {
     private Sound efectoMuerte;
     private Sound efectoMuerteEnemigo;
     private Sound efectoPowerUp;
+    private Sound efectoMuerteEnemigoDos;
 
     //Pausa
     private EstadoJuego estadoJuego = EstadoJuego.JUGANDO;
@@ -218,6 +219,7 @@ public class PantallaNivelDos extends Pantalla {
         efectoMuerteEnemigo = manager.get("Efectos_de_sonido/moneda.mp3");
         efectoPowerUp = manager.get("Efectos_de_sonido/moneda.mp3");
         efectoSalto = manager.get("Efectos_de_sonido/saltoDoc.mp3");
+        efectoMuerteEnemigoDos =manager.get("Efectos_de_sonido/moneda.mp3");
     }
 
     private void crearProyectil() {
@@ -508,6 +510,20 @@ public class PantallaNivelDos extends Pantalla {
                     }
                 }
             }
+        if(proyectil != null){
+            for (int j = arrEnemigosDos.size-1; j >= 0 ; j--) {
+                EnemigoDosPlataformas enemigo = arrEnemigosDos.get(j);
+                if (proyectil.sprite.getBoundingRectangle().overlaps(enemigo.getSprite().getBoundingRectangle())) {
+                    //Si hay colisión
+                    if (juego.efectoSonidoEstado != 1){
+                        efectoMuerteEnemigoDos.play();
+                    }
+                    arrEnemigosDos.removeIndex(j);
+                    proyectil = null;
+                    break;
+                }
+            }
+        }
         //}
     }
 
