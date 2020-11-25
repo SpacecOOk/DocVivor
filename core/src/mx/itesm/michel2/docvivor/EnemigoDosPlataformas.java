@@ -19,7 +19,7 @@ public class EnemigoDosPlataformas {
     private int ladoQUIETO;
 
     //estados
-    private EnemigoUnoPlataformas.estadoMovimiento estadoMov;
+    private estadoMovimiento estadoMov;
 
     public EnemigoDosPlataformas(Texture textura) {
         // Lee la textura como región
@@ -35,7 +35,7 @@ public class EnemigoDosPlataformas {
         timerAnimacion = 0;
         // Crea el sprite cuando para el personaje quieto (idle)
         sprite = new Sprite(texturasFrames[0][0]);    // quieto
-        estadoMov = EnemigoUnoPlataformas.estadoMovimiento.INICIANDO;
+        estadoMov = estadoMovimiento.INICIANDO;
     }
 
     public void render(SpriteBatch batch){
@@ -52,7 +52,7 @@ public class EnemigoDosPlataformas {
                 // Obtiene el frame que se debe mostrar (de acuerdo al timer)
                 TextureRegion region = (TextureRegion)animacion.getKeyFrame(timerAnimacion);
                 // Dirección correcta
-                if (estadoMov== EnemigoUnoPlataformas.estadoMovimiento.MOV_IZQUIERDA) {
+                if (estadoMov== estadoMovimiento.MOV_IZQUIERDA) {
                     if (!region.isFlipX()) {
                         region.flip(true,false);
                     }
@@ -136,11 +136,11 @@ public class EnemigoDosPlataformas {
         INICIANDO
     }
 
-    public EnemigoUnoPlataformas.estadoMovimiento getEstadoMov() {
+    public estadoMovimiento getEstadoMov() {
         return estadoMov;
     }
 
-    public void setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento estadoMov) {
+    public void setEstadoMov(estadoMovimiento estadoMov) {
         this.estadoMov = estadoMov;
     }
 }
