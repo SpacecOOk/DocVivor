@@ -45,7 +45,7 @@ public class PantallaNivelDos extends Pantalla {
     private Texture texturaPersonaje;
     private JugadorPlataformas jugador;
     public static final int TAM_CELDA = 32;
-    private Texture texturaJugadorMetralleta = new Texture("arma1_Personaje/arma1_M_D.png");
+    private Texture texturaJugadorMetralleta;
 
     //vidas
     private Image imagenVidas;
@@ -153,7 +153,7 @@ public class PantallaNivelDos extends Pantalla {
     private void crearItems() {
         //SuperTraje
         texturaMetralleta = new Texture("Items/metralleta.png");
-        metralleta = new Item(texturaMetralleta,32*300,100,139,56);
+        metralleta = new Item(texturaMetralleta,300,100,139,56);
     }
 
     private void crearEnemigos() {
@@ -513,8 +513,9 @@ public class PantallaNivelDos extends Pantalla {
             //estas lineas no funcionan bien
             float x = jugador.getX();
             float y = jugador.getY();
-            metralleta.sprite.setY(ALTO);
-            //jugador = new JugadorPlataformas(texturaJugadorMetralleta); ******insertar tamaños de frames
+            metralleta.sprite.setY(ALTO+100);
+            texturaJugadorMetralleta = new Texture ("Level2/AssetsPersonajes/personajeArma1.png");
+            jugador = new JugadorPlataformas(texturaJugadorMetralleta,54,55);
             jugador.getSprite().setPosition(x,y);
 
         }
