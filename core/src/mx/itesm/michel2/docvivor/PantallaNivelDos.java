@@ -153,7 +153,7 @@ public class PantallaNivelDos extends Pantalla {
     private void crearItems() {
         //SuperTraje
         texturaMetralleta = new Texture("Items/metralleta.png");
-        metralleta = new Item(texturaMetralleta,300,100,139,56);
+        metralleta = new Item(texturaMetralleta,5000,100,139,56);
     }
 
     private void crearEnemigos() {
@@ -420,6 +420,7 @@ public class PantallaNivelDos extends Pantalla {
         if(proyectil!=null){
             proyectil.render(batch);
         }
+        Gdx.app.log(""+jugador.getVidas(),"Vidas");
         batch.end();
 
         //************ HUD ***************
@@ -487,20 +488,20 @@ public class PantallaNivelDos extends Pantalla {
         for (int i = 0; i < arrEnemigosUno.size; i++) {
             EnemigoUnoPlataformas enemigo = arrEnemigosUno.get(i);
             if(jugador.getSprite().getBoundingRectangle().overlaps(enemigo.getSprite().getBoundingRectangle())){
-                if(jugador.getVidas() -1 >0){
+                if(jugador.getVidas() - 1 > 0){
                     arrEnemigosUno.removeIndex(i);
                     jugador.setVidas(jugador.getVidas()-1);
+                }else {
                     if (juego.efectoSonidoEstado != 1){
                         efectoMuerte.play();
-                    }else {
-                        jugador.setVidas(jugador.getVidas()-1);
-                        jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
-                        jugador.getSprite().setY(-100); //Lo manda a lo alto
-                        estadoJuego = PantallaNivelDos.EstadoJuego.DERROTA;
-                        escenaDerrota = new PantallaNivelDos.EscenaDerrota(vistaDerrotaHUD,batch);
-                        Gdx.input.setInputProcessor(escenaDerrota);
-                    }break;
-                }
+                    }
+                    jugador.setVidas(jugador.getVidas()-1);
+                    jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
+                    jugador.getSprite().setY(-100); //Lo manda a lo alto
+                    estadoJuego = PantallaNivelDos.EstadoJuego.DERROTA;
+                    escenaDerrota = new PantallaNivelDos.EscenaDerrota(vistaDerrotaHUD,batch);
+                    Gdx.input.setInputProcessor(escenaDerrota);
+                }break;
             }
         }
     }
