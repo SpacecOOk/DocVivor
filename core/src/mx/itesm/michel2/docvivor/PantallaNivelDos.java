@@ -121,6 +121,7 @@ public class PantallaNivelDos extends Pantalla {
     }
 
     private void crearPosiciones() {
+        posicionesEnemigos = new int[13];
         int a = MathUtils.random(85*32,96*32);
         posicionesEnemigos[0] = a;
         int b = MathUtils.random(126*32, 149*32);
@@ -145,6 +146,8 @@ public class PantallaNivelDos extends Pantalla {
         posicionesEnemigos[10] = k;
         int l = MathUtils.random(811*32,834*32);
         posicionesEnemigos[11] = l;
+        int m = MathUtils.random(845*32,889*32);
+        posicionesEnemigos[12] = m;
     }
 
     private void crearItems() {
@@ -156,10 +159,10 @@ public class PantallaNivelDos extends Pantalla {
     private void crearEnemigos() {
         texturaEnemigoUno = new Texture("Enemigo_LvL2Prueba.png");
         arrEnemigosUno = new Array<>();
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 10; i++) {
             EnemigoUnoPlataformas enemigo = new EnemigoUnoPlataformas(texturaEnemigoUno);
             int x = MathUtils.random(0,posicionesEnemigos.length);
-            enemigo.getSprite().setPosition(posicionesEnemigos[x],21*32);
+            enemigo.getSprite().setPosition(posicionesEnemigos[x],16*32);
             arrEnemigosUno.add(enemigo);
         }
     }
