@@ -64,7 +64,6 @@ public class JugadorPlataformas {
 
     // Dibuja el personaje
     public void render(SpriteBatch batch) {
-        Gdx.app.log(""+getEstadoSalto(),"");
         actualizar();
         // Dibuja el personaje dependiendo del estadoMovimiento
         switch (estadoMovimiento) {

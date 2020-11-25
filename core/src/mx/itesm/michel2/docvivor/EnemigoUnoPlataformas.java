@@ -79,7 +79,6 @@ public class EnemigoUnoPlataformas {
                 }
                 sprite.draw(batch);
                 break;
-
         }
     }
 

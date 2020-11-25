@@ -594,6 +594,9 @@ public class PantallaNivelDos extends Pantalla {
                     break;
                 case MOV_IZQUIERDA:
                     probarChoqueParedesEnemigos();      // Prueba si debe moverse
+                    if(enemigo.getX()<5){
+                        //eliminar enemigos
+                    }
                     /*if (enemigo.getX() + ANCHO/3 < jugador.getX() && enemigo.getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_IZQUIERDA){
                         enemigo.setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.QUIETO);
                     }*/
@@ -635,12 +638,9 @@ public class PantallaNivelDos extends Pantalla {
     }
 
     private void probarChoqueParedesEnemigos() {
-        for (int i = 0; i<arrEnemigosUno.size; i++) { //cambiar a indice
+        for (int i = 0; i<arrEnemigosUno.size; i++) {
             EnemigoUnoPlataformas.estadoMovimiento estado = arrEnemigosUno.get(i).getEstadoMov();
             // Quitar porque este método sólo se llama cuando se está moviendo
-            if (estado != EnemigoUnoPlataformas.estadoMovimiento.MOV_DERECHA && estado != EnemigoUnoPlataformas.estadoMovimiento.MOV_IZQUIERDA) {
-                return;
-            }
             float px = arrEnemigosUno.get(i).getX();    // Posición actual
             // Posición después de actualizar
             px = arrEnemigosUno.get(i).getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_DERECHA ? px + EnemigoUnoPlataformas.VELOCIDAD_X :
@@ -651,13 +651,16 @@ public class PantallaNivelDos extends Pantalla {
             if (arrEnemigosUno.get(i).getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_DERECHA) {
                 celdaX++;   // Casilla del lado derecho
             }
-            TiledMapTileLayer.Cell celdaDerecha = capaPlataforma.getCell(celdaX+2, celdaY);
-            TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX-1, celdaY);
+            TiledMapTileLayer.Cell celdaDerecha = capaPlataforma.getCell(celdaX+1, celdaY);
+            TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX, celdaY);
+            Gdx.app.log(""+arrEnemigosUno.get(i),"");
+            Gdx.app.log(""+celdaDerecha,"");
+            Gdx.app.log(""+celdaIzquierda,"");
             if(celdaDerecha != null && arrEnemigosUno.get(i).getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_DERECHA){
-                arrEnemigosUno.get(i).setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.QUIETO);
+                arrEnemigosUno.get(i).setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.MOV_IZQUIERDA);
             }
             if(celdaIzquierda != null && arrEnemigosUno.get(i).getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_IZQUIERDA){
-                arrEnemigosUno.get(i).setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.QUIETO_IZQUIERDA);
+                arrEnemigosUno.get(i).setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.MOV_DERECHA);
             }
 
         }
