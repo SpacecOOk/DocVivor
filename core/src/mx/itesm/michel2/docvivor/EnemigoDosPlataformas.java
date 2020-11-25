@@ -7,8 +7,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-public class EnemigoUnoPlataformas {
-    public static final float VELOCIDAD_X = 6;
+public class EnemigoDosPlataformas {
+    public static final float VELOCIDAD_X = 10;
     public static final float VELOCIDAD_Y = -4f;
 
     private Sprite sprite;  // Sprite cuando no se mueve
@@ -19,23 +19,23 @@ public class EnemigoUnoPlataformas {
     private int ladoQUIETO;
 
     //estados
-    private estadoMovimiento estadoMov;
+    private EnemigoUnoPlataformas.estadoMovimiento estadoMov;
 
-    public EnemigoUnoPlataformas(Texture textura) {
+    public EnemigoDosPlataformas(Texture textura) {
         // Lee la textura como región
         TextureRegion texturaCompleta = new TextureRegion(textura);
         // La divide en frames de 16x32 (ver marioSprite.png)
-        TextureRegion[][] texturasFrames = texturaCompleta.split(50,50);
+        TextureRegion[][] texturasFrames = texturaCompleta.split(63,66);
         // Crea la animación con tiempo de 0.25 segundos entre frames.
-        animacion = new Animation(0.15f,texturasFrames[0][0],texturasFrames[0][1],texturasFrames[0][2], texturasFrames[0][3], texturasFrames[0][4],texturasFrames[0][5],texturasFrames[0][6],
-                texturasFrames[0][7]);
+        animacion = new Animation(0.15f,texturasFrames[0][0],texturasFrames[0][1], texturasFrames[0][2], texturasFrames[0][3],texturasFrames[0][4],texturasFrames[0][5],
+                texturasFrames[0][6]);
         // Animación infinita
         animacion.setPlayMode(Animation.PlayMode.LOOP);
         // Inicia el timer que contará tiempo para saber qué frame se dibuja
         timerAnimacion = 0;
         // Crea el sprite cuando para el personaje quieto (idle)
         sprite = new Sprite(texturasFrames[0][0]);    // quieto
-        estadoMov = estadoMovimiento.INICIANDO;
+        estadoMov = EnemigoUnoPlataformas.estadoMovimiento.INICIANDO;
     }
 
     public void render(SpriteBatch batch){
@@ -52,7 +52,7 @@ public class EnemigoUnoPlataformas {
                 // Obtiene el frame que se debe mostrar (de acuerdo al timer)
                 TextureRegion region = (TextureRegion)animacion.getKeyFrame(timerAnimacion);
                 // Dirección correcta
-                if (estadoMov== estadoMovimiento.MOV_IZQUIERDA) {
+                if (estadoMov== EnemigoUnoPlataformas.estadoMovimiento.MOV_IZQUIERDA) {
                     if (!region.isFlipX()) {
                         region.flip(true,false);
                     }
@@ -136,11 +136,11 @@ public class EnemigoUnoPlataformas {
         INICIANDO
     }
 
-    public estadoMovimiento getEstadoMov() {
+    public EnemigoUnoPlataformas.estadoMovimiento getEstadoMov() {
         return estadoMov;
     }
 
-    public void setEstadoMov(estadoMovimiento estadoMov) {
+    public void setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento estadoMov) {
         this.estadoMov = estadoMov;
     }
 }
