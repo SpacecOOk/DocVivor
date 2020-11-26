@@ -15,6 +15,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -46,6 +47,7 @@ public class PantallaNivelDos extends Pantalla {
     private JugadorPlataformas jugador;
     public static final int TAM_CELDA = 32;
     private Texture texturaJugadorMetralleta = new Texture("Level2/AssetsPersonajes/arma1_skinPersonaje.png");
+    private Rectangle rectangleJugador;
 
     //vidas
     private Image imagenVidas;
@@ -256,6 +258,8 @@ public class PantallaNivelDos extends Pantalla {
         texturaPersonaje = new Texture("Level2/AssetsPersonajes/Doctor2_moviendose.png");
         jugador = new JugadorPlataformas(texturaPersonaje,56,55);
         jugador.getSprite().setPosition(100,300);
+        rectangleJugador = jugador.getSprite().getBoundingRectangle().setSize(texturaPersonaje.getWidth()*.8f,texturaPersonaje.getHeight()*.8f);
+
     }
 
     private void crearVictoria() {
@@ -613,7 +617,7 @@ public class PantallaNivelDos extends Pantalla {
     private void verificarColisionesEnemigosDos() {
         for (int i = arrEnemigosDos.size-1; i >=0; i--) {
             EnemigoDosPlataformas enemigo = arrEnemigosDos.get(i);
-            if(jugador.getSprite().getBoundingRectangle().overlaps(enemigo.getSprite().getBoundingRectangle())){
+            if(rectangleJugador.overlaps(enemigo.getSprite().getBoundingRectangle())){
                 if(jugador.getVidas() - 1 > 0){
                     arrEnemigosDos.removeIndex(i);
                     jugador.setVidas(jugador.getVidas()-1);
@@ -636,7 +640,7 @@ public class PantallaNivelDos extends Pantalla {
     private void verificarColisionEnemigos() {
         for (int i = arrEnemigosUno.size-1; i >= 0; i--) {
             EnemigoUnoPlataformas enemigo = arrEnemigosUno.get(i);
-            if(jugador.getSprite().getBoundingRectangle().overlaps(enemigo.getSprite().getBoundingRectangle())){
+            if(rectangleJugador.overlaps(enemigo.getSprite().getBoundingRectangle())){
                 if(jugador.getVidas() - 1 > 0){
                     arrEnemigosUno.removeIndex(i);
                     jugador.setVidas(jugador.getVidas()-1);
@@ -703,6 +707,7 @@ public class PantallaNivelDos extends Pantalla {
     }
 
     private void actualizar() {
+        rectangleJugador.setPosition(jugador.getX(),jugador.getY());
         actualizarCamara();
         actualizarProyectil();
         moverPersonaje();
