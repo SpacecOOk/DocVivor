@@ -1,4 +1,4 @@
-package mx.itesm.michel2.docvivor;
+package mx.itesm.michel2.docvivor;          //comentario
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
