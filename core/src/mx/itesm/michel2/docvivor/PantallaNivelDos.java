@@ -145,9 +145,7 @@ public class PantallaNivelDos extends Pantalla {
                 contadorMetralleta--;
             }
         }
-        if (juego.efectoSonidoEstado != 1) {
-            efectoDisparo.play();
-        }
+        //FALTA CREAR LA MUSICA DEL PROYECTIL
     }
 
     private void crearPosicionesDos() {
@@ -201,8 +199,8 @@ public class PantallaNivelDos extends Pantalla {
     }
 
     private void crearEnemigos() {
-        texturaEnemigoUno = new Texture("Level2/AssetsPersonajes/Enemigo_LvL2.png");
-        texturaEnemigoDos = new Texture("Level2/AssetsPersonajes/Enemigo3.png");
+        texturaEnemigoUno = new Texture("Enemigo_LvL2.png");
+        texturaEnemigoDos = new Texture("Enemigo3.png");
         arrEnemigosUno = new Array<>();
         arrEnemigosDos = new Array<>();
         for (int i = 0; i < 10; i++) {
@@ -257,7 +255,7 @@ public class PantallaNivelDos extends Pantalla {
     private void crearPersonaje() {
         texturaPersonaje = new Texture("Level2/AssetsPersonajes/Doctor2_moviendose.png");
         jugador = new JugadorPlataformas(texturaPersonaje,56,55);
-        jugador.getSprite().setPosition(456*32,700);
+        jugador.getSprite().setPosition(100,300);
     }
 
     private void crearVictoria() {

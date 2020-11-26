@@ -37,7 +37,7 @@ public class PantallaCargando extends Pantalla
 
     @Override
     public void show() {
-        texturaCargando = new Texture("cargando/loading.png");
+        texturaCargando = new Texture("loading.png");
         texturaFondo = new Texture("Fondos/fondo_general.png");
         spriteCargando = new Sprite(texturaCargando);
         spriteCargando.setPosition(ANCHO/2 - spriteCargando.getWidth()/2,
