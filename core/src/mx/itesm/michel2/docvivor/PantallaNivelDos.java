@@ -482,6 +482,7 @@ public class PantallaNivelDos extends Pantalla {
         verificarColisionEnemigos();
         verificarColisionesEnemigosDos();
         verificarColisionItems();
+        //lol
         // *** COLISION ITEMS ***
         /*
         if (metralleta.sprite.getBoundingRectangle().overlaps(jugador.getSprite().getBoundingRectangle())) {
