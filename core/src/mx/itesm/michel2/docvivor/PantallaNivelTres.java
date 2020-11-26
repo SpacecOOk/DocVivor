@@ -3,13 +3,19 @@ package mx.itesm.michel2.docvivor;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -22,77 +28,83 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 
-//Pantalla Nivel 1
+//Pantalla Nivel 3
 public class PantallaNivelTres extends Pantalla {
     private final Juego juego;
+    public static final float ANCHO_MAPA = 899*32; //CAMBIAR EL ANCHO CUANDO ESTE EL MAPA
+    //fondo
+    private TiledMap mapa;
+    private OrthogonalTiledMapRenderer rendererMapa;
 
-    //Fondo
-    private Texture texturaFondoNivelTres;
-
-    //Jugador
-    private Texture texturaPersonaje;
-    private Jugador jugador;
-    private Texture texturaPersonajeTraje = new Texture("MovimientosMeleeTraje/Traje_M_I.png");
-
-    //Contador de kills
-    private int kills = 0;
-
-    //Proyectil
-    private Texture texturaProyectilD;
-    private Proyectil proyectil;
-    private Texture texturaProyectilI;
-    private int orientacion;
-
-    //Items
-    private Texture texturaTraje = new Texture("Items/Item_SuperTraje.png");
-    private Item traje;
-
-    //Vidas
-    private Image imagenVidas;
-    private Sprite spriteVidas;
-    private TextureRegion[][] texturasFramesVidas;
-    private TextureRegion regionVidas ;
-    private Texture texturaVida = new Texture("vidas.png");
-
-    //Enemigos
-    private Texture texturaEnemigoUno;
-    private EnemigoUno enemigo;
-    private Array<EnemigoUno> arrEnemigosDerecha;
-    private Array<EnemigoUno> arrEnemigosIzquierda;
-    private float timerCrearEnemigo;
-    private float TIEMPO_CREA_ENEMIGO = 1;
-    private float tiempoBase = 1;
+    //Manager
+    private AssetManager manager;
 
     //HUD
     private Stage HUD;
     private OrthographicCamera camaraHUD;
     private Viewport vistaHUD;
 
-    //Pausa
-    private EstadoJuego estadoJuego = EstadoJuego.JUGANDO;
-    private EscenaPausa escenaPausa;
-    private Stage escenaPausaHUD;
-    private OrthographicCamera camaraPausaHUD;
-    private Viewport vistaPausaHUD;
+    //jugador
+    private Texture texturaPersonaje;
+    private JugadorPlataformas jugador;
+    public static final int TAM_CELDA = 32;
+    private Texture texturaJugadorMetralleta = new Texture("Level2/AssetsPersonajes/arma1_skinPersonaje.png");
+    private Rectangle rectangleJugador;
 
-    //Derrota
-    private EscenaDerrota escenaDerrota;
-    //private Stage escenaDerrota;
-    private OrthographicCamera camaraDerrotaHUD;
-    private Viewport vistaDerrotaHUD;
+    //vidas
+    private Image imagenVidas;
+    private Sprite spriteVidas;
+    private TextureRegion[][] texturasFramesVidas;
+    private TextureRegion regionVidas;
+    private Texture texturaVida = new Texture("vidas.png");
 
-    //Victoria
-    private EscenaVictoria escenaVictoria;
-    //private Stage escenaVictoria;
-    private OrthographicCamera camaraVictoriaHUD;
-    private Viewport vistaVictoriaHUD;
+    //Proyectil
+    private Texture texturaProyectilD;
+    private Texture texturaProyectilI;
+    private Proyectil proyectil;
+    private int orientacion;
+    private Texture texturaBalaMetralleta;
+    private Array<Proyectil> arrBalasMetralleta;
+    private int contadorMetralleta = 20;
 
-    //Musica
+    //Sonidos
     private Sound efectoSalto;
     private Sound efectoDisparo;
     private Sound efectoMuerte;
     private Sound efectoMuerteEnemigo;
     private Sound efectoPowerUp;
+    private Sound efectoMuerteEnemigoDos;
+
+    //Pausa
+    private PantallaNivelTres.EstadoJuego estadoJuego = PantallaNivelTres.EstadoJuego.JUGANDO;
+    private PantallaNivelTres.EscenaPausa escenaPausa;
+    private Stage escenaPausaHUD;
+    private OrthographicCamera camaraPausaHUD;
+    private Viewport vistaPausaHUD;
+
+    //Derrota
+    private PantallaNivelTres.EscenaDerrota escenaDerrota;
+    //private Stage escenaDerrota;
+    private OrthographicCamera camaraDerrotaHUD;
+    private Viewport vistaDerrotaHUD;
+
+    //Victoria
+    private PantallaNivelTres.EscenaVictoria escenaVictoria;
+    //private Stage escenaVictoria;
+    private OrthographicCamera camaraVictoriaHUD;
+    private Viewport vistaVictoriaHUD;
+
+    //Enemigos
+    private Texture texturaEnemigoUno;
+    private Texture texturaEnemigoDos;
+    private Array<EnemigoUnoPlataformas> arrEnemigosUno;
+    private Array<EnemigoDosPlataformas> arrEnemigosDos;
+    private int[] posicionesEnemigos;
+    private int[] posicionesEnemigosDos;
+
+    //item - metralleta
+    private Texture texturaMetralleta;
+    private Item metralleta;
 
     public PantallaNivelTres(Juego juego) {
         this.juego = juego;
@@ -100,23 +112,115 @@ public class PantallaNivelTres extends Pantalla {
 
     @Override
     public void show() {
-        texturaFondoNivelTres = new Texture("Level3/Level3_Background.png");
+        manager = new AssetManager();
+        crearPersonaje();
+        crearmapa();
         crearHUD();
         crearPausa();
         crearDerrota();
         crearVictoria();
+        crearProyectil();
         cargarPreferencias();
         guardarPreferencias();
-        crearPersonaje();
+        crearPosiciones();
+        crearPosicionesDos();
         crearEnemigos();
-        crearProyectil();
-        crearItem();
+        crearItems();
+        crearProyectilMetralleta();
         if(juego.efectoSonidoEstado != 1){
             crearSonidos();
         }
-
-
         Gdx.input.setInputProcessor(HUD);
+    }
+
+    private void crearProyectilMetralleta() {
+        if (jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.MOV_DERECHA || jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.QUIETO) {
+            if(contadorMetralleta > 0){
+                Proyectil proyectilMetralleta = new Proyectil(texturaBalaMetralleta,jugador.getX() +30,jugador.getY()+jugador.getSprite().getHeight()/3);
+                proyectilMetralleta.setOrientacion2(1);
+                arrBalasMetralleta.add(proyectilMetralleta);
+                contadorMetralleta--;
+            }
+        } else if (jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.MOV_IZQUIERDA || jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.QUIETO_IZQUIERDA) {
+            if(contadorMetralleta > 0){
+                Proyectil proyectilMetralleta = new Proyectil(texturaBalaMetralleta,jugador.getX() -30,jugador.getY()+jugador.getSprite().getHeight()/3);
+                proyectilMetralleta.setOrientacion2(0);
+                arrBalasMetralleta.add(proyectilMetralleta);
+                contadorMetralleta--;
+            }
+        }
+        //FALTA CREAR LA MUSICA DEL PROYECTIL
+    }
+
+    private void crearPosicionesDos() {
+        posicionesEnemigosDos = new int[5];
+        int x = MathUtils.random(233*32,268*32);
+        posicionesEnemigos[0] = x;
+        int y = MathUtils.random(320*32,364*32);
+        posicionesEnemigos[1] = y;
+        int z = MathUtils.random(516*32,541*32);
+        posicionesEnemigos[2] = z;
+        int w = MathUtils.random(595*32,641*32);
+        posicionesEnemigos[3] = w;
+        int t = MathUtils.random(812*32,834*32);
+        posicionesEnemigos[4] = t;
+    }
+
+    private void crearPosiciones() {
+        posicionesEnemigos = new int[13];
+        int a = MathUtils.random(85*32,96*32);
+        posicionesEnemigos[0] = a;
+        int b = MathUtils.random(126*32, 149*32);
+        posicionesEnemigos[1] = b;
+        int c = MathUtils.random(212*32,229*32);
+        posicionesEnemigos[2] = c;
+        int d = MathUtils.random(233*32,256*32);
+        posicionesEnemigos[3] = d;
+        int e = MathUtils.random(320*32,364*32);
+        posicionesEnemigos[4] = e;
+        int f = MathUtils.random(429*32, 442*32);
+        posicionesEnemigos[5] = f;
+        int g = MathUtils.random(484*32,497*32);
+        posicionesEnemigos[6] = g;
+        int h = MathUtils.random(516*32,541*32);
+        posicionesEnemigos[7] = h;
+        int i = MathUtils.random(578*32,615*32);
+        posicionesEnemigos[8] = i;
+        int j = MathUtils.random(623*32,641*32);
+        posicionesEnemigos[9] = j;
+        int k = MathUtils.random(687*32,801*32);
+        posicionesEnemigos[10] = k;
+        int l = MathUtils.random(811*32,834*32);
+        posicionesEnemigos[11] = l;
+        int m = MathUtils.random(845*32,889*32);
+        posicionesEnemigos[12] = m;
+    }
+
+    private void crearItems() {
+        //SuperTraje
+        texturaMetralleta = new Texture("Items/metralleta.png");
+        metralleta = new Item(texturaMetralleta,700,100,139,56);
+    }
+
+    private void crearEnemigos() {
+        texturaEnemigoUno = new Texture("Enemigo_LvL2.png");
+        texturaEnemigoDos = new Texture("Enemigo3.png");
+        arrEnemigosUno = new Array<>();
+        arrEnemigosDos = new Array<>();
+        for (int i = 0; i < 10; i++) {
+            EnemigoUnoPlataformas enemigo = new EnemigoUnoPlataformas(texturaEnemigoUno);
+            int x = MathUtils.random(0,posicionesEnemigos.length-1);
+            enemigo.getSprite().setPosition(posicionesEnemigos[x],16*32);
+            arrEnemigosUno.add(enemigo);
+            crearPosiciones();
+        }
+        for (int i = 0; i < 5; i++) {
+            EnemigoDosPlataformas enemigoDos = new EnemigoDosPlataformas(texturaEnemigoDos);
+            int x = MathUtils.random(0,posicionesEnemigosDos.length-1);
+            enemigoDos.getSprite().setPosition(posicionesEnemigos[x],16*32);
+            arrEnemigosDos.add(enemigoDos);
+            crearPosicionesDos();
+        }
     }
 
     private void guardarPreferencias() {
@@ -131,10 +235,9 @@ public class PantallaNivelTres extends Pantalla {
     }
 
     private void crearSonidos() {
-        AssetManager manager = new AssetManager();
         //cargamos todos los efectos que necesitaremos
         manager.load("Efectos_de_sonido/moneda.mp3", Sound.class);
-        manager.load("Efectos_de_sonido/muerteDoc.mp3", Sound.class); //falta acortar el sonido del la tos
+        manager.load("Efectos_de_sonido/muerteDoc.mp3", Sound.class);
         manager.load("Efectos_de_sonido/saltoDoc.mp3", Sound.class);
         manager.finishLoading();
         //Asignamos los sonidos a las variables
@@ -143,11 +246,22 @@ public class PantallaNivelTres extends Pantalla {
         efectoMuerteEnemigo = manager.get("Efectos_de_sonido/moneda.mp3");
         efectoPowerUp = manager.get("Efectos_de_sonido/moneda.mp3");
         efectoSalto = manager.get("Efectos_de_sonido/saltoDoc.mp3");
+        efectoMuerteEnemigoDos =manager.get("Efectos_de_sonido/moneda.mp3");
     }
 
-    private void crearItem() {
-        //int posicion = MathUtils.random(0,texturaFondoNivelUno.getWidth()-texturaTraje.getWidth());
-        traje = new Item(texturaTraje,1590,133,48,49);
+    private void crearProyectil() {
+        texturaProyectilD = new Texture("Balas/Bala_Jeringa_D.png");
+        texturaProyectilI = new Texture("Balas/Bala_Jeringa_I.png");
+        texturaBalaMetralleta = new Texture("Balas/Bala_azul.png");
+        arrBalasMetralleta = new Array<>();
+    }
+
+    private void crearPersonaje() {
+        texturaPersonaje = new Texture("Level2/AssetsPersonajes/Doctor2_moviendose.png");
+        jugador = new JugadorPlataformas(texturaPersonaje,56,55);
+        jugador.getSprite().setPosition(100,300);
+        rectangleJugador = jugador.getSprite().getBoundingRectangle().setSize(texturaPersonaje.getWidth()*.8f,texturaPersonaje.getHeight()*.8f);
+
     }
 
     private void crearVictoria() {
@@ -164,11 +278,6 @@ public class PantallaNivelTres extends Pantalla {
         vistaDerrotaHUD = new StretchViewport(ANCHO,ALTO,camaraDerrotaHUD);
     }
 
-    private void crearProyectil() {
-        texturaProyectilD = new Texture("Balas/Bala_Jeringa_D.png");
-        texturaProyectilI = new Texture("Balas/Bala_Jeringa_I.png");
-    }
-
     private void crearPausa() {
         camaraPausaHUD = new OrthographicCamera(ANCHO,ALTO);
         camaraPausaHUD.position.set(ANCHO/2,ALTO/2,0);
@@ -176,24 +285,12 @@ public class PantallaNivelTres extends Pantalla {
         vistaPausaHUD = new StretchViewport(ANCHO,ALTO,camaraPausaHUD);
     }
 
-
-    private void crearEnemigos() {
-        texturaEnemigoUno = new Texture("Enemigos/Enemigo_1.png");
-        arrEnemigosDerecha = new Array<>();
-        arrEnemigosIzquierda = new Array<>();
-    }
-
-    private void crearPersonaje() {
-        texturaPersonaje = new Texture("MovimientosMelee/Doctor_M_I.png");
-        jugador = new Jugador(texturaPersonaje,texturaFondoNivelTres.getWidth()/2,133);
-    }
-
     private void crearHUD() {
-        camaraHUD = new OrthographicCamera(ANCHO,ALTO);
+        camaraHUD = new OrthographicCamera(ANCHO, ALTO);
         // Ajustar para el fondo
-        camaraHUD.position.set(ANCHO/3,ALTO/2,0);
+        camaraHUD.position.set(ANCHO / 3, ALTO / 2, 0);
         camaraHUD.update();
-        vistaHUD = new StretchViewport(ANCHO,ALTO,camaraHUD);
+        vistaHUD = new StretchViewport(ANCHO, ALTO, camaraHUD);
         HUD = new Stage(vistaHUD);
         //Boton mover a la derecha
         Texture texturaMoverDerecha = new Texture("Botones/Boton_der_negro.png");
@@ -201,8 +298,8 @@ public class PantallaNivelTres extends Pantalla {
 
         //Aqui para el boton inverso (click)
         ImageButton btnMoverDerecha = new ImageButton(botonMoverDerecha);
-        btnMoverDerecha.setPosition(0+(btnMoverDerecha.getWidth()/2)*3,0+btnMoverDerecha.getHeight()/2, Align.center);
-        btnMoverDerecha.addListener(new ClickListener(){
+        btnMoverDerecha.setPosition(0 + (btnMoverDerecha.getWidth() / 2) * 3, 0 + btnMoverDerecha.getHeight() / 2, Align.center);
+        btnMoverDerecha.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
@@ -210,24 +307,27 @@ public class PantallaNivelTres extends Pantalla {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if(jugador.getEstado() == EstadoJugador.SALTANDO) {//Cuando camina a la derecha
-                    jugador.setEstadoCaminando(EstadoCaminando.DERECHA);
+                /*if(jugador.getEstadoSalto() == JugadorPlataformas.EstadoSalto.SUBIENDO || jugador.getEstadoSalto() == JugadorPlataformas.EstadoSalto.BAJANDO){
+                    jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.MOV_DERECHA);
                 }else{
-                    jugador.setEstadoCaminando(EstadoCaminando.DERECHA);
-                    jugador.setEstado(EstadoJugador.CAMINANDO);
-                }
+                    jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.EN_PISO);
+                    jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.MOV_DERECHA);
+                }*/
+                jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.MOV_DERECHA);
+
                 //jugador.setEstado(EstadoJugador.CAMINANDO);
                 return super.touchDown(event, x, y, pointer, button);
             }
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                if (jugador.getEstado() == EstadoJugador.SALTANDO){
-                    jugador.setEstadoCaminando(EstadoCaminando.QUIETO_DERECHA); //Revisar los quietos y donde van
+                /*if(jugador.getEstadoSalto() == JugadorPlataformas.EstadoSalto.SUBIENDO || jugador.getEstadoSalto() == JugadorPlataformas.EstadoSalto.BAJANDO){
+                    jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
                 }else{
-                    jugador.setEstadoCaminando(EstadoCaminando.QUIETO_DERECHA);          //Cuando deja de presionar el boton
-                    jugador.setEstado(EstadoJugador.QUIETO);
-                }
+                    jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.EN_PISO);
+                    jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
+                }*/
+                jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
                 super.touchUp(event, x, y, pointer, button);
             }
         });
@@ -239,28 +339,29 @@ public class PantallaNivelTres extends Pantalla {
         final TextureRegionDrawable botonMoverIzquierda = new TextureRegionDrawable(new TextureRegion(texturaMoverIzquierda));
         //Aqui para el boton inverso (click)
         final ImageButton btnMoverIzquierda = new ImageButton(botonMoverIzquierda);
-        btnMoverIzquierda.setPosition(0+btnMoverIzquierda.getWidth()/2,0+btnMoverIzquierda.getHeight()/2, Align.center);
-        btnMoverIzquierda.addListener(new ClickListener(){
-
+        btnMoverIzquierda.setPosition(0 + btnMoverIzquierda.getWidth() / 2, 0 + btnMoverIzquierda.getHeight() / 2, Align.center);
+        btnMoverIzquierda.addListener(new ClickListener() {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if(jugador.getEstado() == EstadoJugador.SALTANDO) {             //Cuando camina a la izquierda
-                    jugador.setEstadoCaminando(EstadoCaminando.IZQUIERDA);
+                if(jugador.getEstadoSalto() == JugadorPlataformas.EstadoSalto.SUBIENDO || jugador.getEstadoSalto() == JugadorPlataformas.EstadoSalto.BAJANDO){
+                    jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.MOV_IZQUIERDA);
                 }else{
-                    jugador.setEstadoCaminando(EstadoCaminando.IZQUIERDA);
-                    jugador.setEstado(EstadoJugador.CAMINANDO);
+                    jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.EN_PISO);
+                    jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.MOV_IZQUIERDA);
                 }
+
+
                 return super.touchDown(event, x, y, pointer, button);
             }
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                if (jugador.getEstado() == EstadoJugador.SALTANDO){
-                    jugador.setEstadoCaminando(EstadoCaminando.QUIETO_IZQUIERDA); //Revisar los quietos y donde van
+                if(jugador.getEstadoSalto() == JugadorPlataformas.EstadoSalto.SUBIENDO || jugador.getEstadoSalto() == JugadorPlataformas.EstadoSalto.BAJANDO){
+                    jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO_IZQUIERDA);
                 }else{
-                    jugador.setEstadoCaminando(EstadoCaminando.QUIETO_IZQUIERDA);          //Cuando deja de presionar el boton
-                    jugador.setEstado(EstadoJugador.QUIETO);
+                    jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.EN_PISO);
+                    jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO_IZQUIERDA);
                 }
 
                 super.touchUp(event, x, y, pointer, button);
@@ -275,27 +376,35 @@ public class PantallaNivelTres extends Pantalla {
         TextureRegionDrawable botonAtacar = new TextureRegionDrawable(new TextureRegion(texturaAtacar));
         //Aqui para el boton inverso (click)
         ImageButton btnAtacar = new ImageButton(botonAtacar);
-        btnAtacar.setPosition(ANCHO-(btnAtacar.getWidth()/2)*3,0+btnAtacar.getHeight()/2, Align.center);
-        btnAtacar.addListener(new ClickListener(){
+        btnAtacar.setPosition(ANCHO - (btnAtacar.getWidth() / 2) * 3, 0 + btnAtacar.getHeight() / 2, Align.center);
+        btnAtacar.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                //Cuando le pica para atacar
-                if (proyectil==null){ //si no existe la creo, sino no la crea
-                    if(jugador.getEstadoCaminando() == EstadoCaminando.DERECHA || jugador.getEstadoCaminando() == EstadoCaminando.QUIETO_DERECHA){
-                        proyectil = new Proyectil(texturaProyectilD,jugador.sprite.getX()+jugador.sprite.getWidth()/2,
-                                jugador.sprite.getY()+jugador.sprite.getHeight()*0.3f);
-                        orientacion=1;
-                    }else if(jugador.getEstadoCaminando() == EstadoCaminando.IZQUIERDA || jugador.getEstadoCaminando() == EstadoCaminando.QUIETO_IZQUIERDA){
-                        proyectil = new Proyectil(texturaProyectilI,jugador.sprite.getX()+jugador.sprite.getWidth()/2,
-                                jugador.sprite.getY()+jugador.sprite.getHeight()*0.3f);
-                        orientacion=0;
+                if (jugador.getSprite().getTexture() == texturaPersonaje) {
+                    if (proyectil == null) { //si no existe la creo, sino no la crea
+                        if (jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.MOV_DERECHA || jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.QUIETO) {
+                            proyectil = new Proyectil(texturaProyectilD, jugador.getX() + jugador.getSprite().getWidth() / 2,
+                                    jugador.getY() + jugador.getSprite().getHeight() * 0.3f);
+                            orientacion = 1;
+                        } else if (jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.MOV_IZQUIERDA || jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.QUIETO_IZQUIERDA) {
+                            proyectil = new Proyectil(texturaProyectilI, jugador.getX() + jugador.getSprite().getWidth() / 2,
+                                    jugador.getY() + jugador.getSprite().getHeight() * 0.3f);
+                            orientacion = 0;
+                        }
                     }
+                    if (juego.efectoSonidoEstado != 1) {
+                        efectoDisparo.play();
+                    }
+                }else if(contadorMetralleta>0 && jugador.getSprite().getTexture() == texturaJugadorMetralleta){
+                    crearProyectilMetralleta();
+                }else{
+                    int x2 = (int) jugador.getX();
+                    int y2 =(int) jugador.getY();
+                    jugador = new JugadorPlataformas(texturaPersonaje,56,55);
+                    jugador.getSprite().setPosition(x2,y2);
                 }
-                if (juego.efectoSonidoEstado != 1){
-                    efectoDisparo.play();
-                }
-            } //Jeringa
+            }//Jeringa
         });
 
         //Le movi aqui
@@ -306,16 +415,16 @@ public class PantallaNivelTres extends Pantalla {
         TextureRegionDrawable botonSaltar = new TextureRegionDrawable(new TextureRegion(texturaSaltar));
         //Aqui para el boton inverso (click)
         ImageButton btnSaltar = new ImageButton(botonSaltar);
-        btnSaltar.setPosition(ANCHO-btnSaltar.getWidth()/2,0+btnSaltar.getHeight()/2, Align.center);
-        btnSaltar.addListener(new ClickListener(){
+        btnSaltar.setPosition(ANCHO - btnSaltar.getWidth() / 2, 0 + btnSaltar.getHeight() / 2, Align.center);
+        btnSaltar.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 //Salta a la izquierda/derecha
-                if(jugador.getEstado() != EstadoJugador.SALTANDO){
-                    jugador.saltar();
-                }
-                if (juego.efectoSonidoEstado != 1){
+                Gdx.app.log("BOTON SALTAR "+jugador.getEstadoMovimiento(),"");
+                Gdx.app.log("BOTON SALTAR "+jugador.getEstadoSalto(),"");
+                jugador.saltar();
+                if (juego.efectoSonidoEstado != 1) {
                     efectoSalto.play();
                 }
             }
@@ -329,18 +438,18 @@ public class PantallaNivelTres extends Pantalla {
         TextureRegionDrawable botonPausa = new TextureRegionDrawable(new TextureRegion(texturaPausa));
         //Aqui para el boton inverso (click)
         ImageButton btnPausa = new ImageButton(botonPausa);
-        btnPausa.setPosition(ANCHO-btnSaltar.getWidth()/2,ALTO-btnPausa.getHeight()/2, Align.center);
-        btnPausa.addListener(new ClickListener(){
+        btnPausa.setPosition(ANCHO - btnSaltar.getWidth() / 2, ALTO - btnPausa.getHeight() / 2, Align.center);
+        btnPausa.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 //Cuando le pica se pausa el juego, falta implementarlo
                 //Crea la mini pantalla de pausa
-                if (estadoJuego == EstadoJuego.JUGANDO){
-                    estadoJuego = EstadoJuego.PAUSA;
+                if (estadoJuego == PantallaNivelTres.EstadoJuego.JUGANDO) {
+                    estadoJuego = PantallaNivelTres.EstadoJuego.PAUSA;
                 }
-                if(escenaPausa == null){
-                    escenaPausa = new EscenaPausa(vistaPausaHUD,batch); //La vista HUD no se mueve
+                if (escenaPausa == null) {
+                    escenaPausa = new PantallaNivelTres.EscenaPausa(vistaPausaHUD, batch); //La vista HUD no se mueve
                 }
                 Gdx.input.setInputProcessor(escenaPausa);
             }
@@ -350,32 +459,43 @@ public class PantallaNivelTres extends Pantalla {
         HUD.addActor(btnPausa);
 
         regionVidas = new TextureRegion(texturaVida);
-        texturasFramesVidas = regionVidas.split(34,34);
+        texturasFramesVidas = regionVidas.split(34, 34);
         spriteVidas = new Sprite(texturasFramesVidas[0][1]);
         imagenVidas = new Image(spriteVidas);
-        imagenVidas.setPosition(50,650);
+        imagenVidas.setPosition(50, 650);
 
         HUD.addActor(imagenVidas);
     }
 
+
+    private void crearmapa() {
+        AssetManager manager = new AssetManager();
+        manager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
+        manager.load("Lvl3_mapaV1.1.tmx", TiledMap.class);
+        manager.finishLoading();
+        mapa = manager.get("Lvl3_mapaV1.1.tmx");
+        rendererMapa = new OrthogonalTiledMapRenderer(mapa);
+    }
+
     @Override
     public void render(float delta) {
-        actualizar();
-
-        borrarPantalla(0,0,0.5f);
-        batch.setProjectionMatrix(camara.combined);
-        batch.begin();
-        batch.draw(texturaFondoNivelTres,0,0);
-        jugador.render(batch);
-        dibujarEnemigosDerecha();
-        dibujarEnemigosIzquierda();
-        traje.render(batch);
-
-        if(proyectil != null){
-            proyectil.render(batch);
+        if(estadoJuego == PantallaNivelTres.EstadoJuego.JUGANDO) {
+            actualizar();
+            borrarPantalla(0, 0, 0.5f);
+            batch.setProjectionMatrix(camara.combined);
+            rendererMapa.setView(camara);
+            rendererMapa.render();
+            batch.begin();
+            jugador.render(batch);
+            dibujarEnemigos();
+            dibujarItems();
+            dibujarBalasMetralleta();
+            metralleta.render(batch);
+            if (proyectil != null) {
+                proyectil.render(batch);
+            }
+            batch.end();
         }
-
-        batch.end();
 
         //************ HUD ***************
         batch.setProjectionMatrix(camaraHUD.combined);
@@ -383,101 +503,112 @@ public class PantallaNivelTres extends Pantalla {
 
         //*************Pausa*****************
         batch.setProjectionMatrix(camaraPausaHUD.combined);
-        if(estadoJuego == EstadoJuego.PAUSA){
+        if (estadoJuego == PantallaNivelTres.EstadoJuego.PAUSA) {
             escenaPausa.draw();
         }
 
         //************Derrota**************
         batch.setProjectionMatrix(camaraDerrotaHUD.combined);
-        if (estadoJuego == EstadoJuego.DERROTA){
+        if (estadoJuego == PantallaNivelTres.EstadoJuego.DERROTA) {
             escenaDerrota.draw();
         }
 
         //************Victoria**********
         batch.setProjectionMatrix(camaraVictoriaHUD.combined);
-        if(estadoJuego == EstadoJuego.VICTORIA){
+        if (estadoJuego == PantallaNivelTres.EstadoJuego.VICTORIA) {
             escenaVictoria.draw();
         }
-
-
     }
 
-    private void dibujarEnemigosIzquierda() {
-        for (EnemigoUno enemigo : arrEnemigosIzquierda) {
-            enemigo.render(batch);
-            if(estadoJuego == EstadoJuego.JUGANDO){
-                enemigo.setEstado(EstadoEnemigo.CAMINANDO);
-                enemigo.setEstadoCaminando(EstadoEnemigoCaminando.DERECHA);
-            }else{
-                enemigo.setEstado(EstadoEnemigo.QUIETO);
-                enemigo.setEstadoCaminando(EstadoEnemigoCaminando.QUIETO);
-            }
+    private void dibujarBalasMetralleta() {
+        for (Proyectil balaMetralleta:arrBalasMetralleta) {
+            balaMetralleta.render(batch);
         }
     }
 
-    private void dibujarEnemigosDerecha() {
-        for (EnemigoUno enemigo : arrEnemigosDerecha) {
-            enemigo.render(batch);
-            if(estadoJuego == EstadoJuego.JUGANDO){
-                enemigo.setEstado(EstadoEnemigo.CAMINANDO);
-                enemigo.setEstadoCaminando(EstadoEnemigoCaminando.IZQUIERDA);
-            }else{
-                enemigo.setEstado(EstadoEnemigo.QUIETO);
-                enemigo.setEstadoCaminando(EstadoEnemigoCaminando.QUIETO);
-            }
-        }
-    }
-
-    private void actualizar() {
-        actualizarCamara();
-        actualizarEnemigosDerecha();
-        actualizarEnemigosIzquierda();
-        actualizarProyectil();
-        actualizarVidas();
-
-        //**********Colisiones*************
-        verificarColisionesEnemigosDerecha();
-        verificarColisionesEnemigosIzquierda();
-        if(kills>=3 && estadoJuego != EstadoJuego.VICTORIA) {
-            jugador.setEstado(EstadoJugador.QUIETO);
-            estadoJuego = EstadoJuego.VICTORIA;
-            escenaVictoria = new EscenaVictoria(vistaVictoriaHUD, batch);
-            Gdx.input.setInputProcessor(escenaVictoria);
-        }else{
-            verificarColisionesProyectilDerecha();
-            verificarColisionesProyectilIzquierda();
-        }
-
-        //************Items***************
-        verificarColisionTraje();
-
-    }
-
-    private void verificarColisionTraje() {
-        if (traje.sprite.getBoundingRectangle().overlaps(jugador.sprite.getBoundingRectangle())){
-            if (juego.efectoSonidoEstado != 1){
+    private void verificarColisiones() {
+        verificarCaida();
+        verificarColisionEnemigos();
+        verificarColisionesEnemigosDos();
+        verificarColisionItems();
+        verificarColisionMetralleta();
+        //
+        // *** COLISION ITEMS ***
+        /*
+        if (metralleta.sprite.getBoundingRectangle().overlaps(jugador.getSprite().getBoundingRectangle())) {
+            if (juego.efectoSonidoEstado != 1) {
                 efectoPowerUp.play();
             }
-            int x = (int)jugador.sprite.getX();
-            traje.sprite.setY(ALTO);
-            jugador = new Jugador(texturaPersonajeTraje,x,133);
-            jugador.setVidas(4);
+        */
+        //Implementar la textura del personaje, checarlo si movemos el tamaño del mapa
+            /*
+            int x = (int)jugador.getSprite().getX();
+            texturaJugadorMetralleta.setY(ALTO);
+            jugador = new JugadorPlataformas(texturaJugadorMetralleta,x,133);
+             */
+        //}
+        // ***  COLISION BALA-ENEMIGOS ***
+        //if(estadoJuego == PantallaNivelUno.EstadoJuego.JUGANDO && kills < 3){
+        if(proyectil != null){
+            for (int j = arrEnemigosUno.size-1; j >= 0 ; j--) {
+                EnemigoUnoPlataformas enemigo = arrEnemigosUno.get(j);
+                if (proyectil.sprite.getBoundingRectangle().overlaps(enemigo.getSprite().getBoundingRectangle())) {
+                    //Si hay colisión
+                    if (juego.efectoSonidoEstado != 1){
+                        efectoMuerteEnemigo.play();
+                    }
+                    arrEnemigosUno.removeIndex(j);
+                    proyectil = null;
+                    break;
+                }
+            }
         }
+        if(proyectil != null){
+            for (int j = arrEnemigosDos.size-1; j >= 0 ; j--) {
+                EnemigoDosPlataformas enemigo = arrEnemigosDos.get(j);
+                if (proyectil.sprite.getBoundingRectangle().overlaps(enemigo.getSprite().getBoundingRectangle())) {
+                    //Si hay colisión
+                    if (juego.efectoSonidoEstado != 1){
+                        efectoMuerteEnemigoDos.play();
+                    }
+                    arrEnemigosDos.removeIndex(j);
+                    proyectil = null;
+                    break;
+                }
+            }
+        }
+        //}
     }
 
-    private void verificarColisionesProyectilIzquierda() {
-        if(estadoJuego == EstadoJuego.JUGANDO && kills < 3){
-            if(proyectil != null){
-                for (int j = arrEnemigosIzquierda.size-1; j >= 0 ; j--) {
-                    EnemigoUno enemigo = arrEnemigosIzquierda.get(j);
-                    if (proyectil.sprite.getBoundingRectangle().overlaps(enemigo.sprite.getBoundingRectangle())) {
+    private void verificarColisionMetralleta() {
+        for (int j = arrEnemigosUno.size-1; j >= 0 ; j--) {
+            for(int a = arrBalasMetralleta.size-1; a >= 0 ; a--) {
+                if(arrBalasMetralleta != null) {
+                    EnemigoUnoPlataformas enemigo = arrEnemigosUno.get(j);
+                    if (arrBalasMetralleta.get(a).sprite.getBoundingRectangle().overlaps(enemigo.getSprite().getBoundingRectangle())) {
                         //Si hay colisión
-                        if (juego.efectoSonidoEstado != 1){
-                            efectoMuerteEnemigo.play();
+                        if (juego.efectoSonidoEstado != 1) {
+                            efectoMuerteEnemigoDos.play();
                         }
-                        arrEnemigosIzquierda.removeIndex(j);
-                        proyectil = null;
-                        kills +=1;
+                        arrEnemigosUno.removeIndex(j);
+                        arrBalasMetralleta.removeIndex(a);
+                        break;
+                    }
+                }
+            }
+        }
+        //ENMIGOS 2
+        for (int j = arrEnemigosDos.size-1; j >= 0 ; j--) {
+            for(int a = arrBalasMetralleta.size-1; a >= 0 ; a--) {
+                if(arrBalasMetralleta != null) {
+                    EnemigoDosPlataformas enemigo = arrEnemigosDos.get(j);
+                    if (arrBalasMetralleta.get(a).sprite.getBoundingRectangle().overlaps(enemigo.getSprite().getBoundingRectangle())) {
+                        //Si hay colisión
+                        if (juego.efectoSonidoEstado != 1) {
+                            efectoMuerteEnemigoDos.play();
+                        }
+                        arrEnemigosDos.removeIndex(j);
+                        arrBalasMetralleta.removeIndex(a);
                         break;
                     }
                 }
@@ -485,156 +616,558 @@ public class PantallaNivelTres extends Pantalla {
         }
     }
 
-    private void verificarColisionesProyectilDerecha() {
-        if(estadoJuego == EstadoJuego.JUGANDO && kills < 3){
-            if(proyectil != null){
-                for (int j = arrEnemigosDerecha.size-1; j >= 0 ; j--) {
-                    EnemigoUno enemigo = arrEnemigosDerecha.get(j);
-                    if (proyectil.sprite.getBoundingRectangle().overlaps(enemigo.sprite.getBoundingRectangle())) {
-                        //Si hay colisión
-                        if (juego.efectoSonidoEstado != 0){
-                            efectoMuerteEnemigo.play();
-                        }
-                        arrEnemigosDerecha.removeIndex(j);
-                        proyectil = null;
-                        kills +=1;
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
-    private void actualizarVidas() {
-        if(jugador.getVidas() == 4){
-            spriteVidas = new Sprite(texturasFramesVidas[0][0]);
-            imagenVidas = new Image(spriteVidas);
-            imagenVidas.setPosition(50,650);
-            HUD.addActor(imagenVidas);
-        }else if(jugador.getVidas() == 3){
-            spriteVidas = new Sprite(texturasFramesVidas[0][1]);
-            imagenVidas = new Image(spriteVidas);
-            imagenVidas.setPosition(50,650);
-            HUD.addActor(imagenVidas);
-        }else if(jugador.getVidas() == 2){
-            spriteVidas = new Sprite(texturasFramesVidas[0][2]);
-            imagenVidas = new Image(spriteVidas);
-            imagenVidas.setPosition(50,650);
-            HUD.addActor(imagenVidas);
-        }else if(jugador.getVidas() == 1){
-            spriteVidas = new Sprite(texturasFramesVidas[0][3]);
-            imagenVidas = new Image(spriteVidas);
-            imagenVidas.setPosition(50,650);
-            HUD.addActor(imagenVidas);
-        }else{
-            spriteVidas = new Sprite(texturasFramesVidas[0][4]);
-            imagenVidas = new Image(spriteVidas);
-            imagenVidas.setPosition(50,650);
-            HUD.addActor(imagenVidas);
-        }
-
-    }
-
-    private void verificarColisionesEnemigosIzquierda() {
-        for(int i =arrEnemigosIzquierda.size-1; i>=0; i--){
-            EnemigoUno enemigoUno= arrEnemigosIzquierda.get(i);
-            if (jugador.sprite.getBoundingRectangle().overlaps(enemigoUno.sprite.getBoundingRectangle())){
-                //PERDIO
-                if(jugador.getVidas()-1>0){
-                    arrEnemigosIzquierda.removeIndex(i);
+    private void verificarColisionesEnemigosDos() {
+        for (int i = arrEnemigosDos.size-1; i >=0; i--) {
+            EnemigoDosPlataformas enemigo = arrEnemigosDos.get(i);
+            if(rectangleJugador.overlaps(enemigo.getSprite().getBoundingRectangle())){
+                if(jugador.getVidas() - 1 > 0){
+                    arrEnemigosDos.removeIndex(i);
                     jugador.setVidas(jugador.getVidas()-1);
-                }else{     //Murio
+                    //hola
+                }else {
                     if (juego.efectoSonidoEstado != 1){
                         efectoMuerte.play();
                     }
                     jugador.setVidas(jugador.getVidas()-1);
-                    jugador.setEstado(EstadoJugador.QUIETO);
-                    jugador.sprite.setY(ANCHO); //Lo manda a lo alto
-                    estadoJuego = EstadoJuego.DERROTA;
-                    escenaDerrota = new EscenaDerrota(vistaDerrotaHUD,batch);
+                    jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
+                    jugador.getSprite().setY(-100); //Lo manda a lo alto
+                    estadoJuego = PantallaNivelTres.EstadoJuego.DERROTA;
+                    escenaDerrota = new PantallaNivelTres.EscenaDerrota(vistaDerrotaHUD,batch);
                     Gdx.input.setInputProcessor(escenaDerrota);
                 }break;
             }
         }
     }
 
-    private void verificarColisionesEnemigosDerecha() {
-        for(int i =arrEnemigosDerecha.size-1; i>=0; i--){
-            EnemigoUno enemigoUno= arrEnemigosDerecha.get(i);
-            if (jugador.sprite.getBoundingRectangle().overlaps(enemigoUno.sprite.getBoundingRectangle())){
-                //PERDIO
-                if(jugador.getVidas()-1>0){
-                    arrEnemigosDerecha.removeIndex(i);
+    private void verificarColisionEnemigos() {
+        for (int i = arrEnemigosUno.size-1; i >= 0; i--) {
+            EnemigoUnoPlataformas enemigo = arrEnemigosUno.get(i);
+            if(rectangleJugador.overlaps(enemigo.getSprite().getBoundingRectangle())){
+                if(jugador.getVidas() - 1 > 0){
+                    arrEnemigosUno.removeIndex(i);
                     jugador.setVidas(jugador.getVidas()-1);
-                }else{     //Murio
+                }else {
+                    if (juego.efectoSonidoEstado != 1){
+                        efectoMuerte.play();
+                    }
                     jugador.setVidas(jugador.getVidas()-1);
-                    jugador.setEstado(EstadoJugador.QUIETO);
-                    jugador.sprite.setY(ANCHO); //Lo manda a lo alto
-                    estadoJuego = EstadoJuego.DERROTA;
-                    escenaDerrota = new EscenaDerrota(vistaDerrotaHUD,batch);
+                    jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
+                    jugador.getSprite().setY(-100); //Lo manda a lo alto
+                    estadoJuego = PantallaNivelTres.EstadoJuego.DERROTA;
+                    escenaDerrota = new PantallaNivelTres.EscenaDerrota(vistaDerrotaHUD,batch);
                     Gdx.input.setInputProcessor(escenaDerrota);
                 }break;
             }
         }
     }
 
-    private void actualizarEnemigosIzquierda() {        //Los que van para el lado izquierdo
-        timerCrearEnemigo += Gdx.graphics.getDeltaTime();
-        if(estadoJuego == EstadoJuego.JUGANDO){
-            if (timerCrearEnemigo >= TIEMPO_CREA_ENEMIGO){
-                timerCrearEnemigo = 0;
-                TIEMPO_CREA_ENEMIGO = 2 + MathUtils.random()*2;
-                EnemigoUno enemigo = new EnemigoUno(texturaEnemigoUno,0,133);
-                arrEnemigosIzquierda.add(enemigo);
+    private void verificarColisionItems() {
+        if (metralleta.sprite.getBoundingRectangle().overlaps(jugador.getSprite().getBoundingRectangle())) {
+            if (juego.efectoSonidoEstado != 1) {
+                efectoPowerUp.play();
             }
-            for (int i = arrEnemigosIzquierda.size-1; i >= 0; i--) {
-                EnemigoUno enemigo = arrEnemigosIzquierda.get(i);
-                if (enemigo.sprite.getX()> jugador.sprite.getX() + ANCHO/2 + enemigo.sprite.getWidth() ){
-                    arrEnemigosIzquierda.removeIndex(i);
+            //estas lineas no funcionan bien
+            float x = jugador.getX();
+            float y = jugador.getY();
+            metralleta.sprite.setY(ALTO+100);
+            jugador = new JugadorPlataformas(texturaJugadorMetralleta,64,55);
+            jugador.getSprite().setPosition(x,y);
+
+        }
+    }
+
+    private void verificarCaida() {
+        if(jugador.getY() < 5 && estadoJuego!= PantallaNivelTres.EstadoJuego.DERROTA){
+            if (juego.efectoSonidoEstado != 1){
+                efectoMuerte.play();
+            }
+            jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
+            //jugador(ANCHO); //Lo manda a lo alto
+            estadoJuego = PantallaNivelTres.EstadoJuego.DERROTA;
+            escenaDerrota = new PantallaNivelTres.EscenaDerrota(vistaDerrotaHUD,batch);
+            Gdx.input.setInputProcessor(escenaDerrota);
+        }
+    }
+
+    private void dibujarItems() {
+        //SuperTraje
+        metralleta.render(batch);
+    }
+
+    private void dibujarEnemigos() {
+        for (EnemigoUnoPlataformas enemigo : arrEnemigosUno) {
+            enemigo.render(batch);
+            /*if(estadoJuego == EstadoJuego.JUGANDO){
+                enemigo.setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.INICIANDO);
+            }else {
+                enemigo.setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.QUIETO_IZQUIERDA);
+            }*/
+        }
+        for (EnemigoDosPlataformas enemigoDos : arrEnemigosDos) {
+            enemigoDos.render(batch);
+        }
+    }
+
+    private void actualizar() {
+        rectangleJugador.setPosition(jugador.getX(),jugador.getY());
+        actualizarCamara();
+        actualizarProyectil();
+        moverPersonaje();
+        moverEnemigos();
+        moverEnemigoDos();
+        actualizarVidas();
+        verificarColisiones();
+        actualizarBalasMetralleta();
+        comprobarVictoria();
+    }
+
+    private void comprobarVictoria() {
+        if(estadoJuego == PantallaNivelTres.EstadoJuego.JUGANDO && jugador.getX()>=899*32-ANCHO/2){
+            jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
+            jugador.getSprite().setY(-100); //Lo manda a lo alto
+            estadoJuego = PantallaNivelTres.EstadoJuego.VICTORIA;
+            escenaVictoria = new PantallaNivelTres.EscenaVictoria(vistaVictoriaHUD,batch);
+            Gdx.input.setInputProcessor(escenaVictoria);
+        }
+    }
+
+    private void actualizarBalasMetralleta() {
+        for (int i = arrBalasMetralleta.size-1; i >= 0; i--) {
+            arrBalasMetralleta.get(i).mover2();
+            float px = arrBalasMetralleta.get(i).sprite.getX();    // Posición actual
+            // Posición después de actualizar
+                /*px = orientacion==1? px+proyectil.VELOCIDAD_X:
+                        px-proyectil.VELOCIDAD_X;*/
+            int celdaX = (int) (arrBalasMetralleta.get(i).sprite.getX() / TAM_CELDA);
+            int celdaY = (int)jugador.getY()/TAM_CELDA;
+            TiledMapTileLayer capaPlataforma = (TiledMapTileLayer) mapa.getLayers().get("Plataformas");
+            TiledMapTileLayer.Cell celdaDerecha = capaPlataforma.getCell(celdaX+1, celdaY);
+            TiledMapTileLayer.Cell celdaDerechaUno = capaPlataforma.getCell(celdaX+1, celdaY+1);
+            TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX, celdaY); //verificar el signo por la orientacion
+            TiledMapTileLayer.Cell celdaIzquierdaUno = capaPlataforma.getCell(celdaX, celdaY+1);
+
+            if (arrBalasMetralleta.get(i).sprite.getX() > jugador.getX() + ANCHO/2 ||arrBalasMetralleta.get(i).sprite.getX() < jugador.getX() - ANCHO/2) {
+                arrBalasMetralleta.removeIndex(i);
+            }
+            if(celdaDerecha != null || celdaDerechaUno != null){
+                arrBalasMetralleta.removeIndex(i);
+            }
+            if (celdaIzquierda != null || celdaIzquierdaUno != null){
+                arrBalasMetralleta.removeIndex(i);
+            }
+        }
+    }
+
+
+
+    private void moverEnemigoDos() {
+        for (int i = arrEnemigosDos.size-1; i >= 0; i--) {
+            switch (arrEnemigosDos.get(i).getEstadoMov()) {
+                case INICIANDO:     // Mueve el personaje en Y hasta que se encuentre sobre un bloque
+                    // Los bloques en el mapa son de 32x32
+                    // Calcula la celda donde estaría después de moverlo
+                    int celdaX = (int) (arrEnemigosDos.get(i).getX() / TAM_CELDA);
+                    int celdaY = (int) ((arrEnemigosDos.get(i).getY() + arrEnemigosDos.get(i).VELOCIDAD_Y) / TAM_CELDA);
+                    // Recuperamos la celda en esta posición
+                    // La capa 0 son las plataformas
+                    TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get("Plataformas");
+                    TiledMapTileLayer.Cell celda = capa.getCell(celdaX, celdaY);
+                    // probar si la celda está ocupada
+                    if (celda == null) {
+                        //****revisar esta condicion, para ver si si se caen********
+                        arrEnemigosDos.get(i).caer();
+                        if ( arrEnemigosDos.get(i).getY() < 5){
+                            arrEnemigosDos.removeIndex(i);
+                        }
+                    }else {
+                        arrEnemigosDos.get(i).setEstadoMov(EnemigoDosPlataformas.estadoMovimiento.QUIETO_IZQUIERDA);
+                    }
+                    break;
+                case MOV_DERECHA:
+                    //********REVISAR CONDICIONES MOVIMIENTOS****************
+                    probarChoqueParedesEnemigosDos();// Se mueve horizontal
+                    if(arrEnemigosDos.get(i).getX()>899*32){
+                        arrEnemigosDos.removeIndex(i);
+                    }
+                    /*if (enemigo.getX() + ANCHO/3 > jugador.getX() && enemigo.getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_DERECHA){
+                        enemigo.setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.QUIETO_IZQUIERDA);
+                    }*/
+                    break;
+                case MOV_IZQUIERDA:
+                    probarChoqueParedesEnemigosDos();      // Prueba si debe moverse
+                    if(arrEnemigosDos.get(i).getX()<5){
+                        arrEnemigosDos.removeIndex(i);
+                    }
+                    /*if (enemigo.getX() + ANCHO/3 < jugador.getX() && enemigo.getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_IZQUIERDA){
+                        enemigo.setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.QUIETO);
+                    }*/
+                    break;
+                case QUIETO_IZQUIERDA:
+                    if(jugador.getX() + ANCHO/2 >= arrEnemigosDos.get(i).getX()){
+                        arrEnemigosDos.get(i).setEstadoMov(EnemigoDosPlataformas.estadoMovimiento.MOV_IZQUIERDA);
+                    }
+                    break;
+                case QUIETO:
+                    if(jugador.getX() - ANCHO/2 <= arrEnemigosDos.get(i).getX()){
+                        arrEnemigosDos.get(i).setEstadoMov(EnemigoDosPlataformas.estadoMovimiento.MOV_DERECHA);
+                    }
+                    break;
+            }
+
+            // Prueba si debe caer por llegar a un espacio vacío
+            if (arrEnemigosDos.get(i).getEstadoMov() != EnemigoDosPlataformas.estadoMovimiento.INICIANDO) {
+                // Calcula la celda donde estaría después de moverlo
+                int celdaX = (int) (arrEnemigosDos.get(i).getX() / TAM_CELDA);
+                int celdaY = (int) ((arrEnemigosDos.get(i).getY() + arrEnemigosDos.get(i).VELOCIDAD_Y) / TAM_CELDA);
+                // Recuperamos la celda en esta posición
+                // La capa 0 son las plataformas
+                TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get("Plataformas");
+                TiledMapTileLayer.Cell celdaAbajo = capa.getCell(celdaX, celdaY);
+                TiledMapTileLayer.Cell celdaDerecha = capa.getCell(celdaX + 1, celdaY);
+                // probar si la celda está ocupada
+                if (celdaAbajo == null && celdaDerecha == null) {
+                    // Celda vacía, entonces el personaje puede avanzar
+                    arrEnemigosDos.get(i).caer();
+                    //jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.CAIDA_LIBRE); ******revisar******
+                } else {
+                    // Dejarlo sobre la celda que lo detiene
+                    arrEnemigosDos.get(i).setPosicion(arrEnemigosDos.get(i).getX(), (celdaY + 1) * TAM_CELDA);
+                    //jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.EN_PISO);*******revisar*******
                 }
             }
         }
     }
 
-    private void actualizarProyectil() {    //aqui esta el problema
+    private void probarChoqueParedesEnemigosDos() {
+        for (int i = 0; i < arrEnemigosDos.size-1; i++) {
+            EnemigoDosPlataformas.estadoMovimiento estado = arrEnemigosDos.get(i).getEstadoMov();
+            // Quitar porque este método sólo se llama cuando se está moviendo
+            float px = arrEnemigosDos.get(i).getX();    // Posición actual
+            // Posición después de actualizar
+            px = arrEnemigosDos.get(i).getEstadoMov() == EnemigoDosPlataformas.estadoMovimiento.MOV_DERECHA ? px + EnemigoUnoPlataformas.VELOCIDAD_X :
+                    px - EnemigoUnoPlataformas.VELOCIDAD_X;
+            int celdaX = (int) (px / TAM_CELDA);   // Casilla del personaje en X
+            int celdaY = (int) (arrEnemigosDos.get(i).getY() / TAM_CELDA); // Casilla del personaje en Y
+            TiledMapTileLayer capaPlataforma = (TiledMapTileLayer) mapa.getLayers().get("Plataformas");
+            if (arrEnemigosDos.get(i).getEstadoMov() == EnemigoDosPlataformas.estadoMovimiento.MOV_DERECHA) {
+                celdaX++;   // Casilla del lado derecho
+            }
+            TiledMapTileLayer.Cell celdaDerecha = capaPlataforma.getCell(celdaX+1, celdaY);
+            TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX, celdaY);
+            TiledMapTileLayer.Cell celdaAbajoDerecha = capaPlataforma.getCell(celdaX+1, celdaY-1);
+            TiledMapTileLayer.Cell celdaAbajoIzquierda = capaPlataforma.getCell(celdaX, celdaY-1);
+            if(celdaDerecha != null && arrEnemigosDos.get(i).getEstadoMov() == EnemigoDosPlataformas.estadoMovimiento.MOV_DERECHA){
+                arrEnemigosDos.get(i).setEstadoMov(EnemigoDosPlataformas.estadoMovimiento.QUIETO_IZQUIERDA);
+            }
+            if(celdaIzquierda != null && arrEnemigosDos.get(i).getEstadoMov() == EnemigoDosPlataformas.estadoMovimiento.MOV_IZQUIERDA){
+                arrEnemigosDos.get(i).setEstadoMov(EnemigoDosPlataformas.estadoMovimiento.QUIETO);
+            }
+        }
+    }
+
+    private void actualizarVidas() { //Verificar bien el funcionamiento
+        switch (jugador.getVidas()){
+            case 4:
+                spriteVidas = new Sprite(texturasFramesVidas[0][0]);
+                imagenVidas = new Image(spriteVidas);
+                imagenVidas.setPosition(50,650);
+                HUD.addActor(imagenVidas);
+                break;
+            case 3:
+                spriteVidas = new Sprite(texturasFramesVidas[0][1]);
+                imagenVidas = new Image(spriteVidas);
+                imagenVidas.setPosition(50,650);
+                HUD.addActor(imagenVidas);
+                break;
+            case 2:
+                spriteVidas = new Sprite(texturasFramesVidas[0][2]);
+                imagenVidas = new Image(spriteVidas);
+                imagenVidas.setPosition(50,650);
+                HUD.addActor(imagenVidas);
+                break;
+            case 1:
+                spriteVidas = new Sprite(texturasFramesVidas[0][3]);
+                imagenVidas = new Image(spriteVidas);
+                imagenVidas.setPosition(50,650);
+                HUD.addActor(imagenVidas);
+                break;
+            case 0:
+                spriteVidas = new Sprite(texturasFramesVidas[0][4]);
+                imagenVidas = new Image(spriteVidas);
+                imagenVidas.setPosition(50,650);
+                HUD.addActor(imagenVidas);
+                break;
+        }
+    }
+
+    private void moverEnemigos() {
+        for (int i = arrEnemigosUno.size-1; i >= 0; i--) {
+            switch (arrEnemigosUno.get(i).getEstadoMov()) {
+                case INICIANDO:     // Mueve el personaje en Y hasta que se encuentre sobre un bloque
+                    // Los bloques en el mapa son de 32x32
+                    // Calcula la celda donde estaría después de moverlo
+                    int celdaX = (int) (arrEnemigosUno.get(i).getX() / TAM_CELDA);
+                    int celdaY = (int) ((arrEnemigosUno.get(i).getY() + arrEnemigosUno.get(i).VELOCIDAD_Y) / TAM_CELDA);
+                    // Recuperamos la celda en esta posición
+                    // La capa 0 son las plataformas
+                    TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get("Plataformas");
+                    TiledMapTileLayer.Cell celda = capa.getCell(celdaX, celdaY);
+                    // probar si la celda está ocupada
+                    if (celda == null) {
+                        //****revisar esta condicion, para ver si si se caen********
+                        arrEnemigosUno.get(i).caer();
+                        if ( arrEnemigosUno.get(i).getY() < 5){
+                            arrEnemigosUno.removeIndex(i);
+                        }
+                    }else {
+                        arrEnemigosUno.get(i).setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.QUIETO_IZQUIERDA);
+                    }
+                    break;
+                case MOV_DERECHA:
+                    //********REVISAR CONDICIONES MOVIMIENTOS****************
+                    probarChoqueParedesEnemigos();// Se mueve horizontal
+                    if(arrEnemigosUno.get(i).getX()>899*32){
+                        arrEnemigosUno.removeIndex(i);
+                    }
+                    /*if (enemigo.getX() + ANCHO/3 > jugador.getX() && enemigo.getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_DERECHA){
+                        enemigo.setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.QUIETO_IZQUIERDA);
+                    }*/
+                    break;
+                case MOV_IZQUIERDA:
+                    probarChoqueParedesEnemigos();      // Prueba si debe moverse
+                    if(arrEnemigosUno.get(i).getX()<5){
+                        arrEnemigosUno.removeIndex(i);
+                    }
+                    /*if (enemigo.getX() + ANCHO/3 < jugador.getX() && enemigo.getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_IZQUIERDA){
+                        enemigo.setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.QUIETO);
+                    }*/
+                    break;
+                case QUIETO_IZQUIERDA:
+                    if(jugador.getX() + ANCHO/2 >= arrEnemigosUno.get(i).getX()){
+                        arrEnemigosUno.get(i).setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.MOV_IZQUIERDA);
+                    }
+                    break;
+                case QUIETO:
+                    if(jugador.getX() - ANCHO/2 <= arrEnemigosUno.get(i).getX()){
+                        arrEnemigosUno.get(i).setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.MOV_DERECHA);
+                    }
+                    break;
+            }
+
+            // Prueba si debe caer por llegar a un espacio vacío
+            if (arrEnemigosUno.get(i).getEstadoMov() != EnemigoUnoPlataformas.estadoMovimiento.INICIANDO) {
+                // Calcula la celda donde estaría después de moverlo
+                int celdaX = (int) (arrEnemigosUno.get(i).getX() / TAM_CELDA);
+                int celdaY = (int) ((arrEnemigosUno.get(i).getY() + arrEnemigosUno.get(i).VELOCIDAD_Y) / TAM_CELDA);
+                // Recuperamos la celda en esta posición
+                // La capa 0 son las plataformas
+                TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get("Plataformas");
+                TiledMapTileLayer.Cell celdaAbajo = capa.getCell(celdaX, celdaY);
+                TiledMapTileLayer.Cell celdaDerecha = capa.getCell(celdaX + 1, celdaY);
+                // probar si la celda está ocupada
+                if (celdaAbajo == null && celdaDerecha == null) {
+                    // Celda vacía, entonces el personaje puede avanzar
+                    arrEnemigosUno.get(i).caer();
+                    //jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.CAIDA_LIBRE); ******revisar******
+                } else {
+                    // Dejarlo sobre la celda que lo detiene
+                    arrEnemigosUno.get(i).setPosicion(arrEnemigosUno.get(i).getX(), (celdaY + 1) * TAM_CELDA);
+                    //jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.EN_PISO);*******revisar*******
+                }
+            }
+        }
+    }
+
+    private void probarChoqueParedesEnemigos() {
+        for (int i = 0; i<arrEnemigosUno.size-1; i++) {
+            EnemigoUnoPlataformas.estadoMovimiento estado = arrEnemigosUno.get(i).getEstadoMov();
+            // Quitar porque este método sólo se llama cuando se está moviendo
+            float px = arrEnemigosUno.get(i).getX();    // Posición actual
+            // Posición después de actualizar
+            px = arrEnemigosUno.get(i).getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_DERECHA ? px + EnemigoUnoPlataformas.VELOCIDAD_X :
+                    px - EnemigoUnoPlataformas.VELOCIDAD_X;
+            int celdaX = (int) (px / TAM_CELDA);   // Casilla del personaje en X
+            int celdaY = (int) (arrEnemigosUno.get(i).getY() / TAM_CELDA); // Casilla del personaje en Y
+            TiledMapTileLayer capaPlataforma = (TiledMapTileLayer) mapa.getLayers().get("Plataformas");
+            if (arrEnemigosUno.get(i).getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_DERECHA) {
+                celdaX++;   // Casilla del lado derecho
+            }
+            TiledMapTileLayer.Cell celdaDerecha = capaPlataforma.getCell(celdaX+1, celdaY);
+            TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX, celdaY);
+            TiledMapTileLayer.Cell celdaAbajoDerecha = capaPlataforma.getCell(celdaX+1, celdaY-1);
+            TiledMapTileLayer.Cell celdaAbajoIzquierda = capaPlataforma.getCell(celdaX, celdaY-1);
+            if(celdaDerecha != null && arrEnemigosUno.get(i).getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_DERECHA){
+                arrEnemigosUno.get(i).setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.QUIETO_IZQUIERDA);
+            }
+            if(celdaIzquierda != null && arrEnemigosUno.get(i).getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_IZQUIERDA){
+                arrEnemigosUno.get(i).setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.QUIETO);
+            }
+        }
+    }
+
+    private void moverPersonaje() {
+        // Prueba caída libre inicial o movimiento horizontal
+        switch (jugador.getEstadoMovimiento()) {
+            case INICIANDO:     // Mueve el personaje en Y hasta que se encuentre sobre un bloque
+                // Los bloques en el mapa son de 32x32
+                // Calcula la celda donde estaría después de moverlo
+                int celdaX = (int) (jugador.getX() / TAM_CELDA);
+                int celdaY = (int) ((jugador.getY() + jugador.VELOCIDAD_Y) / TAM_CELDA);
+                // Recuperamos la celda en esta posición
+                // La capa 0 son las plataformas
+                TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get("Plataformas");
+                TiledMapTileLayer.Cell celda = capa.getCell(celdaX, celdaY);
+                // probar si la celda está ocupada
+                if (celda == null) {
+                    // Celda vacía, entonces el personaje puede avanzar
+                    jugador.caer();
+                }
+                break;
+            case MOV_DERECHA:// Se mueve horizontal
+                probarChoqueParedes();      // Prueba si debe moverse
+                break;
+            case MOV_IZQUIERDA:
+                probarChoqueParedes(); // Prueba si debe moverse
+                break;
+        }
+        switch (jugador.getEstadoSalto()){
+            case EN_PISO:
+                //probarChoqueParedes();
+                break;
+            case SUBIENDO:
+                probarChoqueParedes();
+                break;
+            case BAJANDO:
+                probarChoqueParedes();
+                break;
+            case CAIDA_LIBRE:
+                probarChoqueParedes();
+                break;
+        }
+        // Prueba si debe caer por llegar a un espacio vacío
+        if (jugador.getEstadoMovimiento() != JugadorPlataformas.EstadoMovimiento.INICIANDO
+                && (jugador.getEstadoSalto() != JugadorPlataformas.EstadoSalto.SUBIENDO)) {
+            // Calcula la celda donde estaría después de moverlo
+            int celdaX = (int) (jugador.getX() / TAM_CELDA);
+            int celdaY = (int) ((jugador.getY() + jugador.VELOCIDAD_Y) / TAM_CELDA);
+            // Recuperamos la celda en esta posición
+            // La capa 0 son las plataformas
+            TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get("Plataformas");
+            TiledMapTileLayer.Cell celdaAbajoIzq = capa.getCell(celdaX, celdaY);
+            TiledMapTileLayer.Cell celdaAbajoDer = capa.getCell(celdaX+1, celdaY);
+            TiledMapTileLayer.Cell celdaDerecha = capa.getCell(celdaX + 2, celdaY);
+            TiledMapTileLayer.Cell celdaIzquierda = capa.getCell(celdaX +1 , celdaY); // revisar la hitbox de las jeringas
+            // probar si la celda está ocupada
+            if (celdaAbajoIzq == null && (celdaDerecha == null || celdaIzquierda == null) && celdaAbajoDer == null) {
+                // Celda vacía, entonces el personaje puede avanzar
+                //jugador.caer();
+                jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.CAIDA_LIBRE);
+            } else {
+                // Dejarlo sobre la celda que lo detiene
+                jugador.setPosicion(jugador.getX(), (celdaY + 1) * TAM_CELDA);
+                jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.EN_PISO);
+            }
+        }
+
+        // Saltar
+        /*switch (jugador.getEstadoSalto()) {
+            case SUBIENDO:
+            case BAJANDO:
+                jugador.actualizarSalto();    // Actualizar posición en 'y'
+                break;
+        }*/
+    }
+
+    private void probarChoqueParedes() {
+        JugadorPlataformas.EstadoMovimiento estado = jugador.getEstadoMovimiento();
+        JugadorPlataformas.EstadoSalto estadoSalto = jugador.getEstadoSalto();
+        // Si el jugador no esta en movimiento no es necesario llamar a este metodo
+        float px = jugador.getX();    // Posición actual
+        // Posición después de actualizar
+        px = jugador.getEstadoMovimiento()==JugadorPlataformas.EstadoMovimiento.MOV_DERECHA? px+JugadorPlataformas.VELOCIDAD_X:
+                px-JugadorPlataformas.VELOCIDAD_X;
+        int celdaX = (int)(px/TAM_CELDA);   // Casilla del personaje en X
+        int celdaY = (int)(jugador.getY()/TAM_CELDA); // Casilla del personaje en Y
+        TiledMapTileLayer capaPlataforma = (TiledMapTileLayer) mapa.getLayers().get("Plataformas");
+        TiledMapTileLayer.Cell celdaDerecha = capaPlataforma.getCell(celdaX+2, celdaY);
+        TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX-1, celdaY);
+        TiledMapTileLayer.Cell celdaAbajoDer = capaPlataforma.getCell(celdaX+1, celdaY-1);
+        TiledMapTileLayer.Cell celdaAbajoIzq = capaPlataforma.getCell(celdaX, celdaY-1);
+        TiledMapTileLayer.Cell celdaArribaDer = capaPlataforma.getCell(celdaX+1, celdaY+2);
+        TiledMapTileLayer.Cell celdaArribaIzq = capaPlataforma.getCell(celdaX+1, celdaY+2);
+        if(celdaDerecha != null && jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.MOV_DERECHA){
+            Gdx.app.log("Se ejeuto la primera condicion","");
+            jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
+        }
+        if(celdaIzquierda != null && jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.MOV_IZQUIERDA){
+            Gdx.app.log("Se ejeuto la segunda condicion","");
+            jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO_IZQUIERDA);
+        }
+        if(celdaArribaDer != null && celdaArribaIzq != null){
+            Gdx.app.log("Se ejeuto la tercera condicion","");
+            jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.BAJANDO);
+        }
+        if(celdaAbajoDer == null && celdaAbajoIzq == null && estadoSalto == JugadorPlataformas.EstadoSalto.BAJANDO){
+            Gdx.app.log("Se ejeuto la cuarta condicion","");
+            jugador.caer();
+        }
+        if(celdaAbajoDer == null && celdaAbajoIzq == null && jugador.getEstadoSalto() == JugadorPlataformas.EstadoSalto.EN_PISO){
+            Gdx.app.log("Se ejeuto la quinta condicion","");
+            jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.CAIDA_LIBRE);
+        }
+        if(celdaAbajoDer != null && celdaAbajoIzq != null && (estadoSalto == JugadorPlataformas.EstadoSalto.BAJANDO || estadoSalto ==  JugadorPlataformas.EstadoSalto.CAIDA_LIBRE)){
+            Gdx.app.log("Se ejeuto la sexta condicion","");
+            jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.EN_PISO);
+        }
+    }
+
+    private void actualizarProyectil(){ //Va a pasar a traves de las celdas
         if(proyectil != null) {
             proyectil.mover(orientacion);
-            if (proyectil.sprite.getX() > jugador.sprite.getX() + ANCHO / 2) {
-                proyectil = null;
-            } else if (proyectil.sprite.getX() < jugador.sprite.getX() - ANCHO / 2) {
-                proyectil = null;
-            }
-        }
-    }
+            float px = proyectil.sprite.getX();    // Posición actual
+            // Posición después de actualizar
+            px = orientacion==1? px+proyectil.VELOCIDAD_X:
+                    px-proyectil.VELOCIDAD_X;
+            int celdaX = (int) (proyectil.sprite.getX() / TAM_CELDA);
+            int celdaY = (int)jugador.getY()/TAM_CELDA;
+            TiledMapTileLayer capaPlataforma = (TiledMapTileLayer) mapa.getLayers().get("Plataformas");
+            TiledMapTileLayer.Cell celdaDerecha = capaPlataforma.getCell(celdaX+1, celdaY);
+            TiledMapTileLayer.Cell celdaDerechaUno = capaPlataforma.getCell(celdaX+1, celdaY+1);
+            TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX, celdaY); //verificar el signo por la orientacion
+            TiledMapTileLayer.Cell celdaIzquierdaUno = capaPlataforma.getCell(celdaX, celdaY+1);
 
-    private void actualizarEnemigosDerecha() {            //Los que van para el lado derecho
-        timerCrearEnemigo += Gdx.graphics.getDeltaTime();
-        if(estadoJuego == EstadoJuego.JUGANDO){
-            if (timerCrearEnemigo >= TIEMPO_CREA_ENEMIGO){
-                timerCrearEnemigo = 0;
-                TIEMPO_CREA_ENEMIGO = 2 + MathUtils.random()*2;
-                EnemigoUno enemigo = new EnemigoUno(texturaEnemigoUno,texturaFondoNivelTres.getWidth(),133);
-                arrEnemigosDerecha.add(enemigo);
+            if (proyectil.sprite.getX() > jugador.getX() + ANCHO/2 ||proyectil.sprite.getX() < jugador.getX() - ANCHO/2) {
+                proyectil = null;
             }
-            for (int i = arrEnemigosDerecha.size-1; i >= 0; i--) {
-                EnemigoUno enemigo = arrEnemigosDerecha.get(i);
-                if (enemigo.sprite.getX()< jugador.sprite.getX() - ANCHO/2 -enemigo.sprite.getWidth() ){
-                    arrEnemigosDerecha.removeIndex(i);
-                }
+            if(celdaDerecha != null || celdaDerechaUno != null){
+                proyectil = null;
             }
+            if (celdaIzquierda != null || celdaIzquierdaUno != null){
+                proyectil = null;
+            }
+
         }
     }
 
     private void actualizarCamara() {
         float xCamara = camara.position.x;
-        if (jugador.sprite.getX() < ANCHO/2){
+        float yCamara = camara.position.y;
+        if (jugador.getX() < ANCHO/2){
             xCamara = ANCHO/2;
-        }else if (jugador.sprite.getX() > texturaFondoNivelTres.getWidth()-ANCHO/2){
-            xCamara = texturaFondoNivelTres.getWidth() - ANCHO/2; //checar para llegar al limite del mapa
+        }else if (jugador.getX() > 899*32){ //checar la condicion del mapa
+            xCamara = ANCHO/2; //checar para llegar al limite del mapa
         }else {
-            xCamara = jugador.sprite.getX();
+            xCamara = jugador.getX();
+        }
+        if (jugador.getY() < ALTO / 2){
+            yCamara = ALTO/2;
+        }else if(jugador.getY() + ALTO >= 32*30){
+            yCamara = jugador.getY();
+        }else{
+            yCamara = ALTO/2;
         }
         camara.position.x = xCamara;
+        camara.position.y = yCamara;
         camara.update();
     }
 
@@ -650,7 +1183,7 @@ public class PantallaNivelTres extends Pantalla {
 
     @Override
     public void dispose() {
-        texturaFondoNivelTres.dispose();
+        mapa.dispose();
         batch.dispose();
     }
 
@@ -661,6 +1194,7 @@ public class PantallaNivelTres extends Pantalla {
         VICTORIA
     }
 
+
     private class EscenaPausa extends Stage {
 
         public EscenaPausa(Viewport vista, SpriteBatch batch) {
@@ -668,21 +1202,21 @@ public class PantallaNivelTres extends Pantalla {
 
             Texture texturaFondoPausa = new Texture("Fondos/fondoPausa.png");
             Image imgFondoPausa = new Image(texturaFondoPausa);
-            imgFondoPausa.setPosition(ANCHO/2 - texturaFondoPausa.getWidth()/2,
-                    ALTO/2 - texturaFondoPausa.getHeight()/2);
+            imgFondoPausa.setPosition(ANCHO / 2 - texturaFondoPausa.getWidth() / 2,
+                    ALTO / 2 - texturaFondoPausa.getHeight() / 2);
             this.addActor(imgFondoPausa);
 
             Texture texturaBtnRegresar = new Texture("Botones/Btn_resume.png");
             TextureRegionDrawable botonRegresar = new TextureRegionDrawable(new TextureRegion(texturaBtnRegresar));
             //Aqui para el boton inverso (click)
             ImageButton btnRegresar = new ImageButton(botonRegresar);
-            btnRegresar.setPosition(ANCHO*0.4f, ALTO*0.6f, Align.center);
-            btnRegresar.addListener(new ClickListener(){
+            btnRegresar.setPosition(ANCHO / 2, ALTO * 0.6f, Align.center);
+            btnRegresar.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     super.clicked(event, x, y);
                     //Para regresar al juego
-                    estadoJuego = EstadoJuego.JUGANDO;
+                    estadoJuego = PantallaNivelTres.EstadoJuego.JUGANDO;
                     Gdx.input.setInputProcessor(HUD);
                 }
             });
@@ -691,14 +1225,14 @@ public class PantallaNivelTres extends Pantalla {
             TextureRegionDrawable botonMenu = new TextureRegionDrawable(new TextureRegion(texturaBtnMenu));
             //Aqui para el boton inverso (click)
             ImageButton btnMenu = new ImageButton(botonMenu);
-            btnMenu.setPosition(ANCHO*0.65f, ALTO*0.6f, Align.center);
-            btnMenu.addListener(new ClickListener(){
+            btnMenu.setPosition(ANCHO / 2, ALTO * 0.3f, Align.center);
+            btnMenu.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     super.clicked(event, x, y);
                     //Para regresar al juego
-                    estadoJuego = EstadoJuego.JUGANDO;
-                    juego.setScreen(new PantallaMenu(juego));
+                    estadoJuego = PantallaNivelTres.EstadoJuego.JUGANDO;
+                    juego.setScreen(new PantallaNiveles(juego));
                 }
             });
             this.addActor(btnMenu);
@@ -725,7 +1259,7 @@ public class PantallaNivelTres extends Pantalla {
                 public void clicked(InputEvent event, float x, float y) {
                     super.clicked(event, x, y);
                     //Para reintentar el nivel
-                    juego.setScreen(new PantallaNivelUno(juego));
+                    juego.setScreen(new PantallaNivelTres(juego));
 
                 }
             });
@@ -741,6 +1275,7 @@ public class PantallaNivelTres extends Pantalla {
                 public void clicked(InputEvent event, float x, float y) {
                     super.clicked(event, x, y);
                     //Para regresar al los niveles
+                    Gdx.app.log("exit ","exit");
                     borrarPantalla();
                     juego.setScreen(new PantallaNiveles(juego));
                 }
@@ -755,21 +1290,21 @@ public class PantallaNivelTres extends Pantalla {
 
             Texture texturaFondoVictoria = new Texture("Fondos/Victory.png");
             Image imgFondoVictoria = new Image(texturaFondoVictoria);
-            imgFondoVictoria.setPosition(ANCHO/2 - texturaFondoVictoria.getWidth()/2,
-                    ALTO/2 - texturaFondoVictoria.getHeight()/2);
+            imgFondoVictoria.setPosition(ANCHO / 2 - texturaFondoVictoria.getWidth() / 2,
+                    ALTO / 2 - texturaFondoVictoria.getHeight() / 2);
             this.addActor(imgFondoVictoria);
 
             Texture texturaBtnSeguir = new Texture("Botones/btn_jugar.png");
             TextureRegionDrawable botonSeguir = new TextureRegionDrawable(new TextureRegion(texturaBtnSeguir));
             //Aqui para el boton inverso (click)
             ImageButton btnSeguir = new ImageButton(botonSeguir);
-            btnSeguir.setPosition(ANCHO*0.35f, ALTO*0.2f, Align.center);
-            btnSeguir.addListener(new ClickListener(){
+            btnSeguir.setPosition(ANCHO * 0.35f, ALTO * 0.2f, Align.center);
+            btnSeguir.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     super.clicked(event, x, y);
-                    //Para ir a los creditos
-                    juego.setScreen(new PantallaAcercaDe(juego));
+                    //Para pasar al siguiente nivel
+                    juego.setScreen(new PantallaNivelTres(juego));
                 }
             });
             this.addActor(btnSeguir);
@@ -778,8 +1313,8 @@ public class PantallaNivelTres extends Pantalla {
             TextureRegionDrawable botonNiveles = new TextureRegionDrawable(new TextureRegion(texturaBtnNiveles));
             //Aqui para el boton inverso (click)
             ImageButton btnNiveles = new ImageButton(botonNiveles);
-            btnNiveles.setPosition(ANCHO*0.65f, ALTO*0.2f, Align.center);
-            btnNiveles.addListener(new ClickListener(){
+            btnNiveles.setPosition(ANCHO * 0.65f, ALTO * 0.2f, Align.center);
+            btnNiveles.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     super.clicked(event, x, y);
