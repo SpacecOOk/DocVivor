@@ -145,9 +145,7 @@ public class PantallaNivelDos extends Pantalla {
                 contadorMetralleta--;
             }
         }
-        if (juego.efectoSonidoEstado != 1) {
-            efectoDisparo.play();
-        }
+        //FALTA CREAR LA MUSICA DEL PROYECTIL
     }
 
     private void crearPosicionesDos() {
@@ -201,21 +199,21 @@ public class PantallaNivelDos extends Pantalla {
     }
 
     private void crearEnemigos() {
-        texturaEnemigoUno = new Texture("Level2/AssetsPersonajes/Enemigo_LvL2.png");
-        texturaEnemigoDos = new Texture("Level2/AssetsPersonajes/Enemigo3.png");
+        texturaEnemigoUno = new Texture("Enemigo_LvL2.png");
+        texturaEnemigoDos = new Texture("Enemigo3.png");
         arrEnemigosUno = new Array<>();
         arrEnemigosDos = new Array<>();
         for (int i = 0; i < 10; i++) {
             EnemigoUnoPlataformas enemigo = new EnemigoUnoPlataformas(texturaEnemigoUno);
             int x = MathUtils.random(0,posicionesEnemigos.length-1);
-            enemigo.getSprite().setPosition(posicionesEnemigos[x],18*32);
+            enemigo.getSprite().setPosition(posicionesEnemigos[x],16*32);
             arrEnemigosUno.add(enemigo);
             crearPosiciones();
         }
         for (int i = 0; i < 5; i++) {
             EnemigoDosPlataformas enemigoDos = new EnemigoDosPlataformas(texturaEnemigoDos);
             int x = MathUtils.random(0,posicionesEnemigosDos.length-1);
-            enemigoDos.getSprite().setPosition(posicionesEnemigos[x],18*32);
+            enemigoDos.getSprite().setPosition(posicionesEnemigos[x],16*32);
             arrEnemigosDos.add(enemigoDos);
             crearPosicionesDos();
         }
@@ -257,7 +255,7 @@ public class PantallaNivelDos extends Pantalla {
     private void crearPersonaje() {
         texturaPersonaje = new Texture("Level2/AssetsPersonajes/Doctor2_moviendose.png");
         jugador = new JugadorPlataformas(texturaPersonaje,56,55);
-        jugador.getSprite().setPosition(100,200);
+        jugador.getSprite().setPosition(100,300);
     }
 
     private void crearVictoria() {
@@ -303,12 +301,13 @@ public class PantallaNivelDos extends Pantalla {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if(jugador.getEstadoSalto() == JugadorPlataformas.EstadoSalto.SUBIENDO || jugador.getEstadoSalto() == JugadorPlataformas.EstadoSalto.BAJANDO){
+                /*if(jugador.getEstadoSalto() == JugadorPlataformas.EstadoSalto.SUBIENDO || jugador.getEstadoSalto() == JugadorPlataformas.EstadoSalto.BAJANDO){
                     jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.MOV_DERECHA);
                 }else{
                     jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.EN_PISO);
                     jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.MOV_DERECHA);
-                }
+                }*/
+                jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.MOV_DERECHA);
 
                 //jugador.setEstado(EstadoJugador.CAMINANDO);
                 return super.touchDown(event, x, y, pointer, button);
@@ -316,12 +315,13 @@ public class PantallaNivelDos extends Pantalla {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                if(jugador.getEstadoSalto() == JugadorPlataformas.EstadoSalto.SUBIENDO || jugador.getEstadoSalto() == JugadorPlataformas.EstadoSalto.BAJANDO){
+                /*if(jugador.getEstadoSalto() == JugadorPlataformas.EstadoSalto.SUBIENDO || jugador.getEstadoSalto() == JugadorPlataformas.EstadoSalto.BAJANDO){
                     jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
                 }else{
                     jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.EN_PISO);
                     jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
-                }
+                }*/
+                jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
                 super.touchUp(event, x, y, pointer, button);
             }
         });
@@ -415,6 +415,8 @@ public class PantallaNivelDos extends Pantalla {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 //Salta a la izquierda/derecha
+                Gdx.app.log("BOTON SALTAR "+jugador.getEstadoMovimiento(),"");
+                Gdx.app.log("BOTON SALTAR "+jugador.getEstadoSalto(),"");
                     jugador.saltar();
                 if (juego.efectoSonidoEstado != 1) {
                     efectoSalto.play();
@@ -723,7 +725,7 @@ public class PantallaNivelDos extends Pantalla {
     }
 
     private void actualizarBalasMetralleta() {
-        for (int i = arrBalasMetralleta.size-1; i >=0; i--) {
+        for (int i = 0; i < arrBalasMetralleta.size; i++) {
                 arrBalasMetralleta.get(i).mover2();
                 float px = arrBalasMetralleta.get(i).sprite.getX();    // Posición actual
                 // Posición después de actualizar
@@ -752,7 +754,7 @@ public class PantallaNivelDos extends Pantalla {
 
 
     private void moverEnemigoDos() {
-        for (int i = arrEnemigosDos.size-1; i >= 0; i--) {
+        for (int i = 0; i < arrEnemigosDos.size; i++) {
             switch (arrEnemigosDos.get(i).getEstadoMov()) {
                 case INICIANDO:     // Mueve el personaje en Y hasta que se encuentre sobre un bloque
                     // Los bloques en el mapa son de 32x32
@@ -886,7 +888,7 @@ public class PantallaNivelDos extends Pantalla {
     }
 
     private void moverEnemigos() {
-        for (int i = arrEnemigosUno.size-1; i >=0; i--) {
+        for (int i = 0; i < arrEnemigosUno.size; i++) {
             switch (arrEnemigosUno.get(i).getEstadoMov()) {
                 case INICIANDO:     // Mueve el personaje en Y hasta que se encuentre sobre un bloque
                     // Los bloques en el mapa son de 32x32
@@ -1067,9 +1069,6 @@ public class PantallaNivelDos extends Pantalla {
         JugadorPlataformas.EstadoMovimiento estado = jugador.getEstadoMovimiento();
         JugadorPlataformas.EstadoSalto estadoSalto = jugador.getEstadoSalto();
         // Si el jugador no esta en movimiento no es necesario llamar a este metodo
-        if ( estado == JugadorPlataformas.EstadoMovimiento.QUIETO && estadoSalto == JugadorPlataformas.EstadoSalto.EN_PISO){
-            return;
-        }
         float px = jugador.getX();    // Posición actual
         // Posición después de actualizar
         px = jugador.getEstadoMovimiento()==JugadorPlataformas.EstadoMovimiento.MOV_DERECHA? px+JugadorPlataformas.VELOCIDAD_X:
@@ -1084,21 +1083,27 @@ public class PantallaNivelDos extends Pantalla {
         TiledMapTileLayer.Cell celdaArribaDer = capaPlataforma.getCell(celdaX+1, celdaY+2);
         TiledMapTileLayer.Cell celdaArribaIzq = capaPlataforma.getCell(celdaX+1, celdaY+2);
         if(celdaDerecha != null && jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.MOV_DERECHA){
+            Gdx.app.log("Se ejeuto la primera condicion","");
             jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
         }
         if(celdaIzquierda != null && jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.MOV_IZQUIERDA){
-            jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
+            Gdx.app.log("Se ejeuto la segunda condicion","");
+            jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO_IZQUIERDA);
         }
         if(celdaArribaDer != null && celdaArribaIzq != null){
+            Gdx.app.log("Se ejeuto la tercera condicion","");
             jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.BAJANDO);
         }
         if(celdaAbajoDer == null && celdaAbajoIzq == null && estadoSalto == JugadorPlataformas.EstadoSalto.BAJANDO){
+            Gdx.app.log("Se ejeuto la cuarta condicion","");
             jugador.caer();
         }
         if(celdaAbajoDer == null && celdaAbajoIzq == null && jugador.getEstadoSalto() == JugadorPlataformas.EstadoSalto.EN_PISO){
+            Gdx.app.log("Se ejeuto la quinta condicion","");
             jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.CAIDA_LIBRE);
         }
         if(celdaAbajoDer != null && celdaAbajoIzq != null && (estadoSalto == JugadorPlataformas.EstadoSalto.BAJANDO || estadoSalto ==  JugadorPlataformas.EstadoSalto.CAIDA_LIBRE)){
+            Gdx.app.log("Se ejeuto la sexta condicion","");
             jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.EN_PISO);
         }
     }
