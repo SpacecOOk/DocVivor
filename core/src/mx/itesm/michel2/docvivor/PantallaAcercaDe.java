@@ -13,6 +13,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 
+import java.awt.Desktop;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+
+
 public class PantallaAcercaDe extends Pantalla {
     private final Juego juego;
 
@@ -33,6 +39,7 @@ public class PantallaAcercaDe extends Pantalla {
     private Texture name_Roberto = new Texture("PantallaAcercaDe/nombre_Roberto.png");
     private Texture name_Bruno = new Texture("PantallaAcercaDe/nombre_Bruno.png");
     private Texture name_Mich = new Texture("PantallaAcercaDe/nombre_Mich.png");
+    //private Texture email = new Texture("PantallaAcercaDe/dora.jpeg");
 
 
     @Override
@@ -58,6 +65,39 @@ public class PantallaAcercaDe extends Pantalla {
             }
         });
         escenaAcerca.addActor(btnRegresar);
+        //Boton para el mail
+        Texture texturaEmail  = new Texture("PantallaAcercaDe/dora.jpeg");
+        TextureRegionDrawable botonEmail = new TextureRegionDrawable(new TextureRegion(texturaEmail));
+        //Aqui para el boton inverso (click)
+        ImageButton btnEmail = new ImageButton(botonEmail);
+        btnEmail.setPosition(ANCHO/2,ALTO/2, Align.center);
+        btnEmail.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                Desktop escritorio;
+                if (Desktop.isDesktopSupported()
+                        && (escritorio = Desktop.getDesktop()).isSupported(Desktop.Action.MAIL)) {
+                    URI direccion = null;
+                    try {
+                        direccion = new URI("mailto:docvivor@hotmail.com?subject=Game");
+                    } catch (URISyntaxException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        escritorio.mail(direccion);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    // TODO fallback to some Runtime.exec(..) voodoo?
+                    throw new RuntimeException("No se tiene mail");
+                }
+
+            }
+        });
+        escenaAcerca.addActor(btnEmail);
+
         Gdx.input.setInputProcessor(escenaAcerca);
     }
 
