@@ -12,6 +12,8 @@ public class Proyectil extends Objeto {
         super(textura, x, y);
     }
 
+    private int orientacion2;
+
     public void mover(int orientacion){
         if(orientacion == 1) {
             float lapso = Gdx.graphics.getDeltaTime();
@@ -24,18 +26,24 @@ public class Proyectil extends Objeto {
         }
     }
 
-    public void moverIzq(){
-        float lapso = Gdx.graphics.getDeltaTime();
-        float distancia = VELOCIDAD_X * lapso;
-        sprite.setX(sprite.getX() - distancia);
-        sprite.rotate(45);
+    public void mover2(){
+        if(orientacion2 == 1) {
+            float lapso = Gdx.graphics.getDeltaTime();
+            float distancia = VELOCIDAD_X * lapso;
+            sprite.setX(sprite.getX() + distancia);
+            sprite.rotate(10);
+        }else if(orientacion2 == 0){
+            float lapso = Gdx.graphics.getDeltaTime();
+            float distancia = -VELOCIDAD_X * lapso;
+            sprite.setX(sprite.getX() + distancia);
+            sprite.rotate(10);
+        }
     }
 
-    public void moverDer(){
-        float lapso = Gdx.graphics.getDeltaTime();
-        float distancia = VELOCIDAD_X * lapso;
-        sprite.setX(sprite.getX() + distancia);
-        sprite.rotate(45);
+    public void setOrientacion2(int orientacion2) {
+        this.orientacion2 = orientacion2;
     }
-
+    public int getOrientacion2(){
+        return this.orientacion2;
+    }
 }

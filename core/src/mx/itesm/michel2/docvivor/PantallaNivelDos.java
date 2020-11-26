@@ -133,12 +133,14 @@ public class PantallaNivelDos extends Pantalla {
         if (jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.MOV_DERECHA || jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.QUIETO) {
             if(contadorMetralleta > 0){
                 Proyectil proyectilMetralleta = new Proyectil(texturaBalaMetralleta,jugador.getX() +30,jugador.getY()+jugador.getSprite().getHeight()/3);
+                proyectilMetralleta.setOrientacion2(1);
                 arrBalasMetralleta.add(proyectilMetralleta);
                 contadorMetralleta--;
             }
         } else if (jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.MOV_IZQUIERDA || jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.QUIETO_IZQUIERDA) {
             if(contadorMetralleta > 0){
                 Proyectil proyectilMetralleta = new Proyectil(texturaBalaMetralleta,jugador.getX() -30,jugador.getY()+jugador.getSprite().getHeight()/3);
+                proyectilMetralleta.setOrientacion2(0);
                 arrBalasMetralleta.add(proyectilMetralleta);
                 contadorMetralleta--;
             }
@@ -390,6 +392,11 @@ public class PantallaNivelDos extends Pantalla {
                     }
                 }else if(contadorMetralleta>0 && jugador.getSprite().getTexture() == texturaJugadorMetralleta){
                     crearProyectilMetralleta();
+                }else{
+                    int x2 = (int) jugador.getX();
+                    int y2 =(int) jugador.getY();
+                    jugador = new JugadorPlataformas(texturaPersonaje,56,55);
+                    jugador.getSprite().setPosition(x2,y2);
                 }
             }//Jeringa
         });
@@ -669,32 +676,7 @@ public class PantallaNivelDos extends Pantalla {
 
     private void actualizarBalasMetralleta() {
         for (int i = 0; i < arrBalasMetralleta.size; i++) {
-            if(jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.QUIETO || jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.MOV_DERECHA){
-                arrBalasMetralleta.get(i).moverDer();
-                float px = arrBalasMetralleta.get(i).sprite.getX();    // Posición actual
-                // Posición después de actualizar
-                /*px = orientacion==1? px+proyectil.VELOCIDAD_X:
-                        px-proyectil.VELOCIDAD_X;*/
-                int celdaX = (int) (arrBalasMetralleta.get(i).sprite.getX() / TAM_CELDA);
-                int celdaY = (int)jugador.getY()/TAM_CELDA;
-                TiledMapTileLayer capaPlataforma = (TiledMapTileLayer) mapa.getLayers().get(7);
-                TiledMapTileLayer.Cell celdaDerecha = capaPlataforma.getCell(celdaX+1, celdaY);
-                TiledMapTileLayer.Cell celdaDerechaUno = capaPlataforma.getCell(celdaX+1, celdaY+1);
-                TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX, celdaY); //verificar el signo por la orientacion
-                TiledMapTileLayer.Cell celdaIzquierdaUno = capaPlataforma.getCell(celdaX, celdaY+1);
-
-                if (arrBalasMetralleta.get(i).sprite.getX() > jugador.getX() + ANCHO/2 ||arrBalasMetralleta.get(i).sprite.getX() < jugador.getX() - ANCHO/2) {
-                    arrBalasMetralleta.removeIndex(i);
-                }
-                if(celdaDerecha != null || celdaDerechaUno != null){
-                    arrBalasMetralleta.removeIndex(i);
-                }
-                if (celdaIzquierda != null || celdaIzquierdaUno != null){
-                    arrBalasMetralleta.removeIndex(i);
-                }
-
-            }else{
-                arrBalasMetralleta.get(i).moverIzq();
+                arrBalasMetralleta.get(i).mover2();
                 float px = arrBalasMetralleta.get(i).sprite.getX();    // Posición actual
                 // Posición después de actualizar
                 /*px = orientacion==1? px+proyectil.VELOCIDAD_X:
@@ -718,7 +700,8 @@ public class PantallaNivelDos extends Pantalla {
                 }
             }
         }
-    }
+
+
 
     private void moverEnemigoDos() {
         for (int i = 0; i < arrEnemigosDos.size; i++) {
