@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class EnemigoDosPlataformas {
-    public static final float VELOCIDAD_X = 9;
+    public static final float VELOCIDAD_X = 8;
     public static final float VELOCIDAD_Y = -4f;
 
     private Sprite sprite;  // Sprite cuando no se mueve
