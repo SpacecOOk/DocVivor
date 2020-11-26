@@ -145,8 +145,14 @@ public class PantallaNivelUno extends Pantalla {
     }
 
     private void crearItem() {
-        int posicion = MathUtils.random(0,texturaFondoNivelUno.getWidth()-texturaTraje.getWidth());
-        traje = new Item(texturaTraje,posicion,133,48,49);
+        int aleatorio = MathUtils.random(0,1);
+        int posicion = MathUtils.random(texturaFondoNivelUno.getWidth()/2+200,texturaFondoNivelUno.getWidth()-texturaTraje.getWidth());
+        int posicion2 = MathUtils.random(0+200,texturaFondoNivelUno.getWidth()/2-200);
+        if(aleatorio == 0) {
+            traje = new Item(texturaTraje, posicion, 133, 48, 49);
+        }else{
+            traje = new Item(texturaTraje, posicion2, 133, 48, 49);
+        }
     }
 
     private void crearVictoria() {
