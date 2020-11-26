@@ -24,4 +24,18 @@ public class Proyectil extends Objeto {
         }
     }
 
+    public void moverIzq(){
+        float lapso = Gdx.graphics.getDeltaTime();
+        float distancia = VELOCIDAD_X * lapso;
+        sprite.setX(sprite.getX() - distancia);
+        sprite.rotate(45);
+    }
+
+    public void moverDer(){
+        float lapso = Gdx.graphics.getDeltaTime();
+        float distancia = VELOCIDAD_X * lapso;
+        sprite.setX(sprite.getX() + distancia);
+        sprite.rotate(45);
+    }
+
 }
