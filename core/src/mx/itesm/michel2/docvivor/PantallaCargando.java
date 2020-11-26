@@ -68,7 +68,7 @@ public class PantallaCargando extends Pantalla
     }
 
     private void cargarRecursosNivel2() {
-        manager.load("arma1_Personaje/arma1_M_D.png",Texture.class);
+        //manager.load("Level2/AssetsPersonajes/personajeArma1.png",Texture.class);
         manager.load("vidas.png",Texture.class);
         manager.load("Items/metralleta.png",Texture.class);
         manager.load("Enemigo_LvL2Prueba.png",Texture.class);

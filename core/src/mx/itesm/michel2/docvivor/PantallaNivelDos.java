@@ -45,7 +45,7 @@ public class PantallaNivelDos extends Pantalla {
     private Texture texturaPersonaje;
     private JugadorPlataformas jugador;
     public static final int TAM_CELDA = 32;
-    private Texture texturaJugadorMetralleta = new Texture("arma1_Personaje/arma1_M_D.png");
+    private Texture texturaJugadorMetralleta;
 
     //vidas
     private Image imagenVidas;
@@ -66,6 +66,7 @@ public class PantallaNivelDos extends Pantalla {
     private Sound efectoMuerte;
     private Sound efectoMuerteEnemigo;
     private Sound efectoPowerUp;
+    private Sound efectoMuerteEnemigoDos;
 
     //Pausa
     private EstadoJuego estadoJuego = EstadoJuego.JUGANDO;
@@ -88,8 +89,11 @@ public class PantallaNivelDos extends Pantalla {
 
     //Enemigos
     private Texture texturaEnemigoUno;
+    private Texture texturaEnemigoDos;
     private Array<EnemigoUnoPlataformas> arrEnemigosUno;
+    private Array<EnemigoDosPlataformas> arrEnemigosDos;
     private int[] posicionesEnemigos;
+    private int[] posicionesEnemigosDos;
 
     //item - metralleta
     private Texture texturaMetralleta;
@@ -112,12 +116,27 @@ public class PantallaNivelDos extends Pantalla {
         cargarPreferencias();
         guardarPreferencias();
         crearPosiciones();
+        crearPosicionesDos();
         crearEnemigos();
         crearItems();
         if(juego.efectoSonidoEstado != 1){
             crearSonidos();
         }
         Gdx.input.setInputProcessor(HUD);
+    }
+
+    private void crearPosicionesDos() {
+        posicionesEnemigosDos = new int[5];
+        int x = MathUtils.random(233*32,268*32);
+        posicionesEnemigos[0] = x;
+        int y = MathUtils.random(320*32,364*32);
+        posicionesEnemigos[1] = y;
+        int z = MathUtils.random(516*32,541*32);
+        posicionesEnemigos[2] = z;
+        int w = MathUtils.random(595*32,641*32);
+        posicionesEnemigos[3] = w;
+        int t = MathUtils.random(812*32,834*32);
+        posicionesEnemigos[4] = t;
     }
 
     private void crearPosiciones() {
@@ -153,18 +172,27 @@ public class PantallaNivelDos extends Pantalla {
     private void crearItems() {
         //SuperTraje
         texturaMetralleta = new Texture("Items/metralleta.png");
-        metralleta = new Item(texturaMetralleta,32*300,100,139,56);
+        metralleta = new Item(texturaMetralleta,700,100,139,56);
     }
 
     private void crearEnemigos() {
         texturaEnemigoUno = new Texture("Enemigo_LvL2Prueba.png");
+        texturaEnemigoDos = new Texture("Level2/AssetsPersonajes/Enemigo3.png");
         arrEnemigosUno = new Array<>();
+        arrEnemigosDos = new Array<>();
         for (int i = 0; i < 10; i++) {
             EnemigoUnoPlataformas enemigo = new EnemigoUnoPlataformas(texturaEnemigoUno);
             int x = MathUtils.random(0,posicionesEnemigos.length-1);
             enemigo.getSprite().setPosition(posicionesEnemigos[x],16*32);
             arrEnemigosUno.add(enemigo);
             crearPosiciones();
+        }
+        for (int i = 0; i < 5; i++) {
+            EnemigoDosPlataformas enemigoDos = new EnemigoDosPlataformas(texturaEnemigoDos);
+            int x = MathUtils.random(0,posicionesEnemigosDos.length-1);
+            enemigoDos.getSprite().setPosition(posicionesEnemigos[x],16*32);
+            arrEnemigosDos.add(enemigoDos);
+            crearPosicionesDos();
         }
     }
 
@@ -191,6 +219,7 @@ public class PantallaNivelDos extends Pantalla {
         efectoMuerteEnemigo = manager.get("Efectos_de_sonido/moneda.mp3");
         efectoPowerUp = manager.get("Efectos_de_sonido/moneda.mp3");
         efectoSalto = manager.get("Efectos_de_sonido/saltoDoc.mp3");
+        efectoMuerteEnemigoDos =manager.get("Efectos_de_sonido/moneda.mp3");
     }
 
     private void crearProyectil() {
@@ -449,6 +478,7 @@ public class PantallaNivelDos extends Pantalla {
     private void verificarColisiones() {
         verificarCaida();
         verificarColisionEnemigos();
+        verificarColisionesEnemigosDos();
         verificarColisionItems();
         // *** COLISION ITEMS ***
         /*
@@ -480,27 +510,63 @@ public class PantallaNivelDos extends Pantalla {
                     }
                 }
             }
+        if(proyectil != null){
+            for (int j = arrEnemigosDos.size-1; j >= 0 ; j--) {
+                EnemigoDosPlataformas enemigo = arrEnemigosDos.get(j);
+                if (proyectil.sprite.getBoundingRectangle().overlaps(enemigo.getSprite().getBoundingRectangle())) {
+                    //Si hay colisión
+                    if (juego.efectoSonidoEstado != 1){
+                        efectoMuerteEnemigoDos.play();
+                    }
+                    arrEnemigosDos.removeIndex(j);
+                    proyectil = null;
+                    break;
+                }
+            }
+        }
         //}
+    }
+
+    private void verificarColisionesEnemigosDos() {
+        for (int i = 0; i < arrEnemigosDos.size; i++) {
+            EnemigoDosPlataformas enemigo = arrEnemigosDos.get(i);
+            if(jugador.getSprite().getBoundingRectangle().overlaps(enemigo.getSprite().getBoundingRectangle())){
+                if(jugador.getVidas() - 1 > 0){
+                    arrEnemigosDos.removeIndex(i);
+                    jugador.setVidas(jugador.getVidas()-1);
+                }else {
+                    if (juego.efectoSonidoEstado != 1){
+                        efectoMuerte.play();
+                    }
+                    jugador.setVidas(jugador.getVidas()-1);
+                    jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
+                    jugador.getSprite().setY(-100); //Lo manda a lo alto
+                    estadoJuego = PantallaNivelDos.EstadoJuego.DERROTA;
+                    escenaDerrota = new PantallaNivelDos.EscenaDerrota(vistaDerrotaHUD,batch);
+                    Gdx.input.setInputProcessor(escenaDerrota);
+                }break;
+            }
+        }
     }
 
     private void verificarColisionEnemigos() {
         for (int i = 0; i < arrEnemigosUno.size; i++) {
             EnemigoUnoPlataformas enemigo = arrEnemigosUno.get(i);
             if(jugador.getSprite().getBoundingRectangle().overlaps(enemigo.getSprite().getBoundingRectangle())){
-                if(jugador.getVidas() -1 >0){
+                if(jugador.getVidas() - 1 > 0){
                     arrEnemigosUno.removeIndex(i);
                     jugador.setVidas(jugador.getVidas()-1);
+                }else {
                     if (juego.efectoSonidoEstado != 1){
                         efectoMuerte.play();
-                    }else {
-                        jugador.setVidas(jugador.getVidas()-1);
-                        jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
-                        jugador.getSprite().setY(-100); //Lo manda a lo alto
-                        estadoJuego = PantallaNivelDos.EstadoJuego.DERROTA;
-                        escenaDerrota = new PantallaNivelDos.EscenaDerrota(vistaDerrotaHUD,batch);
-                        Gdx.input.setInputProcessor(escenaDerrota);
-                    }break;
-                }
+                    }
+                    jugador.setVidas(jugador.getVidas()-1);
+                    jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
+                    jugador.getSprite().setY(-100); //Lo manda a lo alto
+                    estadoJuego = PantallaNivelDos.EstadoJuego.DERROTA;
+                    escenaDerrota = new PantallaNivelDos.EscenaDerrota(vistaDerrotaHUD,batch);
+                    Gdx.input.setInputProcessor(escenaDerrota);
+                }break;
             }
         }
     }
@@ -513,8 +579,9 @@ public class PantallaNivelDos extends Pantalla {
             //estas lineas no funcionan bien
             float x = jugador.getX();
             float y = jugador.getY();
-            metralleta.sprite.setY(ALTO);
-            //jugador = new JugadorPlataformas(texturaJugadorMetralleta); ******insertar tamaños de frames
+            metralleta.sprite.setY(ALTO+100);
+            texturaJugadorMetralleta = new Texture ("Level2/AssetsPersonajes/personajeArma1.png");
+            jugador = new JugadorPlataformas(texturaJugadorMetralleta,64,55);
             jugador.getSprite().setPosition(x,y);
 
         }
@@ -547,6 +614,9 @@ public class PantallaNivelDos extends Pantalla {
                 enemigo.setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.QUIETO_IZQUIERDA);
             }*/
         }
+        for (EnemigoDosPlataformas enemigoDos : arrEnemigosDos) {
+            enemigoDos.render(batch);
+        }
     }
 
     private void actualizar() {
@@ -554,8 +624,114 @@ public class PantallaNivelDos extends Pantalla {
         actualizarProyectil();
         moverPersonaje();
         moverEnemigos();
+        moverEnemigoDos();
         actualizarVidas();
         verificarColisiones();
+    }
+
+    private void moverEnemigoDos() {
+        for (int i = 0; i < arrEnemigosDos.size; i++) {
+            switch (arrEnemigosDos.get(i).getEstadoMov()) {
+                case INICIANDO:     // Mueve el personaje en Y hasta que se encuentre sobre un bloque
+                    // Los bloques en el mapa son de 32x32
+                    // Calcula la celda donde estaría después de moverlo
+                    int celdaX = (int) (arrEnemigosDos.get(i).getX() / TAM_CELDA);
+                    int celdaY = (int) ((arrEnemigosDos.get(i).getY() + arrEnemigosDos.get(i).VELOCIDAD_Y) / TAM_CELDA);
+                    // Recuperamos la celda en esta posición
+                    // La capa 0 son las plataformas
+                    TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get(7);
+                    TiledMapTileLayer.Cell celda = capa.getCell(celdaX, celdaY);
+                    // probar si la celda está ocupada
+                    if (celda == null) {
+                        //****revisar esta condicion, para ver si si se caen********
+                        arrEnemigosDos.get(i).caer();
+                        if ( arrEnemigosDos.get(i).getY() < 5){
+                            arrEnemigosDos.removeIndex(i);
+                        }
+                    }else {
+                        arrEnemigosDos.get(i).setEstadoMov(EnemigoDosPlataformas.estadoMovimiento.QUIETO_IZQUIERDA);
+                    }
+                    break;
+                case MOV_DERECHA:
+                    //********REVISAR CONDICIONES MOVIMIENTOS****************
+                    probarChoqueParedesEnemigosDos();// Se mueve horizontal
+                    if(arrEnemigosDos.get(i).getX()>899*32){
+                        arrEnemigosDos.removeIndex(i);
+                    }
+                    /*if (enemigo.getX() + ANCHO/3 > jugador.getX() && enemigo.getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_DERECHA){
+                        enemigo.setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.QUIETO_IZQUIERDA);
+                    }*/
+                    break;
+                case MOV_IZQUIERDA:
+                    probarChoqueParedesEnemigosDos();      // Prueba si debe moverse
+                    if(arrEnemigosDos.get(i).getX()<5){
+                        arrEnemigosDos.removeIndex(i);
+                    }
+                    /*if (enemigo.getX() + ANCHO/3 < jugador.getX() && enemigo.getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_IZQUIERDA){
+                        enemigo.setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.QUIETO);
+                    }*/
+                    break;
+                case QUIETO_IZQUIERDA:
+                    if(jugador.getX() + ANCHO/2 >= arrEnemigosDos.get(i).getX()){
+                        arrEnemigosDos.get(i).setEstadoMov(EnemigoDosPlataformas.estadoMovimiento.MOV_IZQUIERDA);
+                    }
+                    break;
+                case QUIETO:
+                    if(jugador.getX() - ANCHO/2 <= arrEnemigosDos.get(i).getX()){
+                        arrEnemigosDos.get(i).setEstadoMov(EnemigoDosPlataformas.estadoMovimiento.MOV_DERECHA);
+                    }
+                    break;
+            }
+
+            // Prueba si debe caer por llegar a un espacio vacío
+            if (arrEnemigosDos.get(i).getEstadoMov() != EnemigoDosPlataformas.estadoMovimiento.INICIANDO) {
+                // Calcula la celda donde estaría después de moverlo
+                int celdaX = (int) (arrEnemigosDos.get(i).getX() / TAM_CELDA);
+                int celdaY = (int) ((arrEnemigosDos.get(i).getY() + arrEnemigosDos.get(i).VELOCIDAD_Y) / TAM_CELDA);
+                // Recuperamos la celda en esta posición
+                // La capa 0 son las plataformas
+                TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get(7);
+                TiledMapTileLayer.Cell celdaAbajo = capa.getCell(celdaX, celdaY);
+                TiledMapTileLayer.Cell celdaDerecha = capa.getCell(celdaX + 1, celdaY);
+                // probar si la celda está ocupada
+                if (celdaAbajo == null && celdaDerecha == null) {
+                    // Celda vacía, entonces el personaje puede avanzar
+                    arrEnemigosDos.get(i).caer();
+                    //jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.CAIDA_LIBRE); ******revisar******
+                } else {
+                    // Dejarlo sobre la celda que lo detiene
+                    arrEnemigosDos.get(i).setPosicion(arrEnemigosDos.get(i).getX(), (celdaY + 1) * TAM_CELDA);
+                    //jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.EN_PISO);*******revisar*******
+                }
+            }
+        }
+    }
+
+    private void probarChoqueParedesEnemigosDos() {
+        for (int i = 0; i<arrEnemigosDos.size; i++) {
+            EnemigoDosPlataformas.estadoMovimiento estado = arrEnemigosDos.get(i).getEstadoMov();
+            // Quitar porque este método sólo se llama cuando se está moviendo
+            float px = arrEnemigosDos.get(i).getX();    // Posición actual
+            // Posición después de actualizar
+            px = arrEnemigosDos.get(i).getEstadoMov() == EnemigoDosPlataformas.estadoMovimiento.MOV_DERECHA ? px + EnemigoUnoPlataformas.VELOCIDAD_X :
+                    px - EnemigoUnoPlataformas.VELOCIDAD_X;
+            int celdaX = (int) (px / TAM_CELDA);   // Casilla del personaje en X
+            int celdaY = (int) (arrEnemigosDos.get(i).getY() / TAM_CELDA); // Casilla del personaje en Y
+            TiledMapTileLayer capaPlataforma = (TiledMapTileLayer) mapa.getLayers().get(7);
+            if (arrEnemigosDos.get(i).getEstadoMov() == EnemigoDosPlataformas.estadoMovimiento.MOV_DERECHA) {
+                celdaX++;   // Casilla del lado derecho
+            }
+            TiledMapTileLayer.Cell celdaDerecha = capaPlataforma.getCell(celdaX+1, celdaY);
+            TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX, celdaY);
+            TiledMapTileLayer.Cell celdaAbajoDerecha = capaPlataforma.getCell(celdaX+1, celdaY-1);
+            TiledMapTileLayer.Cell celdaAbajoIzquierda = capaPlataforma.getCell(celdaX, celdaY-1);
+            if(celdaDerecha != null && arrEnemigosDos.get(i).getEstadoMov() == EnemigoDosPlataformas.estadoMovimiento.MOV_DERECHA){
+                arrEnemigosDos.get(i).setEstadoMov(EnemigoDosPlataformas.estadoMovimiento.QUIETO_IZQUIERDA);
+            }
+            if(celdaIzquierda != null && arrEnemigosDos.get(i).getEstadoMov() == EnemigoDosPlataformas.estadoMovimiento.MOV_IZQUIERDA){
+                arrEnemigosDos.get(i).setEstadoMov(EnemigoDosPlataformas.estadoMovimiento.QUIETO);
+            }
+        }
     }
 
     private void actualizarVidas() { //Verificar bien el funcionamiento
