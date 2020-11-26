@@ -436,20 +436,22 @@ public class PantallaNivelDos extends Pantalla {
 
     @Override
     public void render(float delta) {
-        actualizar();
-        borrarPantalla(0, 0, 0.5f);
-        batch.setProjectionMatrix(camara.combined);
-        rendererMapa.setView(camara);
-        rendererMapa.render();
-        batch.begin();
-        jugador.render(batch);
-        dibujarEnemigos();
-        dibujarItems();
-        metralleta.render(batch);
-        if(proyectil!=null){
-            proyectil.render(batch);
+        if(estadoJuego == EstadoJuego.JUGANDO) {
+            actualizar();
+            borrarPantalla(0, 0, 0.5f);
+            batch.setProjectionMatrix(camara.combined);
+            rendererMapa.setView(camara);
+            rendererMapa.render();
+            batch.begin();
+            jugador.render(batch);
+            dibujarEnemigos();
+            dibujarItems();
+            metralleta.render(batch);
+            if (proyectil != null) {
+                proyectil.render(batch);
+            }
+            batch.end();
         }
-        batch.end();
 
         //************ HUD ***************
         batch.setProjectionMatrix(camaraHUD.combined);
