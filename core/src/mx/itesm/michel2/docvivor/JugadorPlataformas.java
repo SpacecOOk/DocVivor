@@ -162,11 +162,11 @@ public class JugadorPlataformas {
         }
         tiempoSalto += 10 * Gdx.graphics.getDeltaTime();  // Actualiza tiempo
         sprite.setY(yInicial + y);    // Actualiza posición
-        if (y < 0) {
+        /*if (y < 0) {
             // Regresó al piso
             sprite.setY(yInicial);  // Lo deja donde inició el salto
             estadoSalto = EstadoSalto.EN_PISO;  // Ya no está saltando
-            }
+            }*/
         }
     }
 
@@ -204,7 +204,7 @@ public class JugadorPlataformas {
 
     // Inicia el salto
     public void saltar() {
-        if (estadoSalto== EstadoSalto.EN_PISO) {
+        if (estadoSalto == EstadoSalto.EN_PISO) {
             tiempoSalto = 0;
             yInicial = sprite.getY();
             estadoSalto = EstadoSalto.SUBIENDO;
