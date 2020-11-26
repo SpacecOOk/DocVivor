@@ -257,7 +257,7 @@ public class PantallaNivelDos extends Pantalla {
     private void crearPersonaje() {
         texturaPersonaje = new Texture("Level2/AssetsPersonajes/Doctor2_moviendose.png");
         jugador = new JugadorPlataformas(texturaPersonaje,56,55);
-        jugador.getSprite().setPosition(100,100);
+        jugador.getSprite().setPosition(100,200);
     }
 
     private void crearVictoria() {
@@ -523,6 +523,7 @@ public class PantallaNivelDos extends Pantalla {
         verificarColisionEnemigos();
         verificarColisionesEnemigosDos();
         verificarColisionItems();
+        verificarColisionMetralleta();
         //
         // *** COLISION ITEMS ***
         /*
@@ -569,6 +570,42 @@ public class PantallaNivelDos extends Pantalla {
             }
         }
         //}
+    }
+
+    private void verificarColisionMetralleta() {
+            for (int j = arrEnemigosUno.size-1; j >= 0 ; j--) {
+                for(int a = arrBalasMetralleta.size-1; a >= 0 ; a--) {
+                    if(arrBalasMetralleta != null) {
+                        EnemigoUnoPlataformas enemigo = arrEnemigosUno.get(j);
+                        if (arrBalasMetralleta.get(a).sprite.getBoundingRectangle().overlaps(enemigo.getSprite().getBoundingRectangle())) {
+                            //Si hay colisión
+                            if (juego.efectoSonidoEstado != 1) {
+                                efectoMuerteEnemigoDos.play();
+                            }
+                            arrEnemigosUno.removeIndex(j);
+                            arrBalasMetralleta.removeIndex(a);
+                            break;
+                        }
+                    }
+                }
+            }
+            //ENMIGOS 2
+            for (int j = arrEnemigosDos.size-1; j >= 0 ; j--) {
+                for(int a = arrBalasMetralleta.size-1; a >= 0 ; a--) {
+                    if(arrBalasMetralleta != null) {
+                        EnemigoDosPlataformas enemigo = arrEnemigosDos.get(j);
+                        if (arrBalasMetralleta.get(a).sprite.getBoundingRectangle().overlaps(enemigo.getSprite().getBoundingRectangle())) {
+                            //Si hay colisión
+                            if (juego.efectoSonidoEstado != 1) {
+                                efectoMuerteEnemigoDos.play();
+                            }
+                            arrEnemigosDos.removeIndex(j);
+                            arrBalasMetralleta.removeIndex(a);
+                            break;
+                        }
+                    }
+                }
+            }
     }
 
     private void verificarColisionesEnemigosDos() {
@@ -672,6 +709,17 @@ public class PantallaNivelDos extends Pantalla {
         actualizarVidas();
         verificarColisiones();
         actualizarBalasMetralleta();
+        comprobarVictoria();
+    }
+
+    private void comprobarVictoria() {
+        if(estadoJuego == EstadoJuego.JUGANDO && jugador.getX()>=899*32-ANCHO/2){
+            jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
+            jugador.getSprite().setY(-100); //Lo manda a lo alto
+            estadoJuego = EstadoJuego.VICTORIA;
+            escenaVictoria = new PantallaNivelDos.EscenaVictoria(vistaVictoriaHUD,batch);
+            Gdx.input.setInputProcessor(escenaVictoria);
+        }
     }
 
     private void actualizarBalasMetralleta() {
