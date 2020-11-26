@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -33,6 +34,7 @@ public class PantallaNivelUno extends Pantalla {
     private Texture texturaPersonaje;
     private Jugador jugador;
     private Texture texturaPersonajeTraje = new Texture("MovimientosMeleeTraje/Traje_M_I.png");
+    private Rectangle rectanglePersonaje;
 
     //Contador de kills
     private int kills = 0;
@@ -191,6 +193,8 @@ public class PantallaNivelUno extends Pantalla {
     private void crearPersonaje() {
         texturaPersonaje = new Texture("MovimientosMelee/Doctor_M_I.png");
         jugador = new Jugador(texturaPersonaje,texturaFondoNivelUno.getWidth()/2,133);
+        rectanglePersonaje = jugador.sprite.getBoundingRectangle().setSize(texturaPersonaje.getWidth()*.8f,texturaPersonaje.getHeight()*.8f);
+
     }
 
     private void crearHUD() {
@@ -534,13 +538,19 @@ public class PantallaNivelUno extends Pantalla {
                 imagenVidas.setPosition(50,650);
                 HUD.addActor(imagenVidas);
                 break;
+            case 0:
+                spriteVidas = new Sprite(texturasFramesVidas[0][4]);
+                imagenVidas = new Image(spriteVidas);
+                imagenVidas.setPosition(50,650);
+                HUD.addActor(imagenVidas);
+                break;
         }
     }
 
     private void verificarColisionesEnemigosIzquierda() {
         for(int i =arrEnemigosIzquierda.size-1; i>=0; i--){
             EnemigoUno enemigoUno= arrEnemigosIzquierda.get(i);
-            if (jugador.sprite.getBoundingRectangle().overlaps(enemigoUno.sprite.getBoundingRectangle())){
+            if (rectanglePersonaje.overlaps(enemigoUno.sprite.getBoundingRectangle())){
                 //PERDIO
                 if(jugador.getVidas()-1>0){
                     arrEnemigosIzquierda.removeIndex(i);
@@ -563,7 +573,7 @@ public class PantallaNivelUno extends Pantalla {
     private void verificarColisionesEnemigosDerecha() {
         for(int i =arrEnemigosDerecha.size-1; i>=0; i--){
             EnemigoUno enemigoUno= arrEnemigosDerecha.get(i);
-            if (jugador.sprite.getBoundingRectangle().overlaps(enemigoUno.sprite.getBoundingRectangle())){
+            if (rectanglePersonaje.overlaps(enemigoUno.sprite.getBoundingRectangle())){
                 //PERDIO
                 if(jugador.getVidas()-1>0){
                     arrEnemigosDerecha.removeIndex(i);

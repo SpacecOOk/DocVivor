@@ -889,6 +889,12 @@ public class PantallaNivelDos extends Pantalla {
                 imagenVidas.setPosition(50,650);
                 HUD.addActor(imagenVidas);
                 break;
+            case 0:
+                spriteVidas = new Sprite(texturasFramesVidas[0][4]);
+                imagenVidas = new Image(spriteVidas);
+                imagenVidas.setPosition(50,650);
+                HUD.addActor(imagenVidas);
+                break;
         }
     }
 
