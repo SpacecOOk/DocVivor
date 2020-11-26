@@ -193,7 +193,7 @@ public class PantallaNivelUno extends Pantalla {
     private void crearPersonaje() {
         texturaPersonaje = new Texture("MovimientosMelee/Doctor_M_I.png");
         jugador = new Jugador(texturaPersonaje,texturaFondoNivelUno.getWidth()/2,133);
-        rectanglePersonaje = jugador.sprite.getBoundingRectangle().setSize(texturaPersonaje.getWidth()*.8f,texturaPersonaje.getHeight()*.8f);
+        rectanglePersonaje = jugador.sprite.getBoundingRectangle().setSize(texturaPersonaje.getWidth()*.75f,texturaPersonaje.getHeight()*.75f);
 
     }
 
