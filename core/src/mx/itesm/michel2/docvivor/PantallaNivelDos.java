@@ -536,6 +536,7 @@ public class PantallaNivelDos extends Pantalla {
                 if(jugador.getVidas() - 1 > 0){
                     arrEnemigosDos.removeIndex(i);
                     jugador.setVidas(jugador.getVidas()-1);
+                    //hola
                 }else {
                     if (juego.efectoSonidoEstado != 1){
                         efectoMuerte.play();
