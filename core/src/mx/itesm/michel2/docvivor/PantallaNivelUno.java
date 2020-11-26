@@ -691,7 +691,7 @@ public class PantallaNivelUno extends Pantalla {
             TextureRegionDrawable botonRegresar = new TextureRegionDrawable(new TextureRegion(texturaBtnRegresar));
             //Aqui para el boton inverso (click)
             ImageButton btnRegresar = new ImageButton(botonRegresar);
-            btnRegresar.setPosition(ANCHO*0.4f, ALTO*0.6f, Align.center);
+            btnRegresar.setPosition(ANCHO/2, ALTO*0.6f, Align.center);
             btnRegresar.addListener(new ClickListener(){
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
@@ -706,7 +706,7 @@ public class PantallaNivelUno extends Pantalla {
             TextureRegionDrawable botonMenu = new TextureRegionDrawable(new TextureRegion(texturaBtnMenu));
             //Aqui para el boton inverso (click)
             ImageButton btnMenu = new ImageButton(botonMenu);
-            btnMenu.setPosition(ANCHO*0.65f, ALTO*0.6f, Align.center);
+            btnMenu.setPosition(ANCHO/2, ALTO*0.3f, Align.center);
             btnMenu.addListener(new ClickListener(){
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
