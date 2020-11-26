@@ -145,8 +145,8 @@ public class PantallaNivelUno extends Pantalla {
     }
 
     private void crearItem() {
-        //int posicion = MathUtils.random(0,texturaFondoNivelUno.getWidth()-texturaTraje.getWidth());
-        traje = new Item(texturaTraje,1590,133,48,49);
+        int posicion = MathUtils.random(0,texturaFondoNivelUno.getWidth()-texturaTraje.getWidth());
+        traje = new Item(texturaTraje,posicion,133,48,49);
     }
 
     private void crearVictoria() {
@@ -435,7 +435,7 @@ public class PantallaNivelUno extends Pantalla {
         //**********Colisiones*************
         verificarColisionesEnemigosDerecha();
         verificarColisionesEnemigosIzquierda();
-        if(kills>=3 && estadoJuego != EstadoJuego.VICTORIA) {
+        if(kills>=20 && estadoJuego != EstadoJuego.VICTORIA) {
             jugador.setEstado(EstadoJugador.QUIETO);
             estadoJuego = EstadoJuego.VICTORIA;
             escenaVictoria = new EscenaVictoria(vistaVictoriaHUD, batch);
