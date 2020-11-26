@@ -45,7 +45,7 @@ public class PantallaNivelDos extends Pantalla {
     private Texture texturaPersonaje;
     private JugadorPlataformas jugador;
     public static final int TAM_CELDA = 32;
-    private Texture texturaJugadorMetralleta;
+    private Texture texturaJugadorMetralleta = new Texture("Level2/AssetsPersonajes/arma1_skinPersonaje.png");
 
     //vidas
     private Image imagenVidas;
@@ -176,7 +176,7 @@ public class PantallaNivelDos extends Pantalla {
     }
 
     private void crearEnemigos() {
-        texturaEnemigoUno = new Texture("Enemigo_LvL2Prueba.png");
+        texturaEnemigoUno = new Texture("Level2/AssetsPersonajes/Enemigo_LvL2.png");
         texturaEnemigoDos = new Texture("Level2/AssetsPersonajes/Enemigo3.png");
         arrEnemigosUno = new Array<>();
         arrEnemigosDos = new Array<>();
@@ -580,7 +580,6 @@ public class PantallaNivelDos extends Pantalla {
             float x = jugador.getX();
             float y = jugador.getY();
             metralleta.sprite.setY(ALTO+100);
-            texturaJugadorMetralleta = new Texture ("Level2/AssetsPersonajes/personajeArma1.png");
             jugador = new JugadorPlataformas(texturaJugadorMetralleta,64,55);
             jugador.getSprite().setPosition(x,y);
 
