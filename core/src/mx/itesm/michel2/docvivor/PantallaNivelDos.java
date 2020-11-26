@@ -208,14 +208,14 @@ public class PantallaNivelDos extends Pantalla {
         for (int i = 0; i < 10; i++) {
             EnemigoUnoPlataformas enemigo = new EnemigoUnoPlataformas(texturaEnemigoUno);
             int x = MathUtils.random(0,posicionesEnemigos.length-1);
-            enemigo.getSprite().setPosition(posicionesEnemigos[x],16*32);
+            enemigo.getSprite().setPosition(posicionesEnemigos[x],18*32);
             arrEnemigosUno.add(enemigo);
             crearPosiciones();
         }
         for (int i = 0; i < 5; i++) {
             EnemigoDosPlataformas enemigoDos = new EnemigoDosPlataformas(texturaEnemigoDos);
             int x = MathUtils.random(0,posicionesEnemigosDos.length-1);
-            enemigoDos.getSprite().setPosition(posicionesEnemigos[x],16*32);
+            enemigoDos.getSprite().setPosition(posicionesEnemigos[x],18*32);
             arrEnemigosDos.add(enemigoDos);
             crearPosicionesDos();
         }
@@ -257,7 +257,7 @@ public class PantallaNivelDos extends Pantalla {
     private void crearPersonaje() {
         texturaPersonaje = new Texture("Level2/AssetsPersonajes/Doctor2_moviendose.png");
         jugador = new JugadorPlataformas(texturaPersonaje,56,55);
-        jugador.getSprite().setPosition(456*32,700);
+        jugador.getSprite().setPosition(100,200);
     }
 
     private void crearVictoria() {
@@ -723,7 +723,7 @@ public class PantallaNivelDos extends Pantalla {
     }
 
     private void actualizarBalasMetralleta() {
-        for (int i = 0; i < arrBalasMetralleta.size; i++) {
+        for (int i = arrBalasMetralleta.size-1; i >=0; i--) {
                 arrBalasMetralleta.get(i).mover2();
                 float px = arrBalasMetralleta.get(i).sprite.getX();    // Posición actual
                 // Posición después de actualizar
@@ -752,7 +752,7 @@ public class PantallaNivelDos extends Pantalla {
 
 
     private void moverEnemigoDos() {
-        for (int i = 0; i < arrEnemigosDos.size; i++) {
+        for (int i = arrEnemigosDos.size-1; i >= 0; i--) {
             switch (arrEnemigosDos.get(i).getEstadoMov()) {
                 case INICIANDO:     // Mueve el personaje en Y hasta que se encuentre sobre un bloque
                     // Los bloques en el mapa son de 32x32
@@ -886,7 +886,7 @@ public class PantallaNivelDos extends Pantalla {
     }
 
     private void moverEnemigos() {
-        for (int i = 0; i < arrEnemigosUno.size; i++) {
+        for (int i = arrEnemigosUno.size-1; i >=0; i--) {
             switch (arrEnemigosUno.get(i).getEstadoMov()) {
                 case INICIANDO:     // Mueve el personaje en Y hasta que se encuentre sobre un bloque
                     // Los bloques en el mapa son de 32x32
