@@ -463,7 +463,7 @@ public class PantallaNivelUno extends Pantalla {
     }
 
     private void verificarColisionesProyectilIzquierda() {
-        if(estadoJuego == EstadoJuego.JUGANDO && kills < 3){
+        if(estadoJuego == EstadoJuego.JUGANDO && kills < 20){
             if(proyectil != null){
                 for (int j = arrEnemigosIzquierda.size-1; j >= 0 ; j--) {
                     EnemigoUno enemigo = arrEnemigosIzquierda.get(j);
@@ -483,7 +483,7 @@ public class PantallaNivelUno extends Pantalla {
     }
 
     private void verificarColisionesProyectilDerecha() {
-        if(estadoJuego == EstadoJuego.JUGANDO && kills < 3){
+        if(estadoJuego == EstadoJuego.JUGANDO && kills < 20){
             if(proyectil != null){
                 for (int j = arrEnemigosDerecha.size-1; j >= 0 ; j--) {
                     EnemigoUno enemigo = arrEnemigosDerecha.get(j);

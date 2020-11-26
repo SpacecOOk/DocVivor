@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 public class Proyectil extends Objeto {
 
     //Fisica
-    public final float VELOCIDAD_X = Pantalla.ANCHO/2;  //pixeles por segundo
+    public final float VELOCIDAD_X = 800;  //pixeles por segundo
 
     public Proyectil(Texture textura, float x, float y){
         super(textura, x, y);
