@@ -713,7 +713,7 @@ public class PantallaNivelTres extends Pantalla {
         actualizarVidas();
         verificarColisiones();
         actualizarBalasMetralleta();
-        comprobarVictoria();
+        comprobarVictoria(); //cambiar la victoria
     }
 
     private void comprobarVictoria() {
@@ -781,7 +781,7 @@ public class PantallaNivelTres extends Pantalla {
                 case MOV_DERECHA:
                     //********REVISAR CONDICIONES MOVIMIENTOS****************
                     probarChoqueParedesEnemigosDos();// Se mueve horizontal
-                    if(arrEnemigosDos.get(i).getX()>899*32){
+                    if(arrEnemigosDos.get(i).getX()>599*32){
                         arrEnemigosDos.removeIndex(i);
                     }
                     /*if (enemigo.getX() + ANCHO/3 > jugador.getX() && enemigo.getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_DERECHA){
@@ -798,12 +798,12 @@ public class PantallaNivelTres extends Pantalla {
                     }*/
                     break;
                 case QUIETO_IZQUIERDA:
-                    if(jugador.getX() + ANCHO/2 >= arrEnemigosDos.get(i).getX()){
+                    if(jugador.getX() + ANCHO/3 >= arrEnemigosDos.get(i).getX()){
                         arrEnemigosDos.get(i).setEstadoMov(EnemigoDosPlataformas.estadoMovimiento.MOV_IZQUIERDA);
                     }
                     break;
                 case QUIETO:
-                    if(jugador.getX() - ANCHO/2 <= arrEnemigosDos.get(i).getX()){
+                    if(jugador.getX() - ANCHO/3 <= arrEnemigosDos.get(i).getX()){
                         arrEnemigosDos.get(i).setEstadoMov(EnemigoDosPlataformas.estadoMovimiento.MOV_DERECHA);
                     }
                     break;
@@ -921,7 +921,7 @@ public class PantallaNivelTres extends Pantalla {
                 case MOV_DERECHA:
                     //********REVISAR CONDICIONES MOVIMIENTOS****************
                     probarChoqueParedesEnemigos();// Se mueve horizontal
-                    if(arrEnemigosUno.get(i).getX()>899*32){
+                    if(arrEnemigosUno.get(i).getX()>599*32){
                         arrEnemigosUno.removeIndex(i);
                     }
                     /*if (enemigo.getX() + ANCHO/3 > jugador.getX() && enemigo.getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_DERECHA){
@@ -938,12 +938,12 @@ public class PantallaNivelTres extends Pantalla {
                     }*/
                     break;
                 case QUIETO_IZQUIERDA:
-                    if(jugador.getX() + ANCHO/2 >= arrEnemigosUno.get(i).getX()){
+                    if(jugador.getX() + ANCHO/3 >= arrEnemigosUno.get(i).getX()){
                         arrEnemigosUno.get(i).setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.MOV_IZQUIERDA);
                     }
                     break;
                 case QUIETO:
-                    if(jugador.getX() - ANCHO/2 <= arrEnemigosUno.get(i).getX()){
+                    if(jugador.getX() - ANCHO/3 <= arrEnemigosUno.get(i).getX()){
                         arrEnemigosUno.get(i).setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.MOV_DERECHA);
                     }
                     break;
