@@ -66,7 +66,7 @@ public class PantallaAcercaDe extends Pantalla {
         });
         escenaAcerca.addActor(btnRegresar);
         //Boton para el mail
-        Texture texturaEmail  = new Texture("PantallaAcercaDe/dora.jpeg");
+        Texture texturaEmail  = new Texture("PantallaAcercaDe/mail.png");
         TextureRegionDrawable botonEmail = new TextureRegionDrawable(new TextureRegion(texturaEmail));
         //Aqui para el boton inverso (click)
         ImageButton btnEmail = new ImageButton(botonEmail);
