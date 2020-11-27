@@ -15,6 +15,7 @@ public class EnemigoUnoPlataformas {
 
     // Animación
     private Animation animacion;    // Caminando
+    private Animation animacionMuerte; 
     private float timerAnimacion;   // tiempo para calcular el frame
     private int ladoQUIETO;
 
@@ -29,9 +30,11 @@ public class EnemigoUnoPlataformas {
         // Crea la animación con tiempo de 0.25 segundos entre frames.
         animacion = new Animation(0.15f,texturasFrames[0][0],texturasFrames[0][1],texturasFrames[0][2], texturasFrames[0][3], texturasFrames[0][4],texturasFrames[0][5],texturasFrames[0][6],
                 texturasFrames[0][7]);
-
+        animacionMuerte = new Animation(0.5f,texturasFrames[0][8],texturasFrames[0][9],texturasFrames[0][10],texturasFrames[0][11],texturasFrames[0][12],texturasFrames[0][13],texturasFrames[0][14],
+                texturasFrames[0][15]);
         // Animación infinita
         animacion.setPlayMode(Animation.PlayMode.LOOP);
+        animacionMuerte.setPlayMode(Animation.PlayMode.NORMAL);
         // Inicia el timer que contará tiempo para saber qué frame se dibuja
         timerAnimacion = 0;
         // Crea el sprite cuando para el personaje quieto (idle)
@@ -65,7 +68,6 @@ public class EnemigoUnoPlataformas {
                 // Dibuja el frame en las coordenadas del sprite
                 batch.draw(region, sprite.getX(), sprite.getY());
                 break;
-
             case QUIETO:
                 if(ladoQUIETO==1){
                     ladoQUIETO=0;
@@ -79,6 +81,13 @@ public class EnemigoUnoPlataformas {
                     sprite.flip(true,false);
                 }
                 sprite.draw(batch);
+                break;
+            case MURIENDO:
+                // Incrementa el timer para calcular el frame que se dibuja
+                timerAnimacion += Gdx.graphics.getDeltaTime();
+                // Obtiene el frame que se debe mostrar (de acuerdo al timer)
+                TextureRegion region2 = (TextureRegion)animacionMuerte.getKeyFrame(timerAnimacion);
+                batch.draw(region2, sprite.getX(), sprite.getY());
                 break;
         }
     }
