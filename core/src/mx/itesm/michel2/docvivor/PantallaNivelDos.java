@@ -201,7 +201,7 @@ public class PantallaNivelDos extends Pantalla {
     }
 
     private void crearEnemigos() {
-        texturaEnemigoUno = new Texture("Enemigo_LvL2.png");
+        texturaEnemigoUno = new Texture("Enemigos/Enemigo_1.png");
         texturaEnemigoDos = new Texture("Enemigo3.png");
         arrEnemigosUno = new Array<>();
         arrEnemigosDos = new Array<>();
@@ -555,6 +555,8 @@ public class PantallaNivelDos extends Pantalla {
                         if (juego.efectoSonidoEstado != 1){
                             efectoMuerteEnemigo.play();
                         }
+                        Gdx.app.log("El enemigo esta muriendo","");
+                        arrEnemigosUno.get(j).setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.MURIENDO);
                         arrEnemigosUno.removeIndex(j);
                         proyectil = null;
                         break;
@@ -588,6 +590,8 @@ public class PantallaNivelDos extends Pantalla {
                             if (juego.efectoSonidoEstado != 1) {
                                 efectoMuerteEnemigoDos.play();
                             }
+                            Gdx.app.log("El enemigo esta muriendo","");
+                            arrEnemigosUno.get(j).setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.MURIENDO);
                             arrEnemigosUno.removeIndex(j);
                             arrBalasMetralleta.removeIndex(a);
                             break;
@@ -684,6 +688,7 @@ public class PantallaNivelDos extends Pantalla {
             estadoJuego = EstadoJuego.DERROTA;
             jugador.getSprite().setY(-100);
             escenaDerrota = new PantallaNivelDos.EscenaDerrota(vistaDerrotaHUD,batch);
+            jugador.getSprite().setY(-100);
             Gdx.input.setInputProcessor(escenaDerrota);
         }
     }
