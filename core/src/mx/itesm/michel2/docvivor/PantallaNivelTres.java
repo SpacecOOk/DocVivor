@@ -31,7 +31,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 //Pantalla Nivel 3
 public class PantallaNivelTres extends Pantalla {
     private final Juego juego;
-    public static final float ANCHO_MAPA = 899*32; //CAMBIAR EL ANCHO CUANDO ESTE EL MAPA
+    public static final float ANCHO_MAPA = 559*32; //CAMBIAR EL ANCHO CUANDO ESTE EL MAPA
     //fondo
     private TiledMap mapa;
     private OrthogonalTiledMapRenderer rendererMapa;
@@ -76,20 +76,20 @@ public class PantallaNivelTres extends Pantalla {
     private Sound efectoMuerteEnemigoDos;
 
     //Pausa
-    private PantallaNivelTres.EstadoJuego estadoJuego = PantallaNivelTres.EstadoJuego.JUGANDO;
-    private PantallaNivelTres.EscenaPausa escenaPausa;
+    private EstadoJuego estadoJuego = PantallaNivelTres.EstadoJuego.JUGANDO;
+    private EscenaPausa escenaPausa;
     private Stage escenaPausaHUD;
     private OrthographicCamera camaraPausaHUD;
     private Viewport vistaPausaHUD;
 
     //Derrota
-    private PantallaNivelTres.EscenaDerrota escenaDerrota;
+    private EscenaDerrota escenaDerrota;
     //private Stage escenaDerrota;
     private OrthographicCamera camaraDerrotaHUD;
     private Viewport vistaDerrotaHUD;
 
     //Victoria
-    private PantallaNivelTres.EscenaVictoria escenaVictoria;
+    private EscenaVictoria escenaVictoria;
     //private Stage escenaVictoria;
     private OrthographicCamera camaraVictoriaHUD;
     private Viewport vistaVictoriaHUD;
@@ -154,46 +154,41 @@ public class PantallaNivelTres extends Pantalla {
 
     private void crearPosicionesDos() {
         posicionesEnemigosDos = new int[5];
-        int x = MathUtils.random(233*32,268*32);
+        int x = MathUtils.random(161*32,179*32);
         posicionesEnemigos[0] = x;
-        int y = MathUtils.random(320*32,364*32);
+        int y = MathUtils.random(195*32,214*32);
         posicionesEnemigos[1] = y;
         int z = MathUtils.random(516*32,541*32);
         posicionesEnemigos[2] = z;
-        int w = MathUtils.random(595*32,641*32);
+        int w = MathUtils.random(273*32,277*32);
         posicionesEnemigos[3] = w;
-        int t = MathUtils.random(812*32,834*32);
+        int t = MathUtils.random(459*32,491*32);
         posicionesEnemigos[4] = t;
     }
 
     private void crearPosiciones() {
-        posicionesEnemigos = new int[13];
-        int a = MathUtils.random(85*32,96*32);
+        posicionesEnemigos = new int[10];
+        int a = MathUtils.random(70*32,77*32);
         posicionesEnemigos[0] = a;
-        int b = MathUtils.random(126*32, 149*32);
+        int b = MathUtils.random(83*32, 90*32);
         posicionesEnemigos[1] = b;
-        int c = MathUtils.random(212*32,229*32);
+        int c = MathUtils.random(166*32,179*32);
         posicionesEnemigos[2] = c;
-        int d = MathUtils.random(233*32,256*32);
+        int d = MathUtils.random(194*32,214*32);
         posicionesEnemigos[3] = d;
-        int e = MathUtils.random(320*32,364*32);
+        int e = MathUtils.random(234*32,241*32);
         posicionesEnemigos[4] = e;
-        int f = MathUtils.random(429*32, 442*32);
+        int f = MathUtils.random(249*32, 259*32);
         posicionesEnemigos[5] = f;
-        int g = MathUtils.random(484*32,497*32);
+        int g = MathUtils.random(261*32,279*32);
         posicionesEnemigos[6] = g;
-        int h = MathUtils.random(516*32,541*32);
+        int h = MathUtils.random(290*32,305*32);
         posicionesEnemigos[7] = h;
-        int i = MathUtils.random(578*32,615*32);
+        int i = MathUtils.random(459*32,492*32);
         posicionesEnemigos[8] = i;
-        int j = MathUtils.random(623*32,641*32);
+        int j = MathUtils.random(495*32,552*32); //depende por la posicion del jefe final
         posicionesEnemigos[9] = j;
-        int k = MathUtils.random(687*32,801*32);
-        posicionesEnemigos[10] = k;
-        int l = MathUtils.random(811*32,834*32);
-        posicionesEnemigos[11] = l;
-        int m = MathUtils.random(845*32,889*32);
-        posicionesEnemigos[12] = m;
+
     }
 
     private void crearItems() {
@@ -503,19 +498,19 @@ public class PantallaNivelTres extends Pantalla {
 
         //*************Pausa*****************
         batch.setProjectionMatrix(camaraPausaHUD.combined);
-        if (estadoJuego == PantallaNivelTres.EstadoJuego.PAUSA) {
+        if (estadoJuego == EstadoJuego.PAUSA) {
             escenaPausa.draw();
         }
 
         //************Derrota**************
         batch.setProjectionMatrix(camaraDerrotaHUD.combined);
-        if (estadoJuego == PantallaNivelTres.EstadoJuego.DERROTA) {
+        if (estadoJuego == EstadoJuego.DERROTA) {
             escenaDerrota.draw();
         }
 
         //************Victoria**********
         batch.setProjectionMatrix(camaraVictoriaHUD.combined);
-        if (estadoJuego == PantallaNivelTres.EstadoJuego.VICTORIA) {
+        if (estadoJuego == EstadoJuego.VICTORIA) {
             escenaVictoria.draw();
         }
     }
@@ -630,7 +625,7 @@ public class PantallaNivelTres extends Pantalla {
                     }
                     jugador.setVidas(jugador.getVidas()-1);
                     jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
-                    jugador.getSprite().setY(-100); //Lo manda a lo alto
+                    jugador.getSprite().setY(-100); //Lo manda abajo de la pantalla
                     estadoJuego = PantallaNivelTres.EstadoJuego.DERROTA;
                     escenaDerrota = new PantallaNivelTres.EscenaDerrota(vistaDerrotaHUD,batch);
                     Gdx.input.setInputProcessor(escenaDerrota);
