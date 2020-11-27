@@ -137,9 +137,10 @@ public class PantallaNivelUno extends Pantalla {
         manager.load("Efectos_de_sonido/moneda.mp3", Sound.class);
         manager.load("Efectos_de_sonido/muerteDoc.mp3", Sound.class);
         manager.load("Efectos_de_sonido/saltoDoc.mp3", Sound.class);
+        manager.load("Efectos_de_sonido/disparo.mp3", Sound.class);
         manager.finishLoading();
         //Asignamos los sonidos a las variables
-        efectoDisparo = manager.get("Efectos_de_sonido/moneda.mp3");
+        efectoDisparo = manager.get("Efectos_de_sonido/disparo.mp3");
         efectoMuerte = manager.get("Efectos_de_sonido/muerteDoc.mp3");
         efectoMuerteEnemigo = manager.get("Efectos_de_sonido/moneda.mp3");
         efectoPowerUp = manager.get("Efectos_de_sonido/moneda.mp3");
