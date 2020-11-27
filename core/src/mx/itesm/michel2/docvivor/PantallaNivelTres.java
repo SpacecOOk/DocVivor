@@ -679,6 +679,7 @@ public class PantallaNivelTres extends Pantalla {
             jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
             //jugador(ANCHO); //Lo manda a lo alto
             estadoJuego = PantallaNivelTres.EstadoJuego.DERROTA;
+            jugador.getSprite().setY(-100);
             escenaDerrota = new PantallaNivelTres.EscenaDerrota(vistaDerrotaHUD,batch);
             Gdx.input.setInputProcessor(escenaDerrota);
         }

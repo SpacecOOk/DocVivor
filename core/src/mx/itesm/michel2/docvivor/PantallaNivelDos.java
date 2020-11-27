@@ -682,6 +682,7 @@ public class PantallaNivelDos extends Pantalla {
             jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
             //jugador(ANCHO); //Lo manda a lo alto
             estadoJuego = EstadoJuego.DERROTA;
+            jugador.getSprite().setY(-100);
             escenaDerrota = new PantallaNivelDos.EscenaDerrota(vistaDerrotaHUD,batch);
             Gdx.input.setInputProcessor(escenaDerrota);
         }
@@ -1109,27 +1110,21 @@ public class PantallaNivelDos extends Pantalla {
         TiledMapTileLayer.Cell celdaArribaDer = capaPlataforma.getCell(celdaX+1, celdaY+1);
         TiledMapTileLayer.Cell celdaArribaIzq = capaPlataforma.getCell(celdaX+1, celdaY+1);
         if(celdaDerecha != null && jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.MOV_DERECHA){
-            Gdx.app.log("Se ejeuto la primera condicion","");
             jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
         }
         if(celdaIzquierda != null && jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.MOV_IZQUIERDA){
-            Gdx.app.log("Se ejeuto la segunda condicion","");
             jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO_IZQUIERDA);
         }
         if(celdaArribaDer != null && celdaArribaIzq != null){
-            Gdx.app.log("Se ejeuto la tercera condicion","");
             jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.BAJANDO);
         }
         if(celdaAbajoDer == null && celdaAbajoIzq == null && estadoSalto == JugadorPlataformas.EstadoSalto.BAJANDO){
-            Gdx.app.log("Se ejeuto la cuarta condicion","");
             jugador.caer();
         }
         if(celdaAbajoDer == null && celdaAbajoIzq == null && jugador.getEstadoSalto() == JugadorPlataformas.EstadoSalto.EN_PISO){
-            Gdx.app.log("Se ejeuto la quinta condicion","");
             jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.CAIDA_LIBRE);
         }
         if(celdaAbajoDer != null && celdaAbajoIzq != null && (estadoSalto == JugadorPlataformas.EstadoSalto.BAJANDO || estadoSalto ==  JugadorPlataformas.EstadoSalto.CAIDA_LIBRE)){
-            Gdx.app.log("Se ejeuto la sexta condicion","");
             jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.EN_PISO);
         }
     }
