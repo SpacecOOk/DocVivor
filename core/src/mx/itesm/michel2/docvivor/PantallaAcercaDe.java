@@ -31,10 +31,10 @@ public class PantallaAcercaDe extends Pantalla {
     }
 
     //Texturas
-    private Texture Roberto = new Texture("PantallaAcercaDe/RobertoCastro.jpeg");
-    private Texture Diego = new Texture("PantallaAcercaDe/DiegoElizalde.jpeg");
-    private Texture Bruno = new Texture("PantallaAcercaDe/BrunoJimenez.jpeg");
-    private Texture Mich = new Texture("PantallaAcercaDe/MichelDionne.jpeg");
+    private Texture Roberto = new Texture("PantallaAcercaDe/RobertoCastro.png");
+    private Texture Diego = new Texture("PantallaAcercaDe/DiegoElizalde.png");
+    private Texture Bruno = new Texture("PantallaAcercaDe/BrunoJimenez.png");
+    private Texture Mich = new Texture("PantallaAcercaDe/MichelDionne.png");
     private Texture name_Diego = new Texture("PantallaAcercaDe/nombre_Diego.png");
     private Texture name_Roberto = new Texture("PantallaAcercaDe/nombre_Roberto.png");
     private Texture name_Bruno = new Texture("PantallaAcercaDe/nombre_Bruno.png");

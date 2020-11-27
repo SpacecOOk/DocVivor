@@ -154,13 +154,13 @@ public class PantallaNivelTres extends Pantalla {
 
     private void crearPosicionesDos() {
         posicionesEnemigosDos = new int[5];
-        int x = MathUtils.random(161*32,179*32);
+        int x = MathUtils.random(161*32,178*32);
         posicionesEnemigos[0] = x;
-        int y = MathUtils.random(195*32,214*32);
+        int y = MathUtils.random(195*32,215*32);
         posicionesEnemigos[1] = y;
-        int z = MathUtils.random(516*32,541*32);
+        int z = MathUtils.random(516*32,541*32); //Verificar por lo del jefe final
         posicionesEnemigos[2] = z;
-        int w = MathUtils.random(273*32,277*32);
+        int w = MathUtils.random(270*32,277*32);
         posicionesEnemigos[3] = w;
         int t = MathUtils.random(459*32,491*32);
         posicionesEnemigos[4] = t;
@@ -168,13 +168,13 @@ public class PantallaNivelTres extends Pantalla {
 
     private void crearPosiciones() {
         posicionesEnemigos = new int[10];
-        int a = MathUtils.random(70*32,77*32);
+        int a = MathUtils.random(70*32,76*32);
         posicionesEnemigos[0] = a;
         int b = MathUtils.random(83*32, 90*32);
         posicionesEnemigos[1] = b;
-        int c = MathUtils.random(166*32,179*32);
+        int c = MathUtils.random(166*32,178*32);
         posicionesEnemigos[2] = c;
-        int d = MathUtils.random(194*32,214*32);
+        int d = MathUtils.random(194*32,217*32);
         posicionesEnemigos[3] = d;
         int e = MathUtils.random(234*32,241*32);
         posicionesEnemigos[4] = e;
@@ -198,7 +198,7 @@ public class PantallaNivelTres extends Pantalla {
     }
 
     private void crearEnemigos() {
-        texturaEnemigoUno = new Texture("Enemigo_LvL2.png");
+        texturaEnemigoUno = new Texture("Enemigos/Enemigo_1.png");
         texturaEnemigoDos = new Texture("Enemigo3.png");
         arrEnemigosUno = new Array<>();
         arrEnemigosDos = new Array<>();
