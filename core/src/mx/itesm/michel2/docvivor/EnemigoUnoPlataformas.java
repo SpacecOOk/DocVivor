@@ -29,6 +29,7 @@ public class EnemigoUnoPlataformas {
         // Crea la animación con tiempo de 0.25 segundos entre frames.
         animacion = new Animation(0.15f,texturasFrames[0][0],texturasFrames[0][1],texturasFrames[0][2], texturasFrames[0][3], texturasFrames[0][4],texturasFrames[0][5],texturasFrames[0][6],
                 texturasFrames[0][7]);
+
         // Animación infinita
         animacion.setPlayMode(Animation.PlayMode.LOOP);
         // Inicia el timer que contará tiempo para saber qué frame se dibuja
@@ -133,7 +134,8 @@ public class EnemigoUnoPlataformas {
         QUIETO_IZQUIERDA,
         MOV_DERECHA,
         MOV_IZQUIERDA,
-        INICIANDO
+        INICIANDO,
+        MURIENDO
     }
 
     public estadoMovimiento getEstadoMov() {
