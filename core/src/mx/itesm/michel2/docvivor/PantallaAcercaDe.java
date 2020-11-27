@@ -39,8 +39,6 @@ public class PantallaAcercaDe extends Pantalla {
     private Texture name_Roberto = new Texture("PantallaAcercaDe/nombre_Roberto.png");
     private Texture name_Bruno = new Texture("PantallaAcercaDe/nombre_Bruno.png");
     private Texture name_Mich = new Texture("PantallaAcercaDe/nombre_Mich.png");
-    //private Texture email = new Texture("PantallaAcercaDe/dora.jpeg");
-
 
     @Override
     public void show() {
@@ -55,7 +53,7 @@ public class PantallaAcercaDe extends Pantalla {
         TextureRegionDrawable botonRegresarMenu = new TextureRegionDrawable(new TextureRegion(texturaRegresar));
         //Aqui para el boton inverso (click)
         ImageButton btnRegresar = new ImageButton(botonRegresarMenu);
-        btnRegresar.setPosition(ANCHO/2,ALTO-btnRegresar.getHeight(), Align.center);
+        btnRegresar.setPosition((ANCHO/2)-70,ALTO-btnRegresar.getHeight(), Align.center);
         btnRegresar.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -107,10 +105,10 @@ public class PantallaAcercaDe extends Pantalla {
         batch.setProjectionMatrix(camara.combined);
         batch.begin();
         batch.draw(texturaAcerca,0,0);
-        batch.draw(Bruno,128,ALTO/6);
-        batch.draw(Diego,ANCHO*0.65f,ALTO/6);
-        batch.draw(Roberto,128,ALTO*0.6f);
-        batch.draw(Mich,ANCHO*0.65f,ALTO*0.6f);
+        batch.draw(Bruno,100,ALTO/6);
+        batch.draw(Diego,ANCHO*0.62f,ALTO/6);
+        batch.draw(Roberto,100,ALTO*0.6f);
+        batch.draw(Mich,ANCHO*0.62f,ALTO*0.6f);
         batch.draw(name_Diego,138+ANCHO*0.65f,ALTO/6);
         batch.draw(name_Mich,138 + ANCHO*0.65f,ALTO*0.6f);
         batch.draw(name_Bruno,128 + 138,ALTO/6);
