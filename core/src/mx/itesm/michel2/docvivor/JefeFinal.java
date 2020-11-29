@@ -42,6 +42,9 @@ public class JefeFinal {
                 batch.draw(region, sprite.getX(), sprite.getY());
                 break;
             case MOV_ABAJO:
+                timerAnimacion += Gdx.graphics.getDeltaTime();
+                region = (TextureRegion)animacion.getKeyFrame(timerAnimacion);
+                batch.draw(region, sprite.getX(), sprite.getY());
                 break;
         }
     }

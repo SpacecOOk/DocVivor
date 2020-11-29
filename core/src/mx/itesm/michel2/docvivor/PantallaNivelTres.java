@@ -95,12 +95,14 @@ public class PantallaNivelTres extends Pantalla {
     private Viewport vistaVictoriaHUD;
 
     //Enemigos
+    private Texture texturaEnemigoFinal;
     private Texture texturaEnemigoUno;
     private Texture texturaEnemigoDos;
     private Array<EnemigoUnoPlataformas> arrEnemigosUno;
     private Array<EnemigoDosPlataformas> arrEnemigosDos;
     private int[] posicionesEnemigos;
     private int[] posicionesEnemigosDos;
+    private JefeFinal enemigoFinal;
 
     //item - metralleta
     private Texture texturaMetralleta;
@@ -127,10 +129,17 @@ public class PantallaNivelTres extends Pantalla {
         crearEnemigos();
         crearItems();
         crearProyectilMetralleta();
+        crearEnemigoFInal();
         if(juego.efectoSonidoEstado != 1){
             crearSonidos();
         }
         Gdx.input.setInputProcessor(HUD);
+    }
+
+    private void crearEnemigoFInal() {
+        texturaEnemigoFinal = new Texture("enemigoFinal.png");
+        enemigoFinal = new JefeFinal(texturaEnemigoFinal, 100,100,224,224);
+
     }
 
     private void crearProyectilMetralleta() {
@@ -485,6 +494,7 @@ public class PantallaNivelTres extends Pantalla {
             rendererMapa.render();
             batch.begin();
             jugador.render(batch);
+            enemigoFinal.render(batch);
             dibujarEnemigos();
             dibujarItems();
             dibujarBalasMetralleta();
@@ -709,6 +719,7 @@ public class PantallaNivelTres extends Pantalla {
 
     private void actualizar() {
         rectangleJugador.setPosition(jugador.getX(),jugador.getY());
+        actualizarEnemigoFinal();
         actualizarCamara();
         actualizarProyectil();
         moverPersonaje();
@@ -718,6 +729,24 @@ public class PantallaNivelTres extends Pantalla {
         verificarColisiones();
         actualizarBalasMetralleta();
         comprobarVictoria(); //cambiar la victoria
+    }
+
+    private void actualizarEnemigoFinal() {
+        switch(enemigoFinal.getEstadoMov()){
+            case INICIANDO:
+                enemigoFinal.setEstadoMov(JefeFinal.estadoMovimiento.MOV_ARRIBA);
+                break;
+            case MOV_ARRIBA:
+                if(enemigoFinal.getY()>600){
+                    enemigoFinal.setEstadoMov(JefeFinal.estadoMovimiento.MOV_ABAJO);
+                }
+                break;
+            case MOV_ABAJO:
+                if(enemigoFinal.getY()<100){
+                    enemigoFinal.setEstadoMov(JefeFinal.estadoMovimiento.MOV_ARRIBA);
+                }
+                break;
+        }
     }
 
     private void comprobarVictoria() {
