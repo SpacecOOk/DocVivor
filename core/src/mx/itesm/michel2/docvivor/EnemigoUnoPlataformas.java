@@ -18,6 +18,7 @@ public class EnemigoUnoPlataformas {
     private Animation animacionMuerte; 
     private float timerAnimacion;   // tiempo para calcular el frame
     private int ladoQUIETO;
+    private int contadorAnimacion;
 
     //estados
     private estadoMovimiento estadoMov;
@@ -87,6 +88,7 @@ public class EnemigoUnoPlataformas {
                 timerAnimacion += Gdx.graphics.getDeltaTime();
                 // Obtiene el frame que se debe mostrar (de acuerdo al timer)
                 TextureRegion region2 = (TextureRegion)animacionMuerte.getKeyFrame(timerAnimacion);
+                contadorAnimacion++;
                 batch.draw(region2, sprite.getX(), sprite.getY());
                 break;
         }
@@ -153,5 +155,13 @@ public class EnemigoUnoPlataformas {
 
     public void setEstadoMov(estadoMovimiento estadoMov) {
         this.estadoMov = estadoMov;
+    }
+
+    public boolean acaboAnimacion() {
+        if(contadorAnimacion<6){
+            return false;
+        }else{
+            return true;
+        }
     }
 }

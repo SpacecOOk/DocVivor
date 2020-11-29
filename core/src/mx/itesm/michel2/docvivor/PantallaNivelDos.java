@@ -201,7 +201,7 @@ public class PantallaNivelDos extends Pantalla {
     }
 
     private void crearEnemigos() {
-        texturaEnemigoUno = new Texture("Enemigos/Enemigo_1.png");
+        texturaEnemigoUno = new Texture("Enemigo_LvL2.png");
         texturaEnemigoDos = new Texture("Enemigo3.png");
         arrEnemigosUno = new Array<>();
         arrEnemigosDos = new Array<>();
@@ -594,7 +594,9 @@ public class PantallaNivelDos extends Pantalla {
                                 efectoMuerteEnemigoDos.play();
                             }
                             Gdx.app.log("El enemigo esta muriendo","");
-                            arrEnemigosUno.get(j).setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.MURIENDO);
+                            //while(arrEnemigosUno.get(j).acaboAnimacion()!=true){
+                                arrEnemigosUno.get(j).setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.MURIENDO);
+                            //}
                             arrEnemigosUno.removeIndex(j);
                             arrBalasMetralleta.removeIndex(a);
                             break;
