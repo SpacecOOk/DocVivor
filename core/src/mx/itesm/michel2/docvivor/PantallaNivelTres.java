@@ -138,8 +138,7 @@ public class PantallaNivelTres extends Pantalla {
 
     private void crearEnemigoFInal() {
         texturaEnemigoFinal = new Texture("enemigoFinal.png");
-        enemigoFinal = new JefeFinal(texturaEnemigoFinal, 100,100,224,224);
-
+        enemigoFinal = new JefeFinal(texturaEnemigoFinal, 200,100,224,224);
     }
 
     private void crearProyectilMetralleta() {
@@ -584,6 +583,19 @@ public class PantallaNivelTres extends Pantalla {
                     break;
                 }
             }
+        }
+        if(proyectil != null){
+                if (proyectil.sprite.getBoundingRectangle().overlaps(enemigoFinal.getSprite().getBoundingRectangle())) {
+                    //Si hay colisión
+                    if (juego.efectoSonidoEstado != 1){
+                        efectoMuerteEnemigoDos.play();
+                    }
+                    int vidas = enemigoFinal.getVidas();
+                    vidas--;
+                    Gdx.app.log("Vidas: "+vidas,"");
+                    enemigoFinal.setVidas(vidas);
+                    proyectil = null;
+                }
         }
         //}
     }

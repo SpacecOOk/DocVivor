@@ -114,7 +114,7 @@ public class JefeFinal {
         INICIANDO,
         MURIENDO
     }
-
+    public Sprite getSprite(){return sprite;}
     //ACCESORES DE POSICION
     public float getY(){return sprite.getY();}
     public float getX(){return sprite.getX();}
