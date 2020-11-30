@@ -105,6 +105,7 @@ public class PantallaNivelTres extends Pantalla {
     private int[] posicionesEnemigos;
     private int[] posicionesEnemigosDos;
     private JefeFinal enemigoFinal;
+    private Rectangle rectangleEnemigo;
 
     //Item
     private Texture texturaItemCorazon;
@@ -139,6 +140,7 @@ public class PantallaNivelTres extends Pantalla {
     private void crearEnemigoFInal() {
         texturaEnemigoFinal = new Texture("enemigoFinal.png");
         enemigoFinal = new JefeFinal(texturaEnemigoFinal, 200,100,224,224);
+        rectangleEnemigo = enemigoFinal.getSprite().getBoundingRectangle().setSize(enemigoFinal.getSprite().getWidth()*.75f,enemigoFinal.getSprite().getHeight()*.75f);
     }
 
     private void crearPosicionesDos() {
@@ -509,6 +511,7 @@ public class PantallaNivelTres extends Pantalla {
         verificarCaida();
         verificarColisionEnemigos();
         verificarColisionesEnemigosDos();
+        verificarColisionEnemigoFinal();
         //
         // *** COLISION ITEMS ***
         /*
@@ -568,6 +571,14 @@ public class PantallaNivelTres extends Pantalla {
                 }
         }
         //}
+    }
+
+    private void verificarColisionEnemigoFinal() {
+        if (proyectil != null){
+            if(proyectil.sprite.getBoundingRectangle().overlaps(rectangleEnemigo)){
+                enemigoFinal.setVidas(enemigoFinal.getVidas()-1);
+            }
+        }
     }
 
     private void verificarColisionesEnemigosDos() {
@@ -675,7 +686,7 @@ public class PantallaNivelTres extends Pantalla {
     }
 
     private void comprobarVictoria() {
-        if(estadoJuego == PantallaNivelTres.EstadoJuego.JUGANDO && jugador.getX()>=899*32-ANCHO/2){
+        if(estadoJuego == EstadoJuego.JUGANDO && enemigoFinal.getVidas()-1 == 0){
             jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
             jugador.getSprite().setY(-100); //Lo manda a lo alto
             estadoJuego = PantallaNivelTres.EstadoJuego.VICTORIA;
@@ -1249,26 +1260,11 @@ public class PantallaNivelTres extends Pantalla {
         public EscenaVictoria(Viewport vista, SpriteBatch batch) {
             super(vista, batch);
 
-            Texture texturaFondoVictoria = new Texture("Fondos/Victory.png");
+            Texture texturaFondoVictoria = new Texture("Fondos/Win.png");
             Image imgFondoVictoria = new Image(texturaFondoVictoria);
             imgFondoVictoria.setPosition(ANCHO / 2 - texturaFondoVictoria.getWidth() / 2,
                     ALTO / 2 - texturaFondoVictoria.getHeight() / 2);
             this.addActor(imgFondoVictoria);
-
-            Texture texturaBtnSeguir = new Texture("Botones/btn_jugar.png");
-            TextureRegionDrawable botonSeguir = new TextureRegionDrawable(new TextureRegion(texturaBtnSeguir));
-            //Aqui para el boton inverso (click)
-            ImageButton btnSeguir = new ImageButton(botonSeguir);
-            btnSeguir.setPosition(ANCHO * 0.35f, ALTO * 0.2f, Align.center);
-            btnSeguir.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    super.clicked(event, x, y);
-                    //Para pasar al siguiente nivel
-                    juego.setScreen(new PantallaNivelTres(juego));
-                }
-            });
-            this.addActor(btnSeguir);
 
             Texture texturaBtnNiveles = new Texture("Botones/btn_Exit.png");
             TextureRegionDrawable botonNiveles = new TextureRegionDrawable(new TextureRegion(texturaBtnNiveles));
