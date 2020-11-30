@@ -32,6 +32,7 @@ public class JefeFinal {
         animacion.setPlayMode(Animation.PlayMode.LOOP);
         timerAnimacion = 0;
         sprite = new Sprite(texutrasFrames[0][0]);
+        sprite.setPosition(x,y);
         estadoMov = estadoMovimiento.INICIANDO;
         vidas = 15;
     }
@@ -40,7 +41,7 @@ public class JefeFinal {
         actualizar();
         switch(estadoMov){
             case QUIETO:
-                sprite.draw(batch);
+                //sprite.draw(batch);
                 break;
             case INICIANDO:
             case MOV_ARRIBA:

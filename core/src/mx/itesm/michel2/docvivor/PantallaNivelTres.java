@@ -139,7 +139,7 @@ public class PantallaNivelTres extends Pantalla {
 
     private void crearEnemigoFInal() {
         texturaEnemigoFinal = new Texture("enemigoFinal.png");
-        enemigoFinal = new JefeFinal(texturaEnemigoFinal, 200,100,224,224);
+        enemigoFinal = new JefeFinal(texturaEnemigoFinal, 510*32,600,224,224);
         rectangleEnemigo = enemigoFinal.getSprite().getBoundingRectangle().setSize(enemigoFinal.getSprite().getWidth()*.75f,enemigoFinal.getSprite().getHeight()*.75f);
     }
 
@@ -182,14 +182,14 @@ public class PantallaNivelTres extends Pantalla {
     }
 
     private void crearEnemigos() {
-        texturaEnemigoUno = new Texture("Enemigos/Enemigo_1.png");
+        texturaEnemigoUno = new Texture("Enemigo_LvL2.png");
         texturaEnemigoDos = new Texture("Enemigo3.png");
         arrEnemigosUno = new Array<>();
         arrEnemigosDos = new Array<>();
         for (int i = 0; i < 10; i++) {
             EnemigoUnoPlataformas enemigo = new EnemigoUnoPlataformas(texturaEnemigoUno);
             int x = MathUtils.random(0,posicionesEnemigos.length-1);
-            enemigo.getSprite().setPosition(posicionesEnemigos[x],16*32);
+            enemigo.getSprite().setPosition(posicionesEnemigos[x],18*32);
             arrEnemigosUno.add(enemigo);
             crearPosiciones();
         }
@@ -242,7 +242,7 @@ public class PantallaNivelTres extends Pantalla {
     private void crearPersonaje() {
         texturaPersonaje = new Texture("Level2/AssetsPersonajes/Doctor2_moviendose.png");
         jugador = new JugadorPlataformas(texturaPersonaje,56,55);
-        jugador.getSprite().setPosition(100,300);
+        jugador.getSprite().setPosition(490*32,600);
         rectangleJugador = jugador.getSprite().getBoundingRectangle().setSize(texturaPersonaje.getWidth()*.8f,texturaPersonaje.getHeight()*.8f);
 
     }
@@ -392,8 +392,6 @@ public class PantallaNivelTres extends Pantalla {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 //Salta a la izquierda/derecha
-                Gdx.app.log("BOTON SALTAR "+jugador.getEstadoMovimiento(),"");
-                Gdx.app.log("BOTON SALTAR "+jugador.getEstadoSalto(),"");
                 jugador.saltar();
                 if (juego.efectoSonidoEstado != 1) {
                     efectoSalto.play();
@@ -462,7 +460,9 @@ public class PantallaNivelTres extends Pantalla {
             rendererMapa.render();
             batch.begin();
             jugador.render(batch);
-            enemigoFinal.render(batch);
+            if(jugador.getX() >=508*32) {
+                enemigoFinal.render(batch);
+            }
             dibujarEnemigos();
             dibujarBalasMetralleta();
             if (proyectil != null) {
@@ -511,7 +511,6 @@ public class PantallaNivelTres extends Pantalla {
         verificarCaida();
         verificarColisionEnemigos();
         verificarColisionesEnemigosDos();
-        verificarColisionEnemigoFinal();
         //
         // *** COLISION ITEMS ***
         /*
@@ -558,14 +557,13 @@ public class PantallaNivelTres extends Pantalla {
             }
         }
         if(proyectil != null){
-                if (proyectil.sprite.getBoundingRectangle().overlaps(enemigoFinal.getSprite().getBoundingRectangle())) {
+                if (proyectil.sprite.getBoundingRectangle().overlaps(rectangleEnemigo)) {
                     //Si hay colisión
                     if (juego.efectoSonidoEstado != 1){
                         efectoMuerteEnemigoDos.play();
                     }
                     int vidas = enemigoFinal.getVidas();
                     vidas--;
-                    Gdx.app.log("Vidas: "+vidas,"");
                     enemigoFinal.setVidas(vidas);
                     proyectil = null;
                 }
@@ -579,14 +577,6 @@ public class PantallaNivelTres extends Pantalla {
             }
         }
         //}
-    }
-
-    private void verificarColisionEnemigoFinal() {
-        if (proyectil != null){
-            if(proyectil.sprite.getBoundingRectangle().overlaps(rectangleEnemigo)){
-                enemigoFinal.setVidas(enemigoFinal.getVidas()-1);
-            }
-        }
     }
 
     private void verificarColisionesEnemigosDos() {
@@ -682,7 +672,7 @@ public class PantallaNivelTres extends Pantalla {
                 enemigoFinal.setEstadoMov(JefeFinal.estadoMovimiento.MOV_ARRIBA);
                 break;
             case MOV_ARRIBA:
-                if(enemigoFinal.getY()>600){
+                if(enemigoFinal.getY()>ALTO-texturaEnemigoFinal.getHeight()/2){
                     enemigoFinal.setEstadoMov(JefeFinal.estadoMovimiento.MOV_ABAJO);
                 }
                 break;
@@ -730,7 +720,7 @@ public class PantallaNivelTres extends Pantalla {
                 case MOV_DERECHA:
                     //********REVISAR CONDICIONES MOVIMIENTOS****************
                     probarChoqueParedesEnemigosDos();// Se mueve horizontal
-                    if(arrEnemigosDos.get(i).getX()>599*32){
+                    if(arrEnemigosDos.get(i).getX()>559*32){
                         arrEnemigosDos.removeIndex(i);
                     }
                     /*if (enemigo.getX() + ANCHO/3 > jugador.getX() && enemigo.getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_DERECHA){
@@ -876,7 +866,7 @@ public class PantallaNivelTres extends Pantalla {
                 case MOV_DERECHA:
                     //********REVISAR CONDICIONES MOVIMIENTOS****************
                     probarChoqueParedesEnemigos();// Se mueve horizontal
-                    if(arrEnemigosUno.get(i).getX()>599*32){
+                    if(arrEnemigosUno.get(i).getX()>559*32){
                         arrEnemigosUno.removeIndex(i);
                     }
                     /*if (enemigo.getX() + ANCHO/3 > jugador.getX() && enemigo.getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_DERECHA){
@@ -1135,8 +1125,8 @@ public class PantallaNivelTres extends Pantalla {
         float yCamara = camara.position.y;
         if (jugador.getX() < ANCHO/2){
             xCamara = ANCHO/2;
-        }else if (jugador.getX() > 899*32){ //checar la condicion del mapa
-            xCamara = ANCHO/2; //checar para llegar al limite del mapa
+        }else if (jugador.getX()+ANCHO/2 > 559*32){ //checar la condicion del mapa
+            xCamara = ANCHO_MAPA - ANCHO/2; //checar para llegar al limite del mapa
         }else {
             xCamara = jugador.getX();
         }
@@ -1234,7 +1224,7 @@ public class PantallaNivelTres extends Pantalla {
             TextureRegionDrawable botonRetry = new TextureRegionDrawable(new TextureRegion(texturaBtnRetry));
             //Aqui para el boton inverso (click)
             ImageButton btnRetry = new ImageButton(botonRetry);
-            btnRetry.setPosition(ANCHO*0.35f, ALTO*0.2f, Align.center);
+            btnRetry.setPosition(ANCHO*0.35f, ALTO*0.3f, Align.center);
             btnRetry.addListener(new ClickListener(){
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
