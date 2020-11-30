@@ -472,6 +472,7 @@ public class PantallaNivelTres extends Pantalla {
                 proyectilJefeFinal.render(batch);
             }
             batch.end();
+            //Quitar comentario despues
         }
 
         //************ HUD ***************
