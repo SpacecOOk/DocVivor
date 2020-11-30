@@ -61,6 +61,8 @@ public class PantallaNivelTres extends Pantalla {
     //Proyectil
     private Texture texturaProyectilD;
     private Texture texturaProyectilI;
+    private Texture texturaProyectilEnemigo;
+    private Proyectil  proyectilJefeFinal;
     private Proyectil proyectil;
     private int orientacion;
     private Texture texturaBalaMetralleta;
@@ -228,6 +230,7 @@ public class PantallaNivelTres extends Pantalla {
     }
 
     private void crearProyectil() {
+        texturaProyectilEnemigo = new Texture("Balas/Bala_azul.png");
         texturaProyectilD = new Texture("Balas/Bala_Jeringa_D.png");
         texturaProyectilI = new Texture("Balas/Bala_Jeringa_I.png");
         texturaBalaMetralleta = new Texture("Balas/Bala_azul.png");
@@ -446,6 +449,10 @@ public class PantallaNivelTres extends Pantalla {
     @Override
     public void render(float delta) {
         if(estadoJuego == PantallaNivelTres.EstadoJuego.JUGANDO) {
+            int numAleatorio = MathUtils.random(0,10);
+            if(numAleatorio>5 && proyectilJefeFinal==null){
+                generarProyectil();
+            }
             actualizar();
             borrarPantalla(0, 0, 0.5f);
             batch.setProjectionMatrix(camara.combined);
@@ -458,6 +465,9 @@ public class PantallaNivelTres extends Pantalla {
             dibujarBalasMetralleta();
             if (proyectil != null) {
                 proyectil.render(batch);
+            }
+            if (proyectilJefeFinal != null) {
+                proyectilJefeFinal.render(batch);
             }
             batch.end();
         }
@@ -483,6 +493,10 @@ public class PantallaNivelTres extends Pantalla {
         if (estadoJuego == EstadoJuego.VICTORIA) {
             escenaVictoria.draw();
         }
+    }
+
+    private void generarProyectil() {
+        proyectilJefeFinal = new Proyectil(texturaProyectilEnemigo,enemigoFinal.getX()+50,enemigoFinal.getY()+50);
     }
 
     private void dibujarBalasMetralleta() {
@@ -1066,6 +1080,31 @@ public class PantallaNivelTres extends Pantalla {
             }
             if (celdaIzquierda != null || celdaIzquierdaUno != null){
                 proyectil = null;
+            }
+
+        }
+        if(proyectilJefeFinal != null) {
+            proyectilJefeFinal.mover2();
+            float px = proyectilJefeFinal.sprite.getX();    // Posición actual
+            // Posición después de actualizar
+            px = orientacion==1? px+proyectilJefeFinal.VELOCIDAD_X:
+                    px-proyectilJefeFinal.VELOCIDAD_X;
+            int celdaX = (int) (proyectilJefeFinal.sprite.getX() / TAM_CELDA);
+            int celdaY = (int)enemigoFinal.getY()/TAM_CELDA;
+            TiledMapTileLayer capaPlataforma = (TiledMapTileLayer) mapa.getLayers().get("Plataformas");
+            TiledMapTileLayer.Cell celdaDerecha = capaPlataforma.getCell(celdaX+1, celdaY);
+            TiledMapTileLayer.Cell celdaDerechaUno = capaPlataforma.getCell(celdaX+1, celdaY+1);
+            TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX, celdaY); //verificar el signo por la orientacion
+            TiledMapTileLayer.Cell celdaIzquierdaUno = capaPlataforma.getCell(celdaX, celdaY+1);
+
+            if (proyectilJefeFinal.sprite.getX() > jugador.getX() + ANCHO/2 ||proyectilJefeFinal.sprite.getX() < jugador.getX() - ANCHO/2) {
+                proyectilJefeFinal = null;
+            }
+            if(celdaDerecha != null || celdaDerechaUno != null){
+                proyectilJefeFinal = null;
+            }
+            if (celdaIzquierda != null || celdaIzquierdaUno != null){
+                proyectilJefeFinal = null;
             }
 
         }
