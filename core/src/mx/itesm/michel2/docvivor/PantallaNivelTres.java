@@ -655,6 +655,7 @@ public class PantallaNivelTres extends Pantalla {
 
     private void actualizar() {
         rectangleJugador.setPosition(jugador.getX(),jugador.getY());
+        rectangleEnemigo.setPosition(enemigoFinal.getX(), enemigoFinal.getY());
         actualizarEnemigoFinal();
         actualizarCamara();
         actualizarProyectil();
@@ -1240,7 +1241,7 @@ public class PantallaNivelTres extends Pantalla {
             TextureRegionDrawable botonNiveles = new TextureRegionDrawable(new TextureRegion(texturaBtnNiveles));
             //Aqui para el boton inverso (click)
             ImageButton btnNiveles = new ImageButton(botonNiveles);
-            btnNiveles.setPosition(ANCHO*0.65f, ALTO*0.2f, Align.center);
+            btnNiveles.setPosition(ANCHO*0.65f, ALTO*0.3f, Align.center);
             btnNiveles.addListener(new ClickListener(){
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
@@ -1269,7 +1270,7 @@ public class PantallaNivelTres extends Pantalla {
             TextureRegionDrawable botonNiveles = new TextureRegionDrawable(new TextureRegion(texturaBtnNiveles));
             //Aqui para el boton inverso (click)
             ImageButton btnNiveles = new ImageButton(botonNiveles);
-            btnNiveles.setPosition(ANCHO * 0.65f, ALTO * 0.2f, Align.center);
+            btnNiveles.setPosition(ANCHO /2, ALTO * 0.2f, Align.center);
             btnNiveles.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
