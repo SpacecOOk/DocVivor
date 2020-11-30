@@ -197,7 +197,7 @@ public class PantallaNivelDos extends Pantalla {
     private void crearItems() {
         //SuperTraje
         texturaMetralleta = new Texture("Items/metralleta.png");
-        metralleta = new Item(texturaMetralleta,700,100,139,56);
+        metralleta = new Item(texturaMetralleta,14816,928,119,56);
     }
 
     private void crearEnemigos() {
