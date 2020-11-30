@@ -655,6 +655,7 @@ public class PantallaNivelTres extends Pantalla {
 
     private void actualizar() {
         rectangleJugador.setPosition(jugador.getX(),jugador.getY());
+        //
         rectangleEnemigo.setPosition(enemigoFinal.getX(), enemigoFinal.getY());
         actualizarEnemigoFinal();
         actualizarCamara();
