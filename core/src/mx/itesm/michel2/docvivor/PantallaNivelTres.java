@@ -139,7 +139,7 @@ public class PantallaNivelTres extends Pantalla {
 
     private void crearEnemigoFInal() {
         texturaEnemigoFinal = new Texture("enemigoFinal.png");
-        enemigoFinal = new JefeFinal(texturaEnemigoFinal, 200,100,224,224);
+        enemigoFinal = new JefeFinal(texturaEnemigoFinal, 55*32,20*32,224,224);
         rectangleEnemigo = enemigoFinal.getSprite().getBoundingRectangle().setSize(enemigoFinal.getSprite().getWidth()*.75f,enemigoFinal.getSprite().getHeight()*.75f);
     }
 
@@ -462,7 +462,9 @@ public class PantallaNivelTres extends Pantalla {
             rendererMapa.render();
             batch.begin();
             jugador.render(batch);
-            enemigoFinal.render(batch);
+            if(jugador.getX() >=  510*32) {
+                enemigoFinal.render(batch);
+            }
             dibujarEnemigos();
             dibujarBalasMetralleta();
             if (proyectil != null) {
@@ -511,7 +513,6 @@ public class PantallaNivelTres extends Pantalla {
         verificarCaida();
         verificarColisionEnemigos();
         verificarColisionesEnemigosDos();
-        verificarColisionEnemigoFinal();
         //
         // *** COLISION ITEMS ***
         /*
@@ -578,17 +579,7 @@ public class PantallaNivelTres extends Pantalla {
                 proyectilJefeFinal = null;
             }
         }
-        //}
     }
-
-    private void verificarColisionEnemigoFinal() {
-        if (proyectil != null){
-            if(proyectil.sprite.getBoundingRectangle().overlaps(rectangleEnemigo)){
-                enemigoFinal.setVidas(enemigoFinal.getVidas()-1);
-            }
-        }
-    }
-
     private void verificarColisionesEnemigosDos() {
         for (int i = arrEnemigosDos.size-1; i >=0; i--) {
             EnemigoDosPlataformas enemigo = arrEnemigosDos.get(i);
@@ -681,7 +672,7 @@ public class PantallaNivelTres extends Pantalla {
                 enemigoFinal.setEstadoMov(JefeFinal.estadoMovimiento.MOV_ARRIBA);
                 break;
             case MOV_ARRIBA:
-                if(enemigoFinal.getY()>600){
+                if(enemigoFinal.getY()>ALTO-enemigoFinal.getSprite().getHeight()/2){
                     enemigoFinal.setEstadoMov(JefeFinal.estadoMovimiento.MOV_ABAJO);
                 }
                 break;
