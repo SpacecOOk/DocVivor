@@ -498,7 +498,7 @@ public class PantallaNivelTres extends Pantalla {
     }
 
     private void generarProyectil() {
-        proyectilJefeFinal = new Proyectil(texturaProyectilEnemigo,enemigoFinal.getX()+50,enemigoFinal.getY()+50);
+        proyectilJefeFinal = new Proyectil(texturaProyectilEnemigo,enemigoFinal.getX()+50,enemigoFinal.getY()+100);
     }
 
     private void dibujarBalasMetralleta() {
@@ -569,6 +569,14 @@ public class PantallaNivelTres extends Pantalla {
                     enemigoFinal.setVidas(vidas);
                     proyectil = null;
                 }
+        }
+        if(proyectilJefeFinal != null){
+            if(proyectilJefeFinal.sprite.getBoundingRectangle().overlaps(jugador.getSprite().getBoundingRectangle())){
+                int vidasJugador = jugador.getVidas();
+                vidasJugador--;
+                jugador.setVidas(vidasJugador);
+                proyectilJefeFinal = null;
+            }
         }
         //}
     }
