@@ -104,9 +104,9 @@ public class PantallaNivelTres extends Pantalla {
     private int[] posicionesEnemigosDos;
     private JefeFinal enemigoFinal;
 
-    //item - metralleta
-    private Texture texturaMetralleta;
-    private Item metralleta;
+    //Item
+    private Texture texturaItemCorazon;
+    private Array<Item> arrItmes;
 
     public PantallaNivelTres(Juego juego) {
         this.juego = juego;
@@ -127,8 +127,6 @@ public class PantallaNivelTres extends Pantalla {
         crearPosiciones();
         crearPosicionesDos();
         crearEnemigos();
-        crearItems();
-        crearProyectilMetralleta();
         crearEnemigoFInal();
         if(juego.efectoSonidoEstado != 1){
             crearSonidos();
@@ -139,25 +137,6 @@ public class PantallaNivelTres extends Pantalla {
     private void crearEnemigoFInal() {
         texturaEnemigoFinal = new Texture("enemigoFinal.png");
         enemigoFinal = new JefeFinal(texturaEnemigoFinal, 200,100,224,224);
-    }
-
-    private void crearProyectilMetralleta() {
-        if (jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.MOV_DERECHA || jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.QUIETO) {
-            if(contadorMetralleta > 0){
-                Proyectil proyectilMetralleta = new Proyectil(texturaBalaMetralleta,jugador.getX() +30,jugador.getY()+jugador.getSprite().getHeight()/3);
-                proyectilMetralleta.setOrientacion2(1);
-                arrBalasMetralleta.add(proyectilMetralleta);
-                contadorMetralleta--;
-            }
-        } else if (jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.MOV_IZQUIERDA || jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.QUIETO_IZQUIERDA) {
-            if(contadorMetralleta > 0){
-                Proyectil proyectilMetralleta = new Proyectil(texturaBalaMetralleta,jugador.getX() -30,jugador.getY()+jugador.getSprite().getHeight()/3);
-                proyectilMetralleta.setOrientacion2(0);
-                arrBalasMetralleta.add(proyectilMetralleta);
-                contadorMetralleta--;
-            }
-        }
-        //FALTA CREAR LA MUSICA DEL PROYECTIL
     }
 
     private void crearPosicionesDos() {
@@ -196,13 +175,6 @@ public class PantallaNivelTres extends Pantalla {
         posicionesEnemigos[8] = i;
         int j = MathUtils.random(495*32,552*32); //depende por la posicion del jefe final
         posicionesEnemigos[9] = j;
-
-    }
-
-    private void crearItems() {
-        //SuperTraje
-        texturaMetralleta = new Texture("Items/metralleta.png");
-        metralleta = new Item(texturaMetralleta,700,100,139,56);
     }
 
     private void crearEnemigos() {
@@ -387,7 +359,6 @@ public class PantallaNivelTres extends Pantalla {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                if (jugador.getSprite().getTexture() == texturaPersonaje) {
                     if (proyectil == null) { //si no existe la creo, sino no la crea
                         if (jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.MOV_DERECHA || jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.QUIETO) {
                             proyectil = new Proyectil(texturaProyectilD, jugador.getX() + jugador.getSprite().getWidth() / 2,
@@ -399,18 +370,7 @@ public class PantallaNivelTres extends Pantalla {
                             orientacion = 0;
                         }
                     }
-                    if (juego.efectoSonidoEstado != 1) {
-                        efectoDisparo.play();
-                    }
-                }else if(contadorMetralleta>0 && jugador.getSprite().getTexture() == texturaJugadorMetralleta){
-                    crearProyectilMetralleta();
-                }else{
-                    int x2 = (int) jugador.getX();
-                    int y2 =(int) jugador.getY();
-                    jugador = new JugadorPlataformas(texturaPersonaje,56,55);
-                    jugador.getSprite().setPosition(x2,y2);
                 }
-            }//Jeringa
         });
 
         //Le movi aqui
@@ -495,9 +455,7 @@ public class PantallaNivelTres extends Pantalla {
             jugador.render(batch);
             enemigoFinal.render(batch);
             dibujarEnemigos();
-            dibujarItems();
             dibujarBalasMetralleta();
-            metralleta.render(batch);
             if (proyectil != null) {
                 proyectil.render(batch);
             }
@@ -537,8 +495,6 @@ public class PantallaNivelTres extends Pantalla {
         verificarCaida();
         verificarColisionEnemigos();
         verificarColisionesEnemigosDos();
-        verificarColisionItems();
-        verificarColisionMetralleta();
         //
         // *** COLISION ITEMS ***
         /*
@@ -600,42 +556,6 @@ public class PantallaNivelTres extends Pantalla {
         //}
     }
 
-    private void verificarColisionMetralleta() {
-        for (int j = arrEnemigosUno.size-1; j >= 0 ; j--) {
-            for(int a = arrBalasMetralleta.size-1; a >= 0 ; a--) {
-                if(arrBalasMetralleta != null) {
-                    EnemigoUnoPlataformas enemigo = arrEnemigosUno.get(j);
-                    if (arrBalasMetralleta.get(a).sprite.getBoundingRectangle().overlaps(enemigo.getSprite().getBoundingRectangle())) {
-                        //Si hay colisión
-                        if (juego.efectoSonidoEstado != 1) {
-                            efectoMuerteEnemigoDos.play();
-                        }
-                        arrEnemigosUno.removeIndex(j);
-                        arrBalasMetralleta.removeIndex(a);
-                        break;
-                    }
-                }
-            }
-        }
-        //ENMIGOS 2
-        for (int j = arrEnemigosDos.size-1; j >= 0 ; j--) {
-            for(int a = arrBalasMetralleta.size-1; a >= 0 ; a--) {
-                if(arrBalasMetralleta != null) {
-                    EnemigoDosPlataformas enemigo = arrEnemigosDos.get(j);
-                    if (arrBalasMetralleta.get(a).sprite.getBoundingRectangle().overlaps(enemigo.getSprite().getBoundingRectangle())) {
-                        //Si hay colisión
-                        if (juego.efectoSonidoEstado != 1) {
-                            efectoMuerteEnemigoDos.play();
-                        }
-                        arrEnemigosDos.removeIndex(j);
-                        arrBalasMetralleta.removeIndex(a);
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
     private void verificarColisionesEnemigosDos() {
         for (int i = arrEnemigosDos.size-1; i >=0; i--) {
             EnemigoDosPlataformas enemigo = arrEnemigosDos.get(i);
@@ -681,21 +601,6 @@ public class PantallaNivelTres extends Pantalla {
         }
     }
 
-    private void verificarColisionItems() {
-        if (metralleta.sprite.getBoundingRectangle().overlaps(jugador.getSprite().getBoundingRectangle())) {
-            if (juego.efectoSonidoEstado != 1) {
-                efectoPowerUp.play();
-            }
-            //estas lineas no funcionan bien
-            float x = jugador.getX();
-            float y = jugador.getY();
-            metralleta.sprite.setY(ALTO+100);
-            jugador = new JugadorPlataformas(texturaJugadorMetralleta,64,55);
-            jugador.getSprite().setPosition(x,y);
-
-        }
-    }
-
     private void verificarCaida() {
         if(jugador.getY() < 5 && estadoJuego!= PantallaNivelTres.EstadoJuego.DERROTA){
             if (juego.efectoSonidoEstado != 1){
@@ -708,11 +613,6 @@ public class PantallaNivelTres extends Pantalla {
             escenaDerrota = new PantallaNivelTres.EscenaDerrota(vistaDerrotaHUD,batch);
             Gdx.input.setInputProcessor(escenaDerrota);
         }
-    }
-
-    private void dibujarItems() {
-        //SuperTraje
-        metralleta.render(batch);
     }
 
     private void dibujarEnemigos() {
@@ -739,7 +639,6 @@ public class PantallaNivelTres extends Pantalla {
         moverEnemigoDos();
         actualizarVidas();
         verificarColisiones();
-        actualizarBalasMetralleta();
         comprobarVictoria(); //cambiar la victoria
     }
 
@@ -754,7 +653,7 @@ public class PantallaNivelTres extends Pantalla {
                 }
                 break;
             case MOV_ABAJO:
-                if(enemigoFinal.getY()<100){
+                if(enemigoFinal.getY()<32*5){
                     enemigoFinal.setEstadoMov(JefeFinal.estadoMovimiento.MOV_ARRIBA);
                 }
                 break;
@@ -770,35 +669,6 @@ public class PantallaNivelTres extends Pantalla {
             Gdx.input.setInputProcessor(escenaVictoria);
         }
     }
-
-    private void actualizarBalasMetralleta() {
-        for (int i = arrBalasMetralleta.size-1; i >= 0; i--) {
-            arrBalasMetralleta.get(i).mover2();
-            float px = arrBalasMetralleta.get(i).sprite.getX();    // Posición actual
-            // Posición después de actualizar
-                /*px = orientacion==1? px+proyectil.VELOCIDAD_X:
-                        px-proyectil.VELOCIDAD_X;*/
-            int celdaX = (int) (arrBalasMetralleta.get(i).sprite.getX() / TAM_CELDA);
-            int celdaY = (int)jugador.getY()/TAM_CELDA;
-            TiledMapTileLayer capaPlataforma = (TiledMapTileLayer) mapa.getLayers().get("Plataformas");
-            TiledMapTileLayer.Cell celdaDerecha = capaPlataforma.getCell(celdaX+1, celdaY);
-            TiledMapTileLayer.Cell celdaDerechaUno = capaPlataforma.getCell(celdaX+1, celdaY+1);
-            TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX, celdaY); //verificar el signo por la orientacion
-            TiledMapTileLayer.Cell celdaIzquierdaUno = capaPlataforma.getCell(celdaX, celdaY+1);
-
-            if (arrBalasMetralleta.get(i).sprite.getX() > jugador.getX() + ANCHO/2 ||arrBalasMetralleta.get(i).sprite.getX() < jugador.getX() - ANCHO/2) {
-                arrBalasMetralleta.removeIndex(i);
-            }
-            if(celdaDerecha != null || celdaDerechaUno != null){
-                arrBalasMetralleta.removeIndex(i);
-            }
-            if (celdaIzquierda != null || celdaIzquierdaUno != null){
-                arrBalasMetralleta.removeIndex(i);
-            }
-        }
-    }
-
-
 
     private void moverEnemigoDos() {
         for (int i = arrEnemigosDos.size-1; i >= 0; i--) {
