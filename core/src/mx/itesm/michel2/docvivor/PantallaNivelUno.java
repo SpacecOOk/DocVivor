@@ -470,6 +470,7 @@ public class PantallaNivelUno extends Pantalla {
             int x = (int)jugador.sprite.getX();
             traje.sprite.setY(ALTO);
             jugador = new Jugador(texturaPersonajeTraje,x,133);
+            rectanglePersonaje.setPosition(jugador.sprite.getX(),jugador.sprite.getY());
             jugador.setVidas(4);
         }
     }

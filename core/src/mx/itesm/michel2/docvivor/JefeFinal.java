@@ -6,9 +6,11 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 
 public class JefeFinal {
     public static final float VELOCIDAD_Y = 4;
+    public static final float VELOCIDAD_X = 4;
     private Sprite sprite;
 
     //ANIMACION
@@ -18,15 +20,20 @@ public class JefeFinal {
     //estados
     private estadoMovimiento estadoMov;
 
+    //vidas
+    private int vidas;
+
 
     public JefeFinal(Texture textura, float x, float y, int width, int height){
         TextureRegion texturaCompleta = new TextureRegion(textura);
         TextureRegion[][] texutrasFrames = texturaCompleta.split(width,height);
-        animacion = new Animation(0.15f, texutrasFrames[0][0]);
+        animacion = new Animation(0.15f, texutrasFrames[0][0],texutrasFrames[0][1],texutrasFrames[0][2],texutrasFrames[0][3],
+                texutrasFrames[0][4],texutrasFrames[0][5],texutrasFrames[0][6]);
         animacion.setPlayMode(Animation.PlayMode.LOOP);
         timerAnimacion = 0;
         sprite = new Sprite(texutrasFrames[0][0]);
         estadoMov = estadoMovimiento.INICIANDO;
+        vidas = 15;
     }
     //RENDER Y ACTUALIZAR
     public void render(SpriteBatch batch){
@@ -49,21 +56,46 @@ public class JefeFinal {
         }
     }
 
-    private void actualizar() { actualizarMovimientoHorizontal();}
+    private void actualizar() {
+        actualizarMovimientoVertical();
+    }
 
-    private void actualizarMovimientoHorizontal() {
+    private void actualizarMovimientoVertical() {
         float nuevaY = sprite.getY();
+        int random = MathUtils.random(0,10);
         switch (estadoMov){
             case MOV_ABAJO:
                 nuevaY -= VELOCIDAD_Y;
                 sprite.setY(nuevaY);
+                if(random >= 5){
+                    moverDerecha();
+                }else{
+                    moverIzquierda();
+                }
                 break;
             case MOV_ARRIBA:
                 nuevaY += VELOCIDAD_Y;
                 sprite.setY(nuevaY);
+                if(random >= 5){
+                    moverDerecha();
+                }else{
+                    moverIzquierda();
+                }
                 break;
 
         }
+    }
+
+    private void moverDerecha(){
+        float nuevaX = sprite.getX();
+        nuevaX += VELOCIDAD_X;
+        sprite.setX(nuevaX);
+    }
+
+    private void moverIzquierda(){
+        float nuevaX = sprite.getX();
+        nuevaX -= VELOCIDAD_X;
+        sprite.setX(nuevaX);
     }
 
     //ESTADOS
@@ -82,8 +114,17 @@ public class JefeFinal {
         INICIANDO,
         MURIENDO
     }
+
     //ACCESORES DE POSICION
     public float getY(){return sprite.getY();}
     public float getX(){return sprite.getX();}
     public void setPosition(float x,int y){sprite.setPosition(x,y);}
+
+    public int getVidas() {
+        return vidas;
+    }
+
+    public void setVidas(int vidas) {
+        this.vidas = vidas;
+    }
 }
