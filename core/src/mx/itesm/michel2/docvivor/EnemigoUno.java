@@ -34,8 +34,8 @@ public class EnemigoUno extends Objeto {
         sprite.setPosition(x, y);
 
         //Creamos la animación
-        TextureRegion[] arrFrames = {texturasFrames[0][0],texturasFrames[0][2], texturasFrames[0][3], texturasFrames[0][4],texturasFrames[0][5],texturasFrames[0][6],
-                texturasFrames[0][7]};
+        TextureRegion[] arrFrames = {texturasFrames[0][0],texturasFrames[0][1], texturasFrames[0][2], texturasFrames[0][3],texturasFrames[0][4],texturasFrames[0][5],
+                texturasFrames[0][6]};
         animacion = new Animation<TextureRegion>(0.15f, arrFrames);
         animacion.setPlayMode(Animation.PlayMode.LOOP);
         timerAnimacion = 0;

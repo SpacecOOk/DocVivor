@@ -438,6 +438,7 @@ public class PantallaNivelUno extends Pantalla {
     }
 
     private void actualizar() {
+        rectanglePersonaje.setPosition(jugador.sprite.getX(),jugador.sprite.getY());
         actualizarCamara();
         actualizarEnemigosDerecha();
         actualizarEnemigosIzquierda();
