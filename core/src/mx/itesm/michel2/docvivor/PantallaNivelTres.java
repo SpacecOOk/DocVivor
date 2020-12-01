@@ -1062,13 +1062,14 @@ public class PantallaNivelTres extends Pantalla {
             TiledMapTileLayer capaPlataforma = (TiledMapTileLayer) mapa.getLayers().get("Plataformas");
             TiledMapTileLayer.Cell celdaDerecha = capaPlataforma.getCell(celdaX+1, celdaY+1);
             TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX, celdaY+1); //verificar el signo por la orientacion
+            TiledMapTileLayer.Cell celdaIzquierdaAbajo = capaPlataforma.getCell(celdaX,celdaY);
             if (proyectilJefeFinal.sprite.getX() <= 491*32 ) {
                 proyectilJefeFinal = null;
             }
             if(celdaDerecha != null ){
                 proyectilJefeFinal = null;
             }
-            if (celdaIzquierda != null ){
+            if (celdaIzquierda != null || celdaIzquierdaAbajo != null ){
                 proyectilJefeFinal = null;
             }
 
