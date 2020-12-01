@@ -63,37 +63,26 @@ public class JefeFinal {
 
     private void actualizarMovimientoVertical() {
         float nuevaY = sprite.getY();
-        int random = MathUtils.random(0,10);
         switch (estadoMov){
             case MOV_ABAJO:
                 nuevaY -= VELOCIDAD_Y;
                 sprite.setY(nuevaY);
-                if(random >= 5){
-                    moverDerecha();
-                }else{
-                    moverIzquierda();
-                }
                 break;
             case MOV_ARRIBA:
                 nuevaY += VELOCIDAD_Y;
                 sprite.setY(nuevaY);
-                if(random >= 5){
-                    moverDerecha();
-                }else{
-                    moverIzquierda();
-                }
                 break;
 
         }
     }
 
-    private void moverDerecha(){
+    public void moverDerecha(){
         float nuevaX = sprite.getX();
         nuevaX += VELOCIDAD_X;
         sprite.setX(nuevaX);
     }
 
-    private void moverIzquierda(){
+    public void moverIzquierda(){
         float nuevaX = sprite.getX();
         nuevaX -= VELOCIDAD_X;
         sprite.setX(nuevaX);
@@ -115,6 +104,7 @@ public class JefeFinal {
         INICIANDO,
         MURIENDO
     }
+
     public Sprite getSprite(){return sprite;}
     //ACCESORES DE POSICION
     public float getY(){return sprite.getY();}

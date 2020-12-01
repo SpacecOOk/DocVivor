@@ -139,7 +139,7 @@ public class PantallaNivelTres extends Pantalla {
 
     private void crearEnemigoFInal() {
         texturaEnemigoFinal = new Texture("enemigoFinal.png");
-        enemigoFinal = new JefeFinal(texturaEnemigoFinal, 510*32,600,224,224);
+        enemigoFinal = new JefeFinal(texturaEnemigoFinal, 544*32,600,224,224);
         rectangleEnemigo = enemigoFinal.getSprite().getBoundingRectangle().setSize(enemigoFinal.getSprite().getWidth()*.75f,enemigoFinal.getSprite().getHeight()*.75f);
     }
 
@@ -153,7 +153,7 @@ public class PantallaNivelTres extends Pantalla {
         posicionesEnemigos[2] = z;
         int w = MathUtils.random(270*32,277*32);
         posicionesEnemigos[3] = w;
-        int t = MathUtils.random(459*32,491*32);
+        int t = MathUtils.random(459*32,477*32);
         posicionesEnemigos[4] = t;
     }
 
@@ -175,9 +175,9 @@ public class PantallaNivelTres extends Pantalla {
         posicionesEnemigos[6] = g;
         int h = MathUtils.random(290*32,305*32);
         posicionesEnemigos[7] = h;
-        int i = MathUtils.random(459*32,492*32);
+        int i = MathUtils.random(459*32,477*32);
         posicionesEnemigos[8] = i;
-        int j = MathUtils.random(495*32,552*32); //depende por la posicion del jefe final
+        int j = MathUtils.random(495*32,533*32); //depende por la posicion del jefe final
         posicionesEnemigos[9] = j;
     }
 
@@ -276,7 +276,7 @@ public class PantallaNivelTres extends Pantalla {
         vistaHUD = new StretchViewport(ANCHO, ALTO, camaraHUD);
         HUD = new Stage(vistaHUD);
         //Boton mover a la derecha
-        Texture texturaMoverDerecha = new Texture("Botones/Boton_der_negro.png");
+        Texture texturaMoverDerecha = new Texture("Botones/Boton_der_blanco.png");
         TextureRegionDrawable botonMoverDerecha = new TextureRegionDrawable(new TextureRegion(texturaMoverDerecha));
 
         //Aqui para el boton inverso (click)
@@ -318,7 +318,7 @@ public class PantallaNivelTres extends Pantalla {
         HUD.addActor(btnMoverDerecha);
 
         //Boton mover izquierda
-        Texture texturaMoverIzquierda = new Texture("Botones/Boton_izq_negro.png");
+        Texture texturaMoverIzquierda = new Texture("Botones/Boton_izq_blanco.png");
         final TextureRegionDrawable botonMoverIzquierda = new TextureRegionDrawable(new TextureRegion(texturaMoverIzquierda));
         //Aqui para el boton inverso (click)
         final ImageButton btnMoverIzquierda = new ImageButton(botonMoverIzquierda);
@@ -355,7 +355,7 @@ public class PantallaNivelTres extends Pantalla {
         HUD.addActor(btnMoverIzquierda);
 
         //Boton atacar
-        Texture texturaAtacar = new Texture("Botones/Boton_disparo.png");
+        Texture texturaAtacar = new Texture("Botones/Boton_disparo_blanco.png");
         TextureRegionDrawable botonAtacar = new TextureRegionDrawable(new TextureRegion(texturaAtacar));
         //Aqui para el boton inverso (click)
         ImageButton btnAtacar = new ImageButton(botonAtacar);
@@ -382,7 +382,7 @@ public class PantallaNivelTres extends Pantalla {
         HUD.addActor(btnAtacar);
 
         //Boton para saltar
-        Texture texturaSaltar = new Texture("Botones/Boton_saltar_negro.png");
+        Texture texturaSaltar = new Texture("Botones/Boton_saltar_blanco.png");
         TextureRegionDrawable botonSaltar = new TextureRegionDrawable(new TextureRegion(texturaSaltar));
         //Aqui para el boton inverso (click)
         ImageButton btnSaltar = new ImageButton(botonSaltar);
@@ -403,7 +403,7 @@ public class PantallaNivelTres extends Pantalla {
         HUD.addActor(btnSaltar);
 
         //Boton para pausa
-        Texture texturaPausa = new Texture("Botones/Boton_pausa.png");
+        Texture texturaPausa = new Texture("Botones/Boton_pausa_blanco.png");
         TextureRegionDrawable botonPausa = new TextureRegionDrawable(new TextureRegion(texturaPausa));
         //Aqui para el boton inverso (click)
         ImageButton btnPausa = new ImageButton(botonPausa);
@@ -460,7 +460,7 @@ public class PantallaNivelTres extends Pantalla {
             rendererMapa.render();
             batch.begin();
             jugador.render(batch);
-            if(jugador.getX() >=450*32) {
+            if(jugador.getX() >= 491*32) {
                 enemigoFinal.render(batch);
             }
             dibujarEnemigos();
@@ -669,7 +669,7 @@ public class PantallaNivelTres extends Pantalla {
                 enemigoFinal.setEstadoMov(JefeFinal.estadoMovimiento.MOV_ARRIBA);
                 break;
             case MOV_ARRIBA:
-                if(enemigoFinal.getY()>ALTO-texturaEnemigoFinal.getHeight()/2){
+                if(enemigoFinal.getY()>= ALTO-texturaEnemigoFinal.getHeight()){
                     enemigoFinal.setEstadoMov(JefeFinal.estadoMovimiento.MOV_ABAJO);
                 }
                 break;
@@ -678,6 +678,13 @@ public class PantallaNivelTres extends Pantalla {
                     enemigoFinal.setEstadoMov(JefeFinal.estadoMovimiento.MOV_ARRIBA);
                 }
                 break;
+        }
+        int random = MathUtils.random(1,10);
+        if (random > 5 && enemigoFinal.getX() <555*32){
+            enemigoFinal.moverDerecha();
+        }
+        if (random <= 5 && enemigoFinal.getX() > 533*32){
+            enemigoFinal.moverIzquierda();
         }
     }
 
