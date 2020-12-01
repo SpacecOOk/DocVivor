@@ -227,7 +227,7 @@ public class PantallaNivelTres extends Pantalla {
         manager.load("Efectos_de_sonido/disparo.mp3", Sound.class);
         manager.load("Efectos_de_sonido/monster1.mp3", Sound.class);
         manager.load("Efectos_de_sonido/sonidoMonstruo.mp3",Sound.class);
-        manager.load("Efectos_de_sonido/enemigoFinalMuerte.mp3",Sound.class);
+        manager.load("enemigoFinalMuerte.mp3",Sound.class);
         manager.finishLoading();
         //Asignamos los sonidos a las variables
         efectoDisparo = manager.get("Efectos_de_sonido/disparo.mp3");
@@ -236,7 +236,7 @@ public class PantallaNivelTres extends Pantalla {
         efectoPowerUp = manager.get("Efectos_de_sonido/powerup.mp3");
         efectoSalto = manager.get("Efectos_de_sonido/saltoDoc.mp3");
         efectoMuerteEnemigoDos = manager.get("Efectos_de_sonido/sonidoMonstruo.mp3");
-        efectoMuerteJefe = manager.get("Efecto_de_sonido/enemigoFinalMuerte.mp3");
+        efectoMuerteJefe = manager.get("enemigoFinalMuerte.mp3");
     }
 
     private void crearProyectil() {
