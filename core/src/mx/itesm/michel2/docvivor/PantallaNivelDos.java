@@ -205,14 +205,14 @@ public class PantallaNivelDos extends Pantalla {
         texturaEnemigoDos = new Texture("Enemigo3.png");
         arrEnemigosUno = new Array<>();
         arrEnemigosDos = new Array<>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 20; i++) {
             EnemigoUnoPlataformas enemigo = new EnemigoUnoPlataformas(texturaEnemigoUno);
             int x = MathUtils.random(0,posicionesEnemigos.length-1);
             enemigo.getSprite().setPosition(posicionesEnemigos[x],16*32);
             arrEnemigosUno.add(enemigo);
             crearPosiciones();
         }
-        for (int i = 0; i < 15; i++) {
+        for (int i = 0; i < 10; i++) {
             EnemigoDosPlataformas enemigoDos = new EnemigoDosPlataformas(texturaEnemigoDos);
             int x = MathUtils.random(0,posicionesEnemigosDos.length-1);
             enemigoDos.getSprite().setPosition(posicionesEnemigos[x],16*32);

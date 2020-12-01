@@ -191,14 +191,14 @@ public class PantallaNivelTres extends Pantalla {
         texturaEnemigoDos = new Texture("Enemigo3.png");
         arrEnemigosUno = new Array<>();
         arrEnemigosDos = new Array<>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 16; i++) {
             EnemigoUnoPlataformas enemigo = new EnemigoUnoPlataformas(texturaEnemigoUno);
             int x = MathUtils.random(0,posicionesEnemigos.length-1);
             enemigo.getSprite().setPosition(posicionesEnemigos[x],18*32);
             arrEnemigosUno.add(enemigo);
             crearPosiciones();
         }
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 8; i++) {
             EnemigoDosPlataformas enemigoDos = new EnemigoDosPlataformas(texturaEnemigoDos);
             int x = MathUtils.random(0,posicionesEnemigosDos.length-1);
             enemigoDos.getSprite().setPosition(posicionesEnemigos[x],16*32);
@@ -245,7 +245,7 @@ public class PantallaNivelTres extends Pantalla {
     private void crearPersonaje() {
         texturaPersonaje = new Texture("Level2/AssetsPersonajes/Doctor2_moviendose.png");
         jugador = new JugadorPlataformas(texturaPersonaje,56,55);
-        jugador.getSprite().setPosition(148*32,600);
+        jugador.getSprite().setPosition(150,300);
         rectangleJugador = jugador.getSprite().getBoundingRectangle().setSize(texturaPersonaje.getWidth()*.8f,texturaPersonaje.getHeight()*.8f);
 
     }
@@ -293,12 +293,6 @@ public class PantallaNivelTres extends Pantalla {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                /*if(jugador.getEstadoSalto() == JugadorPlataformas.EstadoSalto.SUBIENDO || jugador.getEstadoSalto() == JugadorPlataformas.EstadoSalto.BAJANDO){
-                    jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.MOV_DERECHA);
-                }else{
-                    jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.EN_PISO);
-                    jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.MOV_DERECHA);
-                }*/
                 jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.MOV_DERECHA);
 
                 //jugador.setEstado(EstadoJugador.CAMINANDO);
@@ -307,12 +301,6 @@ public class PantallaNivelTres extends Pantalla {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                /*if(jugador.getEstadoSalto() == JugadorPlataformas.EstadoSalto.SUBIENDO || jugador.getEstadoSalto() == JugadorPlataformas.EstadoSalto.BAJANDO){
-                    jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
-                }else{
-                    jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.EN_PISO);
-                    jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
-                }*/
                 jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
                 super.touchUp(event, x, y, pointer, button);
             }
@@ -706,7 +694,6 @@ public class PantallaNivelTres extends Pantalla {
 
     private void comprobarVictoria() {
         if(estadoJuego == EstadoJuego.JUGANDO && enemigoFinal.getVidas()-1 == 0){
-            Gdx.app.log("GANO","");
             jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
             jugador.getSprite().setY(-100); //Lo manda a lo alto
             enemigoFinal.getSprite().setY(-300);
@@ -772,28 +759,6 @@ public class PantallaNivelTres extends Pantalla {
                         }
                         break;
                 }
-
-                // Prueba si debe caer por llegar a un espacio vacío
-                    /*if (arrEnemigosDos.get(i).getEstadoMov() != EnemigoDosPlataformas.estadoMovimiento.INICIANDO) {
-                    // Calcula la celda donde estaría después de moverlo
-                    int celdaX = (int) (arrEnemigosDos.get(i).getX() / TAM_CELDA);
-                    int celdaY = (int) ((arrEnemigosDos.get(i).getY() + arrEnemigosDos.get(i).VELOCIDAD_Y) / TAM_CELDA);
-                    // Recuperamos la celda en esta posición
-                    // La capa 0 son las plataformas
-                    TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get("Plataformas");
-                    TiledMapTileLayer.Cell celdaAbajo = capa.getCell(celdaX, celdaY);
-                    TiledMapTileLayer.Cell celdaDerecha = capa.getCell(celdaX + 1, celdaY);
-                    // probar si la celda está ocupada
-                    if (celdaAbajo == null && celdaDerecha == null) {
-                        // Celda vacía, entonces el personaje puede avanzar
-                        arrEnemigosDos.get(i).caer();
-                        //jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.CAIDA_LIBRE); ******revisar******
-                    } else {
-                            // Dejarlo sobre la celda que lo detiene
-                            arrEnemigosDos.get(i).setPosicion(arrEnemigosDos.get(i).getX(), (celdaY + 1) * TAM_CELDA);
-                            //jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.EN_PISO);*******revisar*******
-                        }
-                }*/
             }
     }
 
@@ -924,28 +889,6 @@ public class PantallaNivelTres extends Pantalla {
                         }
                         break;
                 }
-
-                // Prueba si debe caer por llegar a un espacio vacío
-                /*if (arrEnemigosUno.get(i).getEstadoMov() != EnemigoUnoPlataformas.estadoMovimiento.INICIANDO) {
-                    // Calcula la celda donde estaría después de moverlo
-                    int celdaX = (int) (arrEnemigosUno.get(i).getX() / TAM_CELDA);
-                    int celdaY = (int) ((arrEnemigosUno.get(i).getY() + arrEnemigosUno.get(i).VELOCIDAD_Y) / TAM_CELDA);
-                    // Recuperamos la celda en esta posición
-                    // La capa 0 son las plataformas
-                    TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get("Plataformas");
-                    TiledMapTileLayer.Cell celdaAbajo = capa.getCell(celdaX, celdaY);
-                    TiledMapTileLayer.Cell celdaDerecha = capa.getCell(celdaX + 1, celdaY);
-                    // probar si la celda está ocupada
-                    if (celdaAbajo == null && celdaDerecha == null) {
-                        // Celda vacía, entonces el personaje puede avanzar
-                        arrEnemigosUno.get(i).caer();
-                        //jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.CAIDA_LIBRE); ******revisar******
-                    } else {
-                        // Dejarlo sobre la celda que lo detiene
-                        arrEnemigosUno.get(i).setPosicion(arrEnemigosUno.get(i).getX(), (celdaY + 1) * TAM_CELDA);
-                        //jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.EN_PISO);*******revisar*******
-                    }
-                }*/
         }
     }
 
@@ -1121,7 +1064,7 @@ public class PantallaNivelTres extends Pantalla {
             TiledMapTileLayer capaPlataforma = (TiledMapTileLayer) mapa.getLayers().get("Plataformas");
             TiledMapTileLayer.Cell celdaDerecha = capaPlataforma.getCell(celdaX+1, celdaY+1);
             TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX, celdaY+1); //verificar el signo por la orientacion
-            if (proyectilJefeFinal.sprite.getX() <= 494*32 ) {
+            if (proyectilJefeFinal.sprite.getX() <= 491*32 ) {
                 proyectilJefeFinal = null;
             }
             if(celdaDerecha != null ){

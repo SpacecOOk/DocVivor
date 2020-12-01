@@ -53,7 +53,7 @@ public class PantallaAcercaDe extends Pantalla {
         TextureRegionDrawable botonRegresarMenu = new TextureRegionDrawable(new TextureRegion(texturaRegresar));
         //Aqui para el boton inverso (click)
         ImageButton btnRegresar = new ImageButton(botonRegresarMenu);
-        btnRegresar.setPosition((ANCHO/2)-70,ALTO-btnRegresar.getHeight(), Align.center);
+        btnRegresar.setPosition((ANCHO/2)-50,ALTO-btnRegresar.getHeight()+20, Align.center);
         btnRegresar.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -68,7 +68,7 @@ public class PantallaAcercaDe extends Pantalla {
         TextureRegionDrawable botonEmail = new TextureRegionDrawable(new TextureRegion(texturaEmail));
         //Aqui para el boton inverso (click)
         ImageButton btnEmail = new ImageButton(botonEmail);
-        btnEmail.setPosition(ANCHO/2,ALTO/2, Align.center);
+        btnEmail.setPosition(((ANCHO/4)*3)-70,ALTO/2, Align.center);
         btnEmail.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -95,6 +95,29 @@ public class PantallaAcercaDe extends Pantalla {
             }
         });
         escenaAcerca.addActor(btnEmail);
+
+        Texture texturaFace  = new Texture("PantallaAcercaDe/facebook.png");
+        TextureRegionDrawable botonFace = new TextureRegionDrawable(new TextureRegion(texturaFace));
+        //Aqui para el boton inverso (click)
+        ImageButton btnFace = new ImageButton(botonFace);
+        btnFace.setPosition(ANCHO/4,ALTO/2, Align.center);
+        btnFace.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                Desktop escritorio;
+                if (Desktop.isDesktopSupported() && (escritorio = Desktop.getDesktop()).isSupported(Desktop.Action.BROWSE)){
+                    try{
+                        escritorio.browse(new URI("https://www.facebook.com/DocVivor-105766344708337/"));
+                    } catch (URISyntaxException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        escenaAcerca.addActor(btnFace);
 
         Gdx.input.setInputProcessor(escenaAcerca);
     }
