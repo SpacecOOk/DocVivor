@@ -248,7 +248,7 @@ public class PantallaNivelTres extends Pantalla {
     private void crearPersonaje() {
         texturaPersonaje = new Texture("Level2/AssetsPersonajes/Doctor2_moviendose.png");
         jugador = new JugadorPlataformas(texturaPersonaje,56,55);
-        jugador.getSprite().setPosition(485*32,700);
+        jugador.getSprite().setPosition(100,300);
         rectangleJugador = jugador.getSprite().getBoundingRectangle().setSize(texturaPersonaje.getWidth()*.8f,texturaPersonaje.getHeight()*.8f);
 
     }
@@ -784,20 +784,16 @@ public class PantallaNivelTres extends Pantalla {
             TiledMapTileLayer.Cell celdaAbajoDerecha = capaPlataforma.getCell(celdaX+1, celdaY-1);
             TiledMapTileLayer.Cell celdaAbajoIzquierda = capaPlataforma.getCell(celdaX-1, celdaY-1);
             if(celdaDerecha != null && arrEnemigosDos.get(i).getEstadoMov() == EnemigoDosPlataformas.estadoMovimiento.MOV_DERECHA){
-                Gdx.app.log("Primera condicion","");
                 arrEnemigosDos.get(i).setEstadoMov(EnemigoDosPlataformas.estadoMovimiento.MOV_IZQUIERDA);
             }
             if(celdaIzquierda != null && arrEnemigosDos.get(i).getEstadoMov() == EnemigoDosPlataformas.estadoMovimiento.MOV_IZQUIERDA){
                 arrEnemigosDos.get(i).setEstadoMov(EnemigoDosPlataformas.estadoMovimiento.MOV_DERECHA);
-                Gdx.app.log("Segunda condicion","");
             }
             if(celdaAbajoDerecha == null && celdaDerecha == null && arrEnemigosDos.get(i).getEstadoMov() == EnemigoDosPlataformas.estadoMovimiento.MOV_DERECHA){
                 arrEnemigosDos.get(i).setEstadoMov(EnemigoDosPlataformas.estadoMovimiento.MOV_IZQUIERDA);
-                Gdx.app.log("Tercera condicion","");
             }
             if(celdaAbajoIzquierda == null && celdaIzquierda == null && arrEnemigosDos.get(i).getEstadoMov() == EnemigoDosPlataformas.estadoMovimiento.MOV_IZQUIERDA){
                 arrEnemigosDos.get(i).setEstadoMov(EnemigoDosPlataformas.estadoMovimiento.MOV_DERECHA);
-                Gdx.app.log("Cuarta condicion","");
             }
             if(celdaAbajoDerecha == null && celdaAbajoIzquierda == null){
                 arrEnemigosDos.get(i).caer();
@@ -871,9 +867,6 @@ public class PantallaNivelTres extends Pantalla {
                             arrEnemigosUno.removeIndex(i);
                             break;
                         }
-                    /*if (enemigo.getX() + ANCHO/3 > jugador.getX() && enemigo.getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_DERECHA){
-                        enemigo.setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.QUIETO_IZQUIERDA);
-                    }*/
                         break;
                     case MOV_IZQUIERDA:
                         probarChoqueParedesEnemigos();      // Prueba si debe moverse
@@ -881,9 +874,6 @@ public class PantallaNivelTres extends Pantalla {
                             arrEnemigosUno.removeIndex(i);
                             break;
                         }
-                    /*if (enemigo.getX() + ANCHO/3 < jugador.getX() && enemigo.getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_IZQUIERDA){
-                        enemigo.setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.QUIETO);
-                    }*/
                         break;
                     case QUIETO_IZQUIERDA:
                         if (jugador.getX() + ANCHO / 2 >= arrEnemigosUno.get(i).getX()) {
