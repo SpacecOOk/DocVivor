@@ -248,7 +248,7 @@ public class PantallaNivelTres extends Pantalla {
     private void crearPersonaje() {
         texturaPersonaje = new Texture("Level2/AssetsPersonajes/Doctor2_moviendose.png");
         jugador = new JugadorPlataformas(texturaPersonaje,56,55);
-        jugador.getSprite().setPosition(100,300);
+        jugador.getSprite().setPosition(15568,700);//100 300
         rectangleJugador = jugador.getSprite().getBoundingRectangle().setSize(texturaPersonaje.getWidth()*.8f,texturaPersonaje.getHeight()*.8f);
 
     }
@@ -1036,7 +1036,7 @@ public class PantallaNivelTres extends Pantalla {
             px = orientacion==1? px+proyectil.VELOCIDAD_X:
                     px-proyectil.VELOCIDAD_X;
             int celdaX = (int) (proyectil.sprite.getX() / TAM_CELDA);
-            int celdaY = (int)jugador.getY()/TAM_CELDA;
+            int celdaY = (int)proyectil.sprite.getY()/TAM_CELDA;
             TiledMapTileLayer capaPlataforma = (TiledMapTileLayer) mapa.getLayers().get("Plataformas");
             TiledMapTileLayer.Cell celdaDerecha = capaPlataforma.getCell(celdaX+1, celdaY+1);
             TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX, celdaY+1); //verificar el signo por la orientacion
@@ -1058,7 +1058,7 @@ public class PantallaNivelTres extends Pantalla {
             px = orientacion==1? px+proyectilJefeFinal.VELOCIDAD_X:
                     px-proyectilJefeFinal.VELOCIDAD_X;
             int celdaX = (int) (proyectilJefeFinal.sprite.getX() / TAM_CELDA);
-            int celdaY = (int)enemigoFinal.getY()/TAM_CELDA;
+            int celdaY = (int)proyectilJefeFinal.sprite.getY()/TAM_CELDA;
             TiledMapTileLayer capaPlataforma = (TiledMapTileLayer) mapa.getLayers().get("Plataformas");
             TiledMapTileLayer.Cell celdaDerecha = capaPlataforma.getCell(celdaX+1, celdaY+1);
             TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX, celdaY+1); //verificar el signo por la orientacion

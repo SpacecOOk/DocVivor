@@ -738,7 +738,7 @@ public class PantallaNivelDos extends Pantalla {
                 /*px = orientacion==1? px+proyectil.VELOCIDAD_X:
                         px-proyectil.VELOCIDAD_X;*/
                 int celdaX = (int) (arrBalasMetralleta.get(i).sprite.getX() / TAM_CELDA);
-                int celdaY = (int)jugador.getY()/TAM_CELDA;
+                int celdaY = (int)arrBalasMetralleta.get(i).sprite.getY()/TAM_CELDA;
                 TiledMapTileLayer capaPlataforma = (TiledMapTileLayer) mapa.getLayers().get(7);
                 TiledMapTileLayer.Cell celdaDerecha = capaPlataforma.getCell(celdaX+1, celdaY);
                 TiledMapTileLayer.Cell celdaDerechaUno = capaPlataforma.getCell(celdaX+1, celdaY+1);
@@ -1144,11 +1144,10 @@ public class PantallaNivelDos extends Pantalla {
             px = orientacion==1? px+proyectil.VELOCIDAD_X:
                     px-proyectil.VELOCIDAD_X;
             int celdaX = (int) (proyectil.sprite.getX() / TAM_CELDA);
-            int celdaY = (int)jugador.getY()/TAM_CELDA;
+            int celdaY = (int)proyectil.sprite.getY()/TAM_CELDA;
             TiledMapTileLayer capaPlataforma = (TiledMapTileLayer) mapa.getLayers().get(7);
             TiledMapTileLayer.Cell celdaDerecha = capaPlataforma.getCell(celdaX+1, celdaY+1);
             TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX, celdaY+1); //verificar el signo por la orientacion
-
             if (proyectil.sprite.getX() > jugador.getX() + ANCHO/2 ||proyectil.sprite.getX() < jugador.getX() - ANCHO/2) {
                 proyectil = null;
             }
