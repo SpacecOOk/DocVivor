@@ -207,14 +207,14 @@ public class PantallaNivelDos extends Pantalla {
         for (int i = 0; i < 20; i++) {
             EnemigoUnoPlataformas enemigo = new EnemigoUnoPlataformas(texturaEnemigoUno);
             int x = MathUtils.random(0,posicionesEnemigos.length-1);
-            enemigo.getSprite().setPosition(posicionesEnemigos[x],16*32);
+            enemigo.getSprite().setPosition(posicionesEnemigos[x],18*32);
             arrEnemigosUno.add(enemigo);
             crearPosiciones();
         }
         for (int i = 0; i < 10; i++) {
             EnemigoDosPlataformas enemigoDos = new EnemigoDosPlataformas(texturaEnemigoDos);
             int x = MathUtils.random(0,posicionesEnemigosDos.length-1);
-            enemigoDos.getSprite().setPosition(posicionesEnemigos[x],16*32);
+            enemigoDos.getSprite().setPosition(posicionesEnemigos[x],18*32);
             arrEnemigosDos.add(enemigoDos);
             crearPosicionesDos();
         }
@@ -860,8 +860,8 @@ public class PantallaNivelDos extends Pantalla {
             if (arrEnemigosDos.get(i).getEstadoMov() == EnemigoDosPlataformas.estadoMovimiento.MOV_DERECHA) {
                 celdaX++;   // Casilla del lado derecho
             }
-            TiledMapTileLayer.Cell celdaDerecha = capaPlataforma.getCell(celdaX+1, celdaY);
-            TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX, celdaY);
+            TiledMapTileLayer.Cell celdaDerecha = capaPlataforma.getCell(celdaX+2, celdaY);
+            TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX-1, celdaY);
             TiledMapTileLayer.Cell celdaAbajoDerecha = capaPlataforma.getCell(celdaX+1, celdaY-1);
             TiledMapTileLayer.Cell celdaAbajoIzquierda = capaPlataforma.getCell(celdaX-1, celdaY-1);
             if(celdaDerecha != null && arrEnemigosDos.get(i).getEstadoMov() == EnemigoDosPlataformas.estadoMovimiento.MOV_DERECHA){
@@ -1009,7 +1009,7 @@ public class PantallaNivelDos extends Pantalla {
                 celdaX++;   // Casilla del lado derecho
             }
             TiledMapTileLayer.Cell celdaDerecha = capaPlataforma.getCell(celdaX+2, celdaY);
-            TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX, celdaY);
+            TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX-1, celdaY);
             TiledMapTileLayer.Cell celdaAbajoDerecha = capaPlataforma.getCell(celdaX+1, celdaY-1);
             TiledMapTileLayer.Cell celdaAbajoIzquierda = capaPlataforma.getCell(celdaX-1, celdaY-1);
             if(celdaDerecha != null && arrEnemigosUno.get(i).getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_DERECHA){
