@@ -257,7 +257,7 @@ public class PantallaNivelTres extends Pantalla {
     private void crearPersonaje() {
         texturaPersonaje = new Texture("Level2/AssetsPersonajes/Doctor2_moviendose.png");
         jugador = new JugadorPlataformas(texturaPersonaje,56,55);
-        jugador.getSprite().setPosition(485*32,700);//100 300
+        jugador.getSprite().setPosition(100,300);//100 300
         rectangleJugador = jugador.getSprite().getBoundingRectangle().setSize(texturaPersonaje.getWidth()*.8f,texturaPersonaje.getHeight()*.8f);
 
     }
