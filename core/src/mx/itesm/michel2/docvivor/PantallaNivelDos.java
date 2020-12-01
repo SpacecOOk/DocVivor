@@ -872,10 +872,10 @@ public class PantallaNivelDos extends Pantalla {
                 arrEnemigosDos.get(i).setEstadoMov(EnemigoDosPlataformas.estadoMovimiento.QUIETO);
             }
             if(celdaAbajoDerecha == null && celdaDerecha == null && arrEnemigosDos.get(i).getEstadoMov() == EnemigoDosPlataformas.estadoMovimiento.MOV_DERECHA){
-                arrEnemigosUno.get(i).setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.MOV_IZQUIERDA);
+                arrEnemigosDos.get(i).setEstadoMov(EnemigoDosPlataformas.estadoMovimiento.MOV_IZQUIERDA);
             }
             if(celdaAbajoIzquierda == null && celdaIzquierda == null && arrEnemigosDos.get(i).getEstadoMov() == EnemigoDosPlataformas.estadoMovimiento.MOV_IZQUIERDA){
-                arrEnemigosUno.get(i).setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.MOV_DERECHA);
+                arrEnemigosDos.get(i).setEstadoMov(EnemigoDosPlataformas.estadoMovimiento.MOV_DERECHA);
             }
             if(celdaAbajoDerecha==null && celdaAbajoIzquierda == null){
                 arrEnemigosDos.get(i).caer();
@@ -1026,7 +1026,7 @@ public class PantallaNivelDos extends Pantalla {
                 arrEnemigosUno.get(i).setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.MOV_IZQUIERDA);
             }
             if(celdaAbajoDerecha == null && celdaAbajoIzquierda == null){
-                arrEnemigosDos.get(i).caer();
+                arrEnemigosUno.get(i).caer();
             }
         }
     }
