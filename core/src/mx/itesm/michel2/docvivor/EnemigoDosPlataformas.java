@@ -25,7 +25,7 @@ public class EnemigoDosPlataformas {
         // Lee la textura como región
         TextureRegion texturaCompleta = new TextureRegion(textura);
         // La divide en frames de 16x32 (ver marioSprite.png)
-        TextureRegion[][] texturasFrames = texturaCompleta.split(63,66);
+        TextureRegion[][] texturasFrames = texturaCompleta.split(61,64);
         // Crea la animación con tiempo de 0.25 segundos entre frames.
         animacion = new Animation(0.15f,texturasFrames[0][0],texturasFrames[0][1], texturasFrames[0][2], texturasFrames[0][3],texturasFrames[0][4],texturasFrames[0][5],
                 texturasFrames[0][6]);

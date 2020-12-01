@@ -799,7 +799,7 @@ public class PantallaNivelTres extends Pantalla {
             px = arrEnemigosDos.get(i).getEstadoMov() == EnemigoDosPlataformas.estadoMovimiento.MOV_DERECHA ? px + EnemigoUnoPlataformas.VELOCIDAD_X :
                     px - EnemigoUnoPlataformas.VELOCIDAD_X;
             int celdaX = (int) (px / TAM_CELDA);   // Casilla del personaje en X
-            int celdaY = (int) (arrEnemigosDos.get(i).getY() / TAM_CELDA); // Casilla del personaje en Y
+            int celdaY = MathUtils.roundPositive(arrEnemigosDos.get(i).getY() / TAM_CELDA); // Casilla del personaje en Y
             TiledMapTileLayer capaPlataforma = (TiledMapTileLayer) mapa.getLayers().get("Plataformas");
             if (arrEnemigosDos.get(i).getEstadoMov() == EnemigoDosPlataformas.estadoMovimiento.MOV_DERECHA) {
                 celdaX++;   // Casilla del lado derecho
@@ -948,7 +948,7 @@ public class PantallaNivelTres extends Pantalla {
             px = arrEnemigosUno.get(i).getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_DERECHA ? px + EnemigoUnoPlataformas.VELOCIDAD_X :
                     px - EnemigoUnoPlataformas.VELOCIDAD_X;
             int celdaX = (int) (px / TAM_CELDA);   // Casilla del personaje en X
-            int celdaY = (int) (arrEnemigosUno.get(i).getY() / TAM_CELDA); // Casilla del personaje en Y
+            int celdaY = MathUtils.roundPositive(arrEnemigosUno.get(i).getY() / TAM_CELDA); // Casilla del personaje en Y
             TiledMapTileLayer capaPlataforma = (TiledMapTileLayer) mapa.getLayers().get("Plataformas");
             if (arrEnemigosUno.get(i).getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_DERECHA) {
                 celdaX++;   // Casilla del lado derecho

@@ -134,14 +134,14 @@ public class PantallaNivelDos extends Pantalla {
     private void crearProyectilMetralleta() {
         if (jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.MOV_DERECHA || jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.QUIETO) {
             if(contadorMetralleta > 0){
-                Proyectil proyectilMetralleta = new Proyectil(texturaBalaMetralleta,jugador.getX() +30,jugador.getY()+jugador.getSprite().getHeight()/3);
+                Proyectil proyectilMetralleta = new Proyectil(texturaBalaMetralleta,jugador.getX() +30,jugador.getY()+21);
                 proyectilMetralleta.setOrientacion2(1);
                 arrBalasMetralleta.add(proyectilMetralleta);
                 contadorMetralleta--;
             }
         } else if (jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.MOV_IZQUIERDA || jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.QUIETO_IZQUIERDA) {
             if(contadorMetralleta > 0){
-                Proyectil proyectilMetralleta = new Proyectil(texturaBalaMetralleta,jugador.getX() -30,jugador.getY()+jugador.getSprite().getHeight()/3);
+                Proyectil proyectilMetralleta = new Proyectil(texturaBalaMetralleta,jugador.getX() -30,jugador.getY()+21);
                 proyectilMetralleta.setOrientacion2(0);
                 arrBalasMetralleta.add(proyectilMetralleta);
                 contadorMetralleta--;
@@ -197,7 +197,7 @@ public class PantallaNivelDos extends Pantalla {
     private void crearItems() {
         //SuperTraje
         texturaMetralleta = new Texture("Items/metralleta.png");
-        metralleta = new Item(texturaMetralleta,14816,928,119,56);
+        metralleta = new Item(texturaMetralleta,14816,928,119,56);//14816 928
     }
 
     private void crearEnemigos() {
@@ -212,7 +212,7 @@ public class PantallaNivelDos extends Pantalla {
             arrEnemigosUno.add(enemigo);
             crearPosiciones();
         }
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 15; i++) {
             EnemigoDosPlataformas enemigoDos = new EnemigoDosPlataformas(texturaEnemigoDos);
             int x = MathUtils.random(0,posicionesEnemigosDos.length-1);
             enemigoDos.getSprite().setPosition(posicionesEnemigos[x],16*32);
@@ -747,17 +747,20 @@ public class PantallaNivelDos extends Pantalla {
                 TiledMapTileLayer capaPlataforma = (TiledMapTileLayer) mapa.getLayers().get(7);
                 TiledMapTileLayer.Cell celdaDerecha = capaPlataforma.getCell(celdaX+1, celdaY);
                 TiledMapTileLayer.Cell celdaDerechaUno = capaPlataforma.getCell(celdaX+1, celdaY+1);
-                TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX, celdaY); //verificar el signo por la orientacion
+                TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX, celdaY);
                 TiledMapTileLayer.Cell celdaIzquierdaUno = capaPlataforma.getCell(celdaX, celdaY+1);
 
                 if (arrBalasMetralleta.get(i).sprite.getX() > jugador.getX() + ANCHO/2 ||arrBalasMetralleta.get(i).sprite.getX() < jugador.getX() - ANCHO/2) {
                     arrBalasMetralleta.removeIndex(i);
+                    break;
                 }
                 if(celdaDerecha != null || celdaDerechaUno != null){
                     arrBalasMetralleta.removeIndex(i);
+                    break;
                 }
                 if (celdaIzquierda != null || celdaIzquierdaUno != null){
                     arrBalasMetralleta.removeIndex(i);
+                    break;
                 }
             }
         }
@@ -847,14 +850,13 @@ public class PantallaNivelDos extends Pantalla {
 
     private void probarChoqueParedesEnemigosDos() {
         for (int i = 0; i < arrEnemigosDos.size-1; i++) {
-            EnemigoDosPlataformas.estadoMovimiento estado = arrEnemigosDos.get(i).getEstadoMov();
             // Quitar porque este método sólo se llama cuando se está moviendo
             float px = arrEnemigosDos.get(i).getX();    // Posición actual
             // Posición después de actualizar
             px = arrEnemigosDos.get(i).getEstadoMov() == EnemigoDosPlataformas.estadoMovimiento.MOV_DERECHA ? px + EnemigoUnoPlataformas.VELOCIDAD_X :
                     px - EnemigoUnoPlataformas.VELOCIDAD_X;
             int celdaX = (int) (px / TAM_CELDA);   // Casilla del personaje en X
-            int celdaY = (int) (arrEnemigosDos.get(i).getY() / TAM_CELDA); // Casilla del personaje en Y
+            int celdaY = MathUtils.roundPositive(arrEnemigosDos.get(i).getY() / TAM_CELDA); // Casilla del personaje en Y
             TiledMapTileLayer capaPlataforma = (TiledMapTileLayer) mapa.getLayers().get(7);
             if (arrEnemigosDos.get(i).getEstadoMov() == EnemigoDosPlataformas.estadoMovimiento.MOV_DERECHA) {
                 celdaX++;   // Casilla del lado derecho
@@ -874,6 +876,9 @@ public class PantallaNivelDos extends Pantalla {
             }
             if(celdaAbajoIzquierda == null && celdaIzquierda == null && arrEnemigosDos.get(i).getEstadoMov() == EnemigoDosPlataformas.estadoMovimiento.MOV_IZQUIERDA){
                 arrEnemigosUno.get(i).setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.MOV_DERECHA);
+            }
+            if(celdaAbajoDerecha==null && celdaAbajoIzquierda == null){
+                arrEnemigosDos.get(i).caer();
             }
         }
     }
@@ -993,14 +998,13 @@ public class PantallaNivelDos extends Pantalla {
 
     private void probarChoqueParedesEnemigos() {
         for (int i = 0; i<arrEnemigosUno.size-1; i++) {
-            EnemigoUnoPlataformas.estadoMovimiento estado = arrEnemigosUno.get(i).getEstadoMov();
             // Quitar porque este método sólo se llama cuando se está moviendo
             float px = arrEnemigosUno.get(i).getX();    // Posición actual
             // Posición después de actualizar
             px = arrEnemigosUno.get(i).getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_DERECHA ? px + EnemigoUnoPlataformas.VELOCIDAD_X :
                     px - EnemigoUnoPlataformas.VELOCIDAD_X;
             int celdaX = (int) (px / TAM_CELDA);   // Casilla del personaje en X
-            int celdaY = (int) (arrEnemigosUno.get(i).getY() / TAM_CELDA); // Casilla del personaje en Y
+            int celdaY = MathUtils.roundPositive(arrEnemigosUno.get(i).getY() / TAM_CELDA); // Casilla del personaje en Y
             TiledMapTileLayer capaPlataforma = (TiledMapTileLayer) mapa.getLayers().get(7);
             if (arrEnemigosUno.get(i).getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_DERECHA) {
                 celdaX++;   // Casilla del lado derecho
@@ -1020,6 +1024,9 @@ public class PantallaNivelDos extends Pantalla {
             }
             if(celdaAbajoDerecha == null && celdaDerecha == null && arrEnemigosUno.get(i).getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_DERECHA){
                 arrEnemigosUno.get(i).setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.MOV_IZQUIERDA);
+            }
+            if(celdaAbajoDerecha == null && celdaAbajoIzquierda == null){
+                arrEnemigosDos.get(i).caer();
             }
         }
     }
