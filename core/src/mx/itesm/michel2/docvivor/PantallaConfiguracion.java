@@ -14,12 +14,17 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 
+import javax.xml.soap.Text;
+
 public class PantallaConfiguracion extends Pantalla {
     private final Juego juego;
 
     private Texture texturaConfiguracion;
 
     private Stage escenaConfiguracion;
+
+    private Texture texturaMusica = new Texture("Instrucciones/Music.png");
+    private Texture texturaSF = new Texture("Instrucciones/SoundEffects.png");
 
     public PantallaConfiguracion(Juego juego){
         this.juego=juego;
@@ -141,6 +146,8 @@ public class PantallaConfiguracion extends Pantalla {
         batch.setProjectionMatrix(camara.combined);
         batch.begin();
         batch.draw(texturaConfiguracion,0,0);
+        batch.draw(texturaMusica,(ANCHO/4)-texturaMusica.getWidth()/2,((ALTO/6)*3)+60);
+        batch.draw(texturaSF,((ANCHO/4)*3)-texturaSF.getWidth()/2,((ALTO/6)*3)+60);
         batch.end();
         escenaConfiguracion.draw();
 

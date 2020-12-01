@@ -72,6 +72,7 @@ public class PantallaNivelTres extends Pantalla {
     private Sound efectoMuerteEnemigo;
     private Sound efectoPowerUp;
     private Sound efectoMuerteEnemigoDos;
+    private Sound efectoMuerteJefe;
 
     //Pausa
     private EstadoJuego estadoJuego = PantallaNivelTres.EstadoJuego.JUGANDO;
@@ -226,6 +227,7 @@ public class PantallaNivelTres extends Pantalla {
         manager.load("Efectos_de_sonido/disparo.mp3", Sound.class);
         manager.load("Efectos_de_sonido/monster1.mp3", Sound.class);
         manager.load("Efectos_de_sonido/sonidoMonstruo.mp3",Sound.class);
+        manager.load("Efectos_de_sonido/enemigoFinalMuerte.mp3",Sound.class);
         manager.finishLoading();
         //Asignamos los sonidos a las variables
         efectoDisparo = manager.get("Efectos_de_sonido/disparo.mp3");
@@ -234,6 +236,7 @@ public class PantallaNivelTres extends Pantalla {
         efectoPowerUp = manager.get("Efectos_de_sonido/moneda.mp3");
         efectoSalto = manager.get("Efectos_de_sonido/saltoDoc.mp3");
         efectoMuerteEnemigoDos = manager.get("Efectos_de_sonido/sonidoMonstruo.mp3");
+        efectoMuerteJefe = manager.get("Efecto_de_sonido/enemigoFinalMuerte.mp3");
     }
 
     private void crearProyectil() {
@@ -693,6 +696,9 @@ public class PantallaNivelTres extends Pantalla {
     private void comprobarVictoria() {
         if(estadoJuego == EstadoJuego.JUGANDO && enemigoFinal.getVidas() == 0){
             jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
+            if (juego.efectoSonidoEstado != 1){
+                efectoMuerteJefe.play();
+            }
             jugador.getSprite().setY(-100); //Lo manda a lo alto
             enemigoFinal.getSprite().setY(-300);
             estadoJuego = PantallaNivelTres.EstadoJuego.VICTORIA;
@@ -775,7 +781,7 @@ public class PantallaNivelTres extends Pantalla {
                 celdaX++;   // Casilla del lado derecho
             }
             TiledMapTileLayer.Cell celdaDerecha = capaPlataforma.getCell(celdaX+1, celdaY);
-            TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX-1, celdaY);
+            TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX, celdaY);
             TiledMapTileLayer.Cell celdaAbajoDerecha = capaPlataforma.getCell(celdaX+1, celdaY-1);
             TiledMapTileLayer.Cell celdaAbajoIzquierda = capaPlataforma.getCell(celdaX-1, celdaY-1);
             if(celdaDerecha != null && arrEnemigosDos.get(i).getEstadoMov() == EnemigoDosPlataformas.estadoMovimiento.MOV_DERECHA){
@@ -905,7 +911,7 @@ public class PantallaNivelTres extends Pantalla {
                 celdaX++;   // Casilla del lado derecho
             }
             TiledMapTileLayer.Cell celdaDerecha = capaPlataforma.getCell(celdaX+1, celdaY);
-            TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX-1, celdaY);
+            TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX, celdaY);
             TiledMapTileLayer.Cell celdaAbajoDerecha = capaPlataforma.getCell(celdaX+1, celdaY-1);
             TiledMapTileLayer.Cell celdaAbajoIzquierda = capaPlataforma.getCell(celdaX-1, celdaY-1);
             if(celdaDerecha != null && arrEnemigosUno.get(i).getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_DERECHA){
