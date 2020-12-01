@@ -1321,7 +1321,7 @@ public class PantallaNivelDos extends Pantalla {
                 public void clicked(InputEvent event, float x, float y) {
                     super.clicked(event, x, y);
                     //Para pasar al siguiente nivel
-                    juego.setScreen(new PantallaNivelTres(juego));
+                    juego.setScreen(new PantallaCargando(juego,Pantallas.NIVEL3));
                 }
             });
             this.addActor(btnSeguir);

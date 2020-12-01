@@ -58,6 +58,9 @@ public class PantallaCargando extends Pantalla
             case NIVEL2:
                 cargarRecursosNivel2();
              break;
+            case NIVEL3:
+                cargarRecursosNivel3();
+             break;
 
             /*case REVISARENUMPANTALLAS:
                 cargarRecursosNOMBREDELAPANTALLA();
@@ -65,6 +68,32 @@ public class PantallaCargando extends Pantalla
              */
             // Agregar otras pantallas
         }
+    }
+
+    private void cargarRecursosNivel3() {
+        manager.load("vidas.png",Texture.class);
+        manager.load("Item_corazon.png",Texture.class);
+        manager.load("enemigoFinal.png",Texture.class);
+        manager.load("Enemigo_LvL2.png",Texture.class);
+        manager.load("Enemigo3.png",Texture.class);
+        manager.load("Balas/Bala_roja.png",Texture.class);
+        manager.load("Balas/Bala_Jeringa_D.png",Texture.class);
+        manager.load("Balas/Bala_Jeringa_I.png",Texture.class);
+        manager.load("Level2/AssetsPersonajes/Doctor2_moviendose.png",Texture.class);
+        manager.load("Botones/Boton_der_blanco.png",Texture.class);
+        manager.load("Botones/Boton_izq_blanco.png",Texture.class);
+        manager.load("Botones/Boton_disparo_blanco.png",Texture.class);
+        manager.load("Botones/Boton_saltar_blanco.png",Texture.class);
+        manager.load("Botones/Boton_saltar_blanco.png",Texture.class);
+        manager.load("Botones/Boton_pausa_blanco.png",Texture.class);
+        manager.load("Fondos/fondoPausa.png",Texture.class);
+        manager.load("Botones/Btn_resume.png",Texture.class);
+        manager.load("Botones/btn_Exit.png",Texture.class);
+        manager.load("Fondos/GameOver.png",Texture.class);
+        manager.load("Botones/btn_jugar.png",Texture.class);
+        manager.load("Botones/btn_Exit.png",Texture.class);
+        manager.load("Fondos/Win.png",Texture.class);
+        manager.load("Botones/btn_Exit.png",Texture.class);
     }
 
     private void cargarRecursosNivel2() {
@@ -162,6 +191,9 @@ public class PantallaCargando extends Pantalla
                     break;
                 case NIVEL2:
                     juego.setScreen(new PantallaNivelDos(juego));
+                    break;
+                case NIVEL3:
+                    juego.setScreen(new PantallaNivelTres(juego));
                     break;
                 // Agregar las otras pantallas
             }

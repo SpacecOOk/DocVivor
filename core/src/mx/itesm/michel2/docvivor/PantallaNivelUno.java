@@ -802,7 +802,7 @@ public class PantallaNivelUno extends Pantalla {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     super.clicked(event, x, y);
-                    juego.setScreen(new PantallaNiveles(juego));
+                    juego.setScreen(new PantallaCargando(juego,Pantallas.NIVEL2));
                 }
             });
             this.addActor(btnNiveles);

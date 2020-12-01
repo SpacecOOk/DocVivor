@@ -85,7 +85,7 @@ public class PantallaNiveles extends Pantalla {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 //Para poder entrar al nivel uno
-                juego.setScreen(new PantallaNivelTres(juego));
+                juego.setScreen(new PantallaCargando(juego,Pantallas.NIVEL3));
             }
         });
         escenaNiveles.addActor(btnNivelTres);
