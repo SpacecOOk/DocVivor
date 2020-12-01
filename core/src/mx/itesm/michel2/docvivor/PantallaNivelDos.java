@@ -233,7 +233,7 @@ public class PantallaNivelDos extends Pantalla {
 
     private void crearSonidos() {
         //cargamos todos los efectos que necesitaremos
-        manager.load("Efectos_de_sonido/moneda.mp3", Sound.class);
+        manager.load("Efectos_de_sonido/powerup.mp3", Sound.class);
         manager.load("Efectos_de_sonido/muerteDoc.mp3", Sound.class);
         manager.load("Efectos_de_sonido/saltoDoc.mp3", Sound.class);
         manager.load("Efectos_de_sonido/disparo.mp3", Sound.class);
@@ -244,7 +244,7 @@ public class PantallaNivelDos extends Pantalla {
         efectoDisparo = manager.get("Efectos_de_sonido/disparo.mp3");
         efectoMuerte = manager.get("Efectos_de_sonido/muerteDoc.mp3");
         efectoMuerteEnemigo = manager.get("Efectos_de_sonido/monster1.mp3");
-        efectoPowerUp = manager.get("Efectos_de_sonido/moneda.mp3");
+        efectoPowerUp = manager.get("Efectos_de_sonido/powerup.mp3");
         efectoSalto = manager.get("Efectos_de_sonido/saltoDoc.mp3");
         efectoMuerteEnemigoDos = manager.get("Efectos_de_sonido/sonidoMonstruo.mp3");
     }
