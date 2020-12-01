@@ -782,6 +782,7 @@ public class PantallaNivelDos extends Pantalla {
                         arrEnemigosDos.get(i).caer();
                         if ( arrEnemigosDos.get(i).getY() < 5){
                             arrEnemigosDos.removeIndex(i);
+                            break;
                         }
                     }else {
                         arrEnemigosDos.get(i).setEstadoMov(EnemigoDosPlataformas.estadoMovimiento.QUIETO_IZQUIERDA);
@@ -792,6 +793,7 @@ public class PantallaNivelDos extends Pantalla {
                     probarChoqueParedesEnemigosDos();// Se mueve horizontal
                     if(arrEnemigosDos.get(i).getX()>899*32){
                         arrEnemigosDos.removeIndex(i);
+                        break;
                     }
                     /*if (enemigo.getX() + ANCHO/3 > jugador.getX() && enemigo.getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_DERECHA){
                         enemigo.setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.QUIETO_IZQUIERDA);
@@ -801,6 +803,7 @@ public class PantallaNivelDos extends Pantalla {
                     probarChoqueParedesEnemigosDos();      // Prueba si debe moverse
                     if(arrEnemigosDos.get(i).getX()<5){
                         arrEnemigosDos.removeIndex(i);
+                        break;
                     }
                     /*if (enemigo.getX() + ANCHO/3 < jugador.getX() && enemigo.getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_IZQUIERDA){
                         enemigo.setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.QUIETO);
@@ -819,7 +822,7 @@ public class PantallaNivelDos extends Pantalla {
             }
 
             // Prueba si debe caer por llegar a un espacio vacío
-            if (arrEnemigosDos.get(i).getEstadoMov() != EnemigoDosPlataformas.estadoMovimiento.INICIANDO) {
+            /*if (arrEnemigosDos.get(i).getEstadoMov() != EnemigoDosPlataformas.estadoMovimiento.INICIANDO) {
                 // Calcula la celda donde estaría después de moverlo
                 int celdaX = (int) (arrEnemigosDos.get(i).getX() / TAM_CELDA);
                 int celdaY = (int) ((arrEnemigosDos.get(i).getY() + arrEnemigosDos.get(i).VELOCIDAD_Y) / TAM_CELDA);
@@ -838,7 +841,7 @@ public class PantallaNivelDos extends Pantalla {
                     arrEnemigosDos.get(i).setPosicion(arrEnemigosDos.get(i).getX(), (celdaY + 1) * TAM_CELDA);
                     //jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.EN_PISO);*******revisar*******
                 }
-            }
+            }*/
         }
     }
 
@@ -965,7 +968,7 @@ public class PantallaNivelDos extends Pantalla {
             }
 
             // Prueba si debe caer por llegar a un espacio vacío
-            if (arrEnemigosUno.get(i).getEstadoMov() != EnemigoUnoPlataformas.estadoMovimiento.INICIANDO) {
+            /*if (arrEnemigosUno.get(i).getEstadoMov() != EnemigoUnoPlataformas.estadoMovimiento.INICIANDO) {
                 // Calcula la celda donde estaría después de moverlo
                 int celdaX = (int) (arrEnemigosUno.get(i).getX() / TAM_CELDA);
                 int celdaY = (int) ((arrEnemigosUno.get(i).getY() + arrEnemigosUno.get(i).VELOCIDAD_Y) / TAM_CELDA);
@@ -984,7 +987,7 @@ public class PantallaNivelDos extends Pantalla {
                     arrEnemigosUno.get(i).setPosicion(arrEnemigosUno.get(i).getX(), (celdaY + 1) * TAM_CELDA);
                     //jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.EN_PISO);*******revisar*******
                 }
-            }
+            }*/
         }
     }
 

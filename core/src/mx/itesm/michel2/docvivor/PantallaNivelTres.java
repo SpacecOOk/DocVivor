@@ -572,9 +572,21 @@ public class PantallaNivelTres extends Pantalla {
         if(proyectilJefeFinal != null){
             if(proyectilJefeFinal.sprite.getBoundingRectangle().overlaps(jugador.getSprite().getBoundingRectangle())){
                 int vidasJugador = jugador.getVidas();
+                if(vidasJugador-1>0){
                 vidasJugador--;
                 jugador.setVidas(vidasJugador);
                 proyectilJefeFinal = null;
+                }else{
+                    if (juego.efectoSonidoEstado != 1){
+                        efectoMuerte.play();
+                    }
+                    jugador.setVidas(jugador.getVidas()-1);
+                    jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
+                    jugador.getSprite().setY(-100); //Lo manda a lo alto
+                    estadoJuego = PantallaNivelTres.EstadoJuego.DERROTA;
+                    escenaDerrota = new PantallaNivelTres.EscenaDerrota(vistaDerrotaHUD,batch);
+                    Gdx.input.setInputProcessor(escenaDerrota);
+                }
             }
         }
         //}
@@ -687,8 +699,10 @@ public class PantallaNivelTres extends Pantalla {
 
     private void comprobarVictoria() {
         if(estadoJuego == EstadoJuego.JUGANDO && enemigoFinal.getVidas()-1 == 0){
+            Gdx.app.log("GANO","");
             jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
             jugador.getSprite().setY(-100); //Lo manda a lo alto
+            enemigoFinal.getSprite().setY(-300);
             estadoJuego = PantallaNivelTres.EstadoJuego.VICTORIA;
             escenaVictoria = new PantallaNivelTres.EscenaVictoria(vistaVictoriaHUD,batch);
             Gdx.input.setInputProcessor(escenaVictoria);
@@ -696,81 +710,84 @@ public class PantallaNivelTres extends Pantalla {
     }
 
     private void moverEnemigoDos() {
-        for (int i = arrEnemigosDos.size-1; i >= 0; i--) {
-            switch (arrEnemigosDos.get(i).getEstadoMov()) {
-                case INICIANDO:     // Mueve el personaje en Y hasta que se encuentre sobre un bloque
-                    // Los bloques en el mapa son de 32x32
+            for (int i = arrEnemigosDos.size - 1; i > 0; i--) {
+                switch (arrEnemigosDos.get(i).getEstadoMov()) {
+                    case INICIANDO:     // Mueve el personaje en Y hasta que se encuentre sobre un bloque
+                        // Los bloques en el mapa son de 32x32
+                        // Calcula la celda donde estaría después de moverlo
+                        int celdaX = (int) (arrEnemigosDos.get(i).getX() / TAM_CELDA);
+                        int celdaY = (int) ((arrEnemigosDos.get(i).getY() + arrEnemigosDos.get(i).VELOCIDAD_Y) / TAM_CELDA);
+                        // Recuperamos la celda en esta posición
+                        // La capa 0 son las plataformas
+                        TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get("Plataformas");
+                        TiledMapTileLayer.Cell celda = capa.getCell(celdaX, celdaY);
+                        // probar si la celda está ocupada
+                        if (celda == null) {
+                            //****revisar esta condicion, para ver si si se caen********
+                            arrEnemigosDos.get(i).caer();
+                            if (arrEnemigosDos.get(i).getY() < 5) {
+                                arrEnemigosDos.removeIndex(i);
+                                break;
+                            }
+                        } else {
+                            arrEnemigosDos.get(i).setEstadoMov(EnemigoDosPlataformas.estadoMovimiento.QUIETO_IZQUIERDA);
+                        }
+                        break;
+                    case MOV_DERECHA:
+                        //********REVISAR CONDICIONES MOVIMIENTOS****************
+                        probarChoqueParedesEnemigosDos();// Se mueve horizontal
+                        if (arrEnemigosDos.get(i).getX() > 559 * 32) {
+                            arrEnemigosDos.removeIndex(i);
+                            break;
+                        }
+                    /*if (enemigo.getX() + ANCHO/3 > jugador.getX() && enemigo.getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_DERECHA){
+                        enemigo.setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.QUIETO_IZQUIERDA);
+                    }*/
+                        break;
+                    case MOV_IZQUIERDA:
+                        probarChoqueParedesEnemigosDos();      // Prueba si debe moverse
+                        if (arrEnemigosDos.get(i).getX() < 5) {
+                            arrEnemigosDos.removeIndex(i);
+                            break;
+                        }
+                    /*if (enemigo.getX() + ANCHO/3 < jugador.getX() && enemigo.getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_IZQUIERDA){
+                        enemigo.setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.QUIETO);
+                    }*/
+                        break;
+                    case QUIETO_IZQUIERDA:
+                        if (jugador.getX() + ANCHO / 2 >= arrEnemigosDos.get(i).getX()) {
+                            arrEnemigosDos.get(i).setEstadoMov(EnemigoDosPlataformas.estadoMovimiento.MOV_IZQUIERDA);
+                        }
+                        break;
+                    case QUIETO:
+                        if (jugador.getX() - ANCHO / 2 <= arrEnemigosDos.get(i).getX()) {
+                            arrEnemigosDos.get(i).setEstadoMov(EnemigoDosPlataformas.estadoMovimiento.MOV_DERECHA);
+                        }
+                        break;
+                }
+
+                // Prueba si debe caer por llegar a un espacio vacío
+                    /*if (arrEnemigosDos.get(i).getEstadoMov() != EnemigoDosPlataformas.estadoMovimiento.INICIANDO) {
                     // Calcula la celda donde estaría después de moverlo
                     int celdaX = (int) (arrEnemigosDos.get(i).getX() / TAM_CELDA);
                     int celdaY = (int) ((arrEnemigosDos.get(i).getY() + arrEnemigosDos.get(i).VELOCIDAD_Y) / TAM_CELDA);
                     // Recuperamos la celda en esta posición
                     // La capa 0 son las plataformas
                     TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get("Plataformas");
-                    TiledMapTileLayer.Cell celda = capa.getCell(celdaX, celdaY);
+                    TiledMapTileLayer.Cell celdaAbajo = capa.getCell(celdaX, celdaY);
+                    TiledMapTileLayer.Cell celdaDerecha = capa.getCell(celdaX + 1, celdaY);
                     // probar si la celda está ocupada
-                    if (celda == null) {
-                        //****revisar esta condicion, para ver si si se caen********
+                    if (celdaAbajo == null && celdaDerecha == null) {
+                        // Celda vacía, entonces el personaje puede avanzar
                         arrEnemigosDos.get(i).caer();
-                        if ( arrEnemigosDos.get(i).getY() < 5){
-                            arrEnemigosDos.removeIndex(i);
+                        //jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.CAIDA_LIBRE); ******revisar******
+                    } else {
+                            // Dejarlo sobre la celda que lo detiene
+                            arrEnemigosDos.get(i).setPosicion(arrEnemigosDos.get(i).getX(), (celdaY + 1) * TAM_CELDA);
+                            //jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.EN_PISO);*******revisar*******
                         }
-                    }else {
-                        arrEnemigosDos.get(i).setEstadoMov(EnemigoDosPlataformas.estadoMovimiento.QUIETO_IZQUIERDA);
-                    }
-                    break;
-                case MOV_DERECHA:
-                    //********REVISAR CONDICIONES MOVIMIENTOS****************
-                    probarChoqueParedesEnemigosDos();// Se mueve horizontal
-                    if(arrEnemigosDos.get(i).getX()>559*32){
-                        arrEnemigosDos.removeIndex(i);
-                    }
-                    /*if (enemigo.getX() + ANCHO/3 > jugador.getX() && enemigo.getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_DERECHA){
-                        enemigo.setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.QUIETO_IZQUIERDA);
-                    }*/
-                    break;
-                case MOV_IZQUIERDA:
-                    probarChoqueParedesEnemigosDos();      // Prueba si debe moverse
-                    if(arrEnemigosDos.get(i).getX()<5){
-                        arrEnemigosDos.removeIndex(i);
-                    }
-                    /*if (enemigo.getX() + ANCHO/3 < jugador.getX() && enemigo.getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_IZQUIERDA){
-                        enemigo.setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.QUIETO);
-                    }*/
-                    break;
-                case QUIETO_IZQUIERDA:
-                    if(jugador.getX() + ANCHO/3 >= arrEnemigosDos.get(i).getX()){
-                        arrEnemigosDos.get(i).setEstadoMov(EnemigoDosPlataformas.estadoMovimiento.MOV_IZQUIERDA);
-                    }
-                    break;
-                case QUIETO:
-                    if(jugador.getX() - ANCHO/3 <= arrEnemigosDos.get(i).getX()){
-                        arrEnemigosDos.get(i).setEstadoMov(EnemigoDosPlataformas.estadoMovimiento.MOV_DERECHA);
-                    }
-                    break;
+                }*/
             }
-
-            // Prueba si debe caer por llegar a un espacio vacío
-            if (arrEnemigosDos.get(i).getEstadoMov() != EnemigoDosPlataformas.estadoMovimiento.INICIANDO) {
-                // Calcula la celda donde estaría después de moverlo
-                int celdaX = (int) (arrEnemigosDos.get(i).getX() / TAM_CELDA);
-                int celdaY = (int) ((arrEnemigosDos.get(i).getY() + arrEnemigosDos.get(i).VELOCIDAD_Y) / TAM_CELDA);
-                // Recuperamos la celda en esta posición
-                // La capa 0 son las plataformas
-                TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get("Plataformas");
-                TiledMapTileLayer.Cell celdaAbajo = capa.getCell(celdaX, celdaY);
-                TiledMapTileLayer.Cell celdaDerecha = capa.getCell(celdaX + 1, celdaY);
-                // probar si la celda está ocupada
-                if (celdaAbajo == null && celdaDerecha == null) {
-                    // Celda vacía, entonces el personaje puede avanzar
-                    arrEnemigosDos.get(i).caer();
-                    //jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.CAIDA_LIBRE); ******revisar******
-                } else {
-                    // Dejarlo sobre la celda que lo detiene
-                    arrEnemigosDos.get(i).setPosicion(arrEnemigosDos.get(i).getX(), (celdaY + 1) * TAM_CELDA);
-                    //jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.EN_PISO);*******revisar*******
-                }
-            }
-        }
     }
 
     private void probarChoqueParedesEnemigosDos() {
@@ -843,79 +860,82 @@ public class PantallaNivelTres extends Pantalla {
 
     private void moverEnemigos() {
         for (int i = arrEnemigosUno.size-1; i >= 0; i--) {
-            switch (arrEnemigosUno.get(i).getEstadoMov()) {
-                case INICIANDO:     // Mueve el personaje en Y hasta que se encuentre sobre un bloque
-                    // Los bloques en el mapa son de 32x32
+                switch (arrEnemigosUno.get(i).getEstadoMov()) {
+                    case INICIANDO:     // Mueve el personaje en Y hasta que se encuentre sobre un bloque
+                        // Los bloques en el mapa son de 32x32
+                        // Calcula la celda donde estaría después de moverlo
+                        int celdaX = (int) (arrEnemigosUno.get(i).getX() / TAM_CELDA);
+                        int celdaY = (int) ((arrEnemigosUno.get(i).getY() + arrEnemigosUno.get(i).VELOCIDAD_Y) / TAM_CELDA);
+                        // Recuperamos la celda en esta posición
+                        // La capa 0 son las plataformas
+                        TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get("Plataformas");
+                        TiledMapTileLayer.Cell celda = capa.getCell(celdaX, celdaY);
+                        // probar si la celda está ocupada
+                        if (celda == null) {
+                            //****revisar esta condicion, para ver si si se caen********
+                            arrEnemigosUno.get(i).caer();
+                            if (arrEnemigosUno.get(i).getY() < 5) {
+                                arrEnemigosUno.removeIndex(i);
+                                break;
+                            }
+                        } else {
+                            arrEnemigosUno.get(i).setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.QUIETO_IZQUIERDA);
+                        }
+                        break;
+                    case MOV_DERECHA:
+                        //********REVISAR CONDICIONES MOVIMIENTOS****************
+                        probarChoqueParedesEnemigos();// Se mueve horizontal
+                        if (arrEnemigosUno.get(i).getX() > 559 * 32) {
+                            arrEnemigosUno.removeIndex(i);
+                            break;
+                        }
+                    /*if (enemigo.getX() + ANCHO/3 > jugador.getX() && enemigo.getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_DERECHA){
+                        enemigo.setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.QUIETO_IZQUIERDA);
+                    }*/
+                        break;
+                    case MOV_IZQUIERDA:
+                        probarChoqueParedesEnemigos();      // Prueba si debe moverse
+                        if (arrEnemigosUno.get(i).getX() < 5) {
+                            arrEnemigosUno.removeIndex(i);
+                            break;
+                        }
+                    /*if (enemigo.getX() + ANCHO/3 < jugador.getX() && enemigo.getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_IZQUIERDA){
+                        enemigo.setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.QUIETO);
+                    }*/
+                        break;
+                    case QUIETO_IZQUIERDA:
+                        if (jugador.getX() + ANCHO / 2 >= arrEnemigosUno.get(i).getX()) {
+                            arrEnemigosUno.get(i).setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.MOV_IZQUIERDA);
+                        }
+                        break;
+                    case QUIETO:
+                        if (jugador.getX() - ANCHO / 2 <= arrEnemigosUno.get(i).getX()) {
+                            arrEnemigosUno.get(i).setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.MOV_DERECHA);
+                        }
+                        break;
+                }
+
+                // Prueba si debe caer por llegar a un espacio vacío
+                /*if (arrEnemigosUno.get(i).getEstadoMov() != EnemigoUnoPlataformas.estadoMovimiento.INICIANDO) {
                     // Calcula la celda donde estaría después de moverlo
                     int celdaX = (int) (arrEnemigosUno.get(i).getX() / TAM_CELDA);
                     int celdaY = (int) ((arrEnemigosUno.get(i).getY() + arrEnemigosUno.get(i).VELOCIDAD_Y) / TAM_CELDA);
                     // Recuperamos la celda en esta posición
                     // La capa 0 son las plataformas
                     TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get("Plataformas");
-                    TiledMapTileLayer.Cell celda = capa.getCell(celdaX, celdaY);
+                    TiledMapTileLayer.Cell celdaAbajo = capa.getCell(celdaX, celdaY);
+                    TiledMapTileLayer.Cell celdaDerecha = capa.getCell(celdaX + 1, celdaY);
                     // probar si la celda está ocupada
-                    if (celda == null) {
-                        //****revisar esta condicion, para ver si si se caen********
+                    if (celdaAbajo == null && celdaDerecha == null) {
+                        // Celda vacía, entonces el personaje puede avanzar
                         arrEnemigosUno.get(i).caer();
-                        if ( arrEnemigosUno.get(i).getY() < 5){
-                            arrEnemigosUno.removeIndex(i);
-                        }
-                    }else {
-                        arrEnemigosUno.get(i).setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.QUIETO_IZQUIERDA);
+                        //jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.CAIDA_LIBRE); ******revisar******
+                    } else {
+                        // Dejarlo sobre la celda que lo detiene
+                        arrEnemigosUno.get(i).setPosicion(arrEnemigosUno.get(i).getX(), (celdaY + 1) * TAM_CELDA);
+                        //jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.EN_PISO);*******revisar*******
                     }
-                    break;
-                case MOV_DERECHA:
-                    //********REVISAR CONDICIONES MOVIMIENTOS****************
-                    probarChoqueParedesEnemigos();// Se mueve horizontal
-                    if(arrEnemigosUno.get(i).getX()>559*32){
-                        arrEnemigosUno.removeIndex(i);
-                    }
-                    /*if (enemigo.getX() + ANCHO/3 > jugador.getX() && enemigo.getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_DERECHA){
-                        enemigo.setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.QUIETO_IZQUIERDA);
-                    }*/
-                    break;
-                case MOV_IZQUIERDA:
-                    probarChoqueParedesEnemigos();      // Prueba si debe moverse
-                    if(arrEnemigosUno.get(i).getX()<5){
-                        arrEnemigosUno.removeIndex(i);
-                    }
-                    /*if (enemigo.getX() + ANCHO/3 < jugador.getX() && enemigo.getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_IZQUIERDA){
-                        enemigo.setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.QUIETO);
-                    }*/
-                    break;
-                case QUIETO_IZQUIERDA:
-                    if(jugador.getX() + ANCHO/3 >= arrEnemigosUno.get(i).getX()){
-                        arrEnemigosUno.get(i).setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.MOV_IZQUIERDA);
-                    }
-                    break;
-                case QUIETO:
-                    if(jugador.getX() - ANCHO/3 <= arrEnemigosUno.get(i).getX()){
-                        arrEnemigosUno.get(i).setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.MOV_DERECHA);
-                    }
-                    break;
-            }
-
-            // Prueba si debe caer por llegar a un espacio vacío
-            if (arrEnemigosUno.get(i).getEstadoMov() != EnemigoUnoPlataformas.estadoMovimiento.INICIANDO) {
-                // Calcula la celda donde estaría después de moverlo
-                int celdaX = (int) (arrEnemigosUno.get(i).getX() / TAM_CELDA);
-                int celdaY = (int) ((arrEnemigosUno.get(i).getY() + arrEnemigosUno.get(i).VELOCIDAD_Y) / TAM_CELDA);
-                // Recuperamos la celda en esta posición
-                // La capa 0 son las plataformas
-                TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get("Plataformas");
-                TiledMapTileLayer.Cell celdaAbajo = capa.getCell(celdaX, celdaY);
-                TiledMapTileLayer.Cell celdaDerecha = capa.getCell(celdaX + 1, celdaY);
-                // probar si la celda está ocupada
-                if (celdaAbajo == null && celdaDerecha == null) {
-                    // Celda vacía, entonces el personaje puede avanzar
-                    arrEnemigosUno.get(i).caer();
-                    //jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.CAIDA_LIBRE); ******revisar******
-                } else {
-                    // Dejarlo sobre la celda que lo detiene
-                    arrEnemigosUno.get(i).setPosicion(arrEnemigosUno.get(i).getX(), (celdaY + 1) * TAM_CELDA);
-                    //jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.EN_PISO);*******revisar*******
-                }
-            }
+                }*/
         }
     }
 
