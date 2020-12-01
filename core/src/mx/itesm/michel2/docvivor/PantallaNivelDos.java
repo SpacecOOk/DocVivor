@@ -386,11 +386,11 @@ public class PantallaNivelDos extends Pantalla {
                     if (proyectil == null) { //si no existe la creo, sino no la crea
                         if (jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.MOV_DERECHA || jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.QUIETO) {
                             proyectil = new Proyectil(texturaProyectilD, jugador.getX() + jugador.getSprite().getWidth() / 2,
-                                    jugador.getY() + jugador.getSprite().getHeight() * 0.3f);
+                                    jugador.getY() + 32);
                             orientacion = 1;
                         } else if (jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.MOV_IZQUIERDA || jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.QUIETO_IZQUIERDA) {
                             proyectil = new Proyectil(texturaProyectilI, jugador.getX() + jugador.getSprite().getWidth() / 2,
-                                    jugador.getY() + jugador.getSprite().getHeight() * 0.3f);
+                                    jugador.getY() + 32);
                             orientacion = 0;
                         }
                     }
@@ -1151,18 +1151,16 @@ public class PantallaNivelDos extends Pantalla {
             int celdaX = (int) (proyectil.sprite.getX() / TAM_CELDA);
             int celdaY = (int)jugador.getY()/TAM_CELDA;
             TiledMapTileLayer capaPlataforma = (TiledMapTileLayer) mapa.getLayers().get(7);
-            TiledMapTileLayer.Cell celdaDerecha = capaPlataforma.getCell(celdaX+1, celdaY);
-            TiledMapTileLayer.Cell celdaDerechaUno = capaPlataforma.getCell(celdaX+1, celdaY+1);
-            TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX, celdaY); //verificar el signo por la orientacion
-            TiledMapTileLayer.Cell celdaIzquierdaUno = capaPlataforma.getCell(celdaX, celdaY+1);
+            TiledMapTileLayer.Cell celdaDerecha = capaPlataforma.getCell(celdaX+1, celdaY+1);
+            TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX, celdaY+1); //verificar el signo por la orientacion
 
             if (proyectil.sprite.getX() > jugador.getX() + ANCHO/2 ||proyectil.sprite.getX() < jugador.getX() - ANCHO/2) {
                 proyectil = null;
             }
-            if(celdaDerecha != null || celdaDerechaUno != null){
+            if(celdaDerecha != null ){
                 proyectil = null;
             }
-            if (celdaIzquierda != null || celdaIzquierdaUno != null){
+            if (celdaIzquierda != null ){
                 proyectil = null;
             }
 

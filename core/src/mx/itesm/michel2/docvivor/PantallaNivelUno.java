@@ -174,8 +174,8 @@ public class PantallaNivelUno extends Pantalla {
     }
 
     private void crearProyectil() {
-        texturaProyectilD = new Texture("Balas/Bala_Jeringa_D.png");
-        texturaProyectilI = new Texture("Balas/Bala_Jeringa_I.png");
+        texturaProyectilD = new Texture("Balas/Bala_Jeringa_DLvl1.png");
+        texturaProyectilI = new Texture("Balas/Bala_Jeringa_ILvl1.png");
     }
 
     private void crearPausa() {

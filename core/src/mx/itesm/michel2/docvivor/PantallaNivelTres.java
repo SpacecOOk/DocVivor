@@ -232,7 +232,7 @@ public class PantallaNivelTres extends Pantalla {
     }
 
     private void crearProyectil() {
-        texturaProyectilEnemigo = new Texture("Balas/Bala_azul.png");
+        texturaProyectilEnemigo = new Texture("Balas/Bala_roja.png");
         texturaProyectilD = new Texture("Balas/Bala_Jeringa_D.png");
         texturaProyectilI = new Texture("Balas/Bala_Jeringa_I.png");
         texturaBalaMetralleta = new Texture("Balas/Bala_azul.png");
@@ -554,7 +554,7 @@ public class PantallaNivelTres extends Pantalla {
                 }
         }
         if(proyectilJefeFinal != null){
-            if(proyectilJefeFinal.sprite.getBoundingRectangle().overlaps(jugador.getSprite().getBoundingRectangle())){
+            if(proyectilJefeFinal.sprite.getBoundingRectangle().overlaps(rectangleJugador)){
                 int vidasJugador = jugador.getVidas();
                 if(vidasJugador-1>0){
                 vidasJugador--;
@@ -638,11 +638,6 @@ public class PantallaNivelTres extends Pantalla {
     private void dibujarEnemigos() {
         for (EnemigoUnoPlataformas enemigo : arrEnemigosUno) {
             enemigo.render(batch);
-            /*if(estadoJuego == EstadoJuego.JUGANDO){
-                enemigo.setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.INICIANDO);
-            }else {
-                enemigo.setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.QUIETO_IZQUIERDA);
-            }*/
         }
         for (EnemigoDosPlataformas enemigoDos : arrEnemigosDos) {
             enemigoDos.render(batch);
@@ -1095,18 +1090,15 @@ public class PantallaNivelTres extends Pantalla {
             int celdaX = (int) (proyectil.sprite.getX() / TAM_CELDA);
             int celdaY = (int)jugador.getY()/TAM_CELDA;
             TiledMapTileLayer capaPlataforma = (TiledMapTileLayer) mapa.getLayers().get("Plataformas");
-            TiledMapTileLayer.Cell celdaDerecha = capaPlataforma.getCell(celdaX+1, celdaY);
-            TiledMapTileLayer.Cell celdaDerechaUno = capaPlataforma.getCell(celdaX+1, celdaY+1);
-            TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX, celdaY); //verificar el signo por la orientacion
-            TiledMapTileLayer.Cell celdaIzquierdaUno = capaPlataforma.getCell(celdaX, celdaY+1);
-
+            TiledMapTileLayer.Cell celdaDerecha = capaPlataforma.getCell(celdaX+1, celdaY+1);
+            TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX, celdaY+1); //verificar el signo por la orientacion
             if (proyectil.sprite.getX() > jugador.getX() + ANCHO/2 ||proyectil.sprite.getX() < jugador.getX() - ANCHO/2) {
                 proyectil = null;
             }
-            if(celdaDerecha != null || celdaDerechaUno != null){
+            if(celdaDerecha != null ){
                 proyectil = null;
             }
-            if (celdaIzquierda != null || celdaIzquierdaUno != null){
+            if (celdaIzquierda != null){
                 proyectil = null;
             }
 
@@ -1120,18 +1112,15 @@ public class PantallaNivelTres extends Pantalla {
             int celdaX = (int) (proyectilJefeFinal.sprite.getX() / TAM_CELDA);
             int celdaY = (int)enemigoFinal.getY()/TAM_CELDA;
             TiledMapTileLayer capaPlataforma = (TiledMapTileLayer) mapa.getLayers().get("Plataformas");
-            TiledMapTileLayer.Cell celdaDerecha = capaPlataforma.getCell(celdaX+1, celdaY);
-            TiledMapTileLayer.Cell celdaDerechaUno = capaPlataforma.getCell(celdaX+1, celdaY+1);
-            TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX, celdaY); //verificar el signo por la orientacion
-            TiledMapTileLayer.Cell celdaIzquierdaUno = capaPlataforma.getCell(celdaX, celdaY+1);
-
-            if (proyectilJefeFinal.sprite.getX() > jugador.getX() + ANCHO/2 ||proyectilJefeFinal.sprite.getX() < jugador.getX() - ANCHO/2) {
+            TiledMapTileLayer.Cell celdaDerecha = capaPlataforma.getCell(celdaX+1, celdaY+1);
+            TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX, celdaY+1); //verificar el signo por la orientacion
+            if (proyectilJefeFinal.sprite.getX() <= 494*32 ) {
                 proyectilJefeFinal = null;
             }
-            if(celdaDerecha != null || celdaDerechaUno != null){
+            if(celdaDerecha != null ){
                 proyectilJefeFinal = null;
             }
-            if (celdaIzquierda != null || celdaIzquierdaUno != null){
+            if (celdaIzquierda != null ){
                 proyectilJefeFinal = null;
             }
 
