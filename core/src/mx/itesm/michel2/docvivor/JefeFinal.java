@@ -34,7 +34,7 @@ public class JefeFinal {
         sprite = new Sprite(texutrasFrames[0][0]);
         sprite.setPosition(x,y);
         estadoMov = estadoMovimiento.INICIANDO;
-        vidas = 3;
+        vidas = 15;
     }
     //RENDER Y ACTUALIZAR
     public void render(SpriteBatch batch){

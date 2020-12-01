@@ -245,7 +245,7 @@ public class PantallaNivelTres extends Pantalla {
     private void crearPersonaje() {
         texturaPersonaje = new Texture("Level2/AssetsPersonajes/Doctor2_moviendose.png");
         jugador = new JugadorPlataformas(texturaPersonaje,56,55);
-        jugador.getSprite().setPosition(150,300);
+        jugador.getSprite().setPosition(490*32,700);
         rectangleJugador = jugador.getSprite().getBoundingRectangle().setSize(texturaPersonaje.getWidth()*.8f,texturaPersonaje.getHeight()*.8f);
 
     }
@@ -534,9 +534,7 @@ public class PantallaNivelTres extends Pantalla {
                     if (juego.efectoSonidoEstado != 1){
                         efectoMuerteEnemigoDos.play();
                     }
-                    int vidas = enemigoFinal.getVidas();
-                    vidas--;
-                    enemigoFinal.setVidas(vidas);
+                    enemigoFinal.setVidas(enemigoFinal.getVidas()-1);
                     proyectil = null;
                 }
         }
@@ -693,7 +691,7 @@ public class PantallaNivelTres extends Pantalla {
     }
 
     private void comprobarVictoria() {
-        if(estadoJuego == EstadoJuego.JUGANDO && enemigoFinal.getVidas()-1 == 0){
+        if(estadoJuego == EstadoJuego.JUGANDO && enemigoFinal.getVidas() == 0){
             jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
             jugador.getSprite().setY(-100); //Lo manda a lo alto
             enemigoFinal.getSprite().setY(-300);
@@ -1231,7 +1229,7 @@ public class PantallaNivelTres extends Pantalla {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     super.clicked(event, x, y);
-                    juego.setScreen(new PantallaNiveles(juego));
+                    juego.setScreen(new PantallaMenu(juego));
                 }
             });
             this.addActor(btnNiveles);
