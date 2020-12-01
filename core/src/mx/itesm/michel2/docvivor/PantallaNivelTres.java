@@ -903,6 +903,11 @@ public class PantallaNivelTres extends Pantalla {
             TiledMapTileLayer.Cell celdaAbajoIzquierda = capaPlataforma.getCell(celdaX-1, celdaY-1);
             TiledMapTileLayer.Cell celdaArribaDerecha = capaPlataforma.getCell(celdaX+1, celdaY+1);
             TiledMapTileLayer.Cell celdaArribaIzquierda = capaPlataforma.getCell(celdaX-1, celdaY+1);
+            /*Gdx.app.log("el enemigo en las celdas"+celdaX," y la "+celdaY);
+            Gdx.app.log("celda derecha " +celdaDerecha,"");
+            Gdx.app.log("celda izquierda " + celdaIzquierda,"");
+            Gdx.app.log("celda arriba derecha " + celdaArribaDerecha," celda arriba izquierda " + celdaAbajoIzquierda );
+            Gdx.app.log("celda abajo derecha " + celdaAbajoDerecha," celda abajo izquierda " + celdaAbajoIzquierda);*/
             if((celdaDerecha != null || celdaArribaDerecha !=null) && arrEnemigosUno.get(i).getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_DERECHA){
                 arrEnemigosUno.get(i).setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.MOV_IZQUIERDA);
             }
@@ -1196,7 +1201,6 @@ public class PantallaNivelTres extends Pantalla {
                 public void clicked(InputEvent event, float x, float y) {
                     super.clicked(event, x, y);
                     //Para regresar al los niveles
-                    Gdx.app.log("exit ","exit");
                     borrarPantalla();
                     juego.setScreen(new PantallaNiveles(juego));
                 }

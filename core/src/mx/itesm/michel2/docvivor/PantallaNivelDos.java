@@ -421,8 +421,6 @@ public class PantallaNivelDos extends Pantalla {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 //Salta a la izquierda/derecha
-                Gdx.app.log("BOTON SALTAR "+jugador.getEstadoMovimiento(),"");
-                Gdx.app.log("BOTON SALTAR "+jugador.getEstadoSalto(),"");
                     jugador.saltar();
                 if (juego.efectoSonidoEstado != 1) {
                     efectoSalto.play();
@@ -557,7 +555,6 @@ public class PantallaNivelDos extends Pantalla {
                         if (juego.efectoSonidoEstado != 1){
                             efectoMuerteEnemigo.play();
                         }
-                        Gdx.app.log("El enemigo esta muriendo","");
                         arrEnemigosUno.get(j).setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.MURIENDO);
                         arrEnemigosUno.removeIndex(j);
                         proyectil = null;
@@ -592,7 +589,6 @@ public class PantallaNivelDos extends Pantalla {
                             if (juego.efectoSonidoEstado != 1) {
                                 efectoMuerteEnemigoDos.play();
                             }
-                            Gdx.app.log("El enemigo esta muriendo","");
                             //while(arrEnemigosUno.get(j).acaboAnimacion()!=true){
                                 arrEnemigosUno.get(j).setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.MURIENDO);
                             //}
@@ -1292,7 +1288,6 @@ public class PantallaNivelDos extends Pantalla {
                 public void clicked(InputEvent event, float x, float y) {
                     super.clicked(event, x, y);
                     //Para regresar al los niveles
-                    Gdx.app.log("exit ","exit");
                     borrarPantalla();
                     juego.setScreen(new PantallaNiveles(juego));
                 }
