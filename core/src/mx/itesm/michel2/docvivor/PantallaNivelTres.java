@@ -512,23 +512,7 @@ public class PantallaNivelTres extends Pantalla {
         verificarCaida();
         verificarColisionEnemigos();
         verificarColisionesEnemigosDos();
-        //
-        // *** COLISION ITEMS ***
-        /*
-        if (metralleta.sprite.getBoundingRectangle().overlaps(jugador.getSprite().getBoundingRectangle())) {
-            if (juego.efectoSonidoEstado != 1) {
-                efectoPowerUp.play();
-            }
-        */
-        //Implementar la textura del personaje, checarlo si movemos el tamaño del mapa
-            /*
-            int x = (int)jugador.getSprite().getX();
-            texturaJugadorMetralleta.setY(ALTO);
-            jugador = new JugadorPlataformas(texturaJugadorMetralleta,x,133);
-             */
-        //}
-        // ***  COLISION BALA-ENEMIGOS ***
-        //if(estadoJuego == PantallaNivelUno.EstadoJuego.JUGANDO && kills < 3){
+        
         if(proyectil != null){
             for (int j = arrEnemigosUno.size-1; j >= 0 ; j--) {
                 EnemigoUnoPlataformas enemigo = arrEnemigosUno.get(j);
@@ -815,10 +799,13 @@ public class PantallaNivelTres extends Pantalla {
                 arrEnemigosDos.get(i).setEstadoMov(EnemigoDosPlataformas.estadoMovimiento.QUIETO);
             }
             if(celdaAbajoDerecha == null && celdaDerecha == null && arrEnemigosDos.get(i).getEstadoMov() == EnemigoDosPlataformas.estadoMovimiento.MOV_DERECHA){
-                arrEnemigosUno.get(i).setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.MOV_IZQUIERDA);
+                arrEnemigosDos.get(i).setEstadoMov(EnemigoDosPlataformas.estadoMovimiento.MOV_IZQUIERDA);
             }
             if(celdaAbajoIzquierda == null && celdaIzquierda == null && arrEnemigosDos.get(i).getEstadoMov() == EnemigoDosPlataformas.estadoMovimiento.MOV_IZQUIERDA){
-                arrEnemigosUno.get(i).setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.MOV_DERECHA);
+                arrEnemigosDos.get(i).setEstadoMov(EnemigoDosPlataformas.estadoMovimiento.MOV_DERECHA);
+            }
+            if(celdaAbajoDerecha == null && celdaAbajoIzquierda == null){
+                arrEnemigosDos.get(i).caer();
             }
         }
     }
@@ -968,6 +955,9 @@ public class PantallaNivelTres extends Pantalla {
             }
             if(celdaAbajoIzquierda == null && celdaIzquierda == null && arrEnemigosUno.get(i).getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_IZQUIERDA){
                 arrEnemigosUno.get(i).setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.MOV_DERECHA);
+            }
+            if(celdaAbajoDerecha == null && celdaAbajoIzquierda == null){
+                arrEnemigosUno.get(i).caer();
             }
         }
     }
