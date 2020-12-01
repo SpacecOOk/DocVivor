@@ -448,7 +448,7 @@ public class PantallaNivelUno extends Pantalla {
         //**********Colisiones*************
         verificarColisionesEnemigosDerecha();
         verificarColisionesEnemigosIzquierda();
-        if(kills>=20 && estadoJuego != EstadoJuego.VICTORIA) {
+        if(kills>=30 && estadoJuego != EstadoJuego.VICTORIA) {
             jugador.setEstado(EstadoJugador.QUIETO);
             estadoJuego = EstadoJuego.VICTORIA;
             escenaVictoria = new EscenaVictoria(vistaVictoriaHUD, batch);
@@ -464,7 +464,7 @@ public class PantallaNivelUno extends Pantalla {
     }
 
     private void verificarColisionTraje() {
-        if (traje.sprite.getBoundingRectangle().overlaps(jugador.sprite.getBoundingRectangle())){
+        if (traje.sprite.getBoundingRectangle().overlaps(rectanglePersonaje)){
             if (juego.efectoSonidoEstado != 1){
                 efectoPowerUp.play();
             }
@@ -476,7 +476,7 @@ public class PantallaNivelUno extends Pantalla {
     }
 
     private void verificarColisionesProyectilIzquierda() {
-        if(estadoJuego == EstadoJuego.JUGANDO && kills < 20){
+        if(estadoJuego == EstadoJuego.JUGANDO && kills < 30){
             if(proyectil != null){
                 for (int j = arrEnemigosIzquierda.size-1; j >= 0 ; j--) {
                     EnemigoUno enemigo = arrEnemigosIzquierda.get(j);
@@ -496,7 +496,7 @@ public class PantallaNivelUno extends Pantalla {
     }
 
     private void verificarColisionesProyectilDerecha() {
-        if(estadoJuego == EstadoJuego.JUGANDO && kills < 20){
+        if(estadoJuego == EstadoJuego.JUGANDO && kills < 30){
             if(proyectil != null){
                 for (int j = arrEnemigosDerecha.size-1; j >= 0 ; j--) {
                     EnemigoUno enemigo = arrEnemigosDerecha.get(j);

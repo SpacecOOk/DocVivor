@@ -202,7 +202,7 @@ public class PantallaNivelTres extends Pantalla {
         for (int i = 0; i < 8; i++) {
             EnemigoDosPlataformas enemigoDos = new EnemigoDosPlataformas(texturaEnemigoDos);
             int x = MathUtils.random(0,posicionesEnemigosDos.length-1);
-            enemigoDos.getSprite().setPosition(posicionesEnemigos[x],16*32);
+            enemigoDos.getSprite().setPosition(posicionesEnemigos[x],18*32);
             arrEnemigosDos.add(enemigoDos);
             crearPosicionesDos();
         }
@@ -738,9 +738,6 @@ public class PantallaNivelTres extends Pantalla {
                             arrEnemigosDos.removeIndex(i);
                             break;
                         }
-                    /*if (enemigo.getX() + ANCHO/3 > jugador.getX() && enemigo.getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_DERECHA){
-                        enemigo.setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.QUIETO_IZQUIERDA);
-                    }*/
                         break;
                     case MOV_IZQUIERDA:
                         probarChoqueParedesEnemigosDos();      // Prueba si debe moverse
@@ -748,9 +745,6 @@ public class PantallaNivelTres extends Pantalla {
                             arrEnemigosDos.removeIndex(i);
                             break;
                         }
-                    /*if (enemigo.getX() + ANCHO/3 < jugador.getX() && enemigo.getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_IZQUIERDA){
-                        enemigo.setEstadoMov(EnemigoUnoPlataformas.estadoMovimiento.QUIETO);
-                    }*/
                         break;
                     case QUIETO_IZQUIERDA:
                         if (jugador.getX() + ANCHO / 2 >= arrEnemigosDos.get(i).getX()) {
