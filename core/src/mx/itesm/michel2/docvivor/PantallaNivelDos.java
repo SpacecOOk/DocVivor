@@ -385,11 +385,11 @@ public class PantallaNivelDos extends Pantalla {
                     if (proyectil == null) { //si no existe la creo, sino no la crea
                         if (jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.MOV_DERECHA || jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.QUIETO) {
                             proyectil = new Proyectil(texturaProyectilD, jugador.getX() + jugador.getSprite().getWidth() / 2,
-                                    jugador.getY() + 32);
+                                    jugador.getSprite().getY() + 32);
                             orientacion = 1;
                         } else if (jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.MOV_IZQUIERDA || jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.QUIETO_IZQUIERDA) {
                             proyectil = new Proyectil(texturaProyectilI, jugador.getX() + jugador.getSprite().getWidth() / 2,
-                                    jugador.getY() + 32);
+                                    jugador.getSprite().getY() + 32);
                             orientacion = 0;
                         }
                     }
@@ -530,23 +530,7 @@ public class PantallaNivelDos extends Pantalla {
         verificarColisionesEnemigosDos();
         verificarColisionItems();
         verificarColisionMetralleta();
-        //
-        // *** COLISION ITEMS ***
-        /*
-        if (metralleta.sprite.getBoundingRectangle().overlaps(jugador.getSprite().getBoundingRectangle())) {
-            if (juego.efectoSonidoEstado != 1) {
-                efectoPowerUp.play();
-            }
-        */
-            //Implementar la textura del personaje, checarlo si movemos el tamaño del mapa
-            /*
-            int x = (int)jugador.getSprite().getX();
-            texturaJugadorMetralleta.setY(ALTO);
-            jugador = new JugadorPlataformas(texturaJugadorMetralleta,x,133);
-             */
-        //}
-        // ***  COLISION BALA-ENEMIGOS ***
-        //if(estadoJuego == PantallaNivelUno.EstadoJuego.JUGANDO && kills < 3){
+
             if(proyectil != null){
                 for (int j = arrEnemigosUno.size-1; j >= 0 ; j--) {
                     EnemigoUnoPlataformas enemigo = arrEnemigosUno.get(j);
@@ -818,28 +802,6 @@ public class PantallaNivelDos extends Pantalla {
                     }
                     break;
             }
-
-            // Prueba si debe caer por llegar a un espacio vacío
-            /*if (arrEnemigosDos.get(i).getEstadoMov() != EnemigoDosPlataformas.estadoMovimiento.INICIANDO) {
-                // Calcula la celda donde estaría después de moverlo
-                int celdaX = (int) (arrEnemigosDos.get(i).getX() / TAM_CELDA);
-                int celdaY = (int) ((arrEnemigosDos.get(i).getY() + arrEnemigosDos.get(i).VELOCIDAD_Y) / TAM_CELDA);
-                // Recuperamos la celda en esta posición
-                // La capa 0 son las plataformas
-                TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get(7);
-                TiledMapTileLayer.Cell celdaAbajo = capa.getCell(celdaX, celdaY);
-                TiledMapTileLayer.Cell celdaDerecha = capa.getCell(celdaX + 1, celdaY);
-                // probar si la celda está ocupada
-                if (celdaAbajo == null && celdaDerecha == null) {
-                    // Celda vacía, entonces el personaje puede avanzar
-                    arrEnemigosDos.get(i).caer();
-                    //jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.CAIDA_LIBRE); ******revisar******
-                } else {
-                    // Dejarlo sobre la celda que lo detiene
-                    arrEnemigosDos.get(i).setPosicion(arrEnemigosDos.get(i).getX(), (celdaY + 1) * TAM_CELDA);
-                    //jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.EN_PISO);*******revisar*******
-                }
-            }*/
         }
     }
 
@@ -857,7 +819,7 @@ public class PantallaNivelDos extends Pantalla {
                 celdaX++;   // Casilla del lado derecho
             }
             TiledMapTileLayer.Cell celdaDerecha = capaPlataforma.getCell(celdaX+2, celdaY);
-            TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX-1, celdaY);
+            TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX, celdaY);
             TiledMapTileLayer.Cell celdaAbajoDerecha = capaPlataforma.getCell(celdaX+1, celdaY-1);
             TiledMapTileLayer.Cell celdaAbajoIzquierda = capaPlataforma.getCell(celdaX-1, celdaY-1);
             if(celdaDerecha != null && arrEnemigosDos.get(i).getEstadoMov() == EnemigoDosPlataformas.estadoMovimiento.MOV_DERECHA){
@@ -966,28 +928,6 @@ public class PantallaNivelDos extends Pantalla {
                     }
                     break;
             }
-
-            // Prueba si debe caer por llegar a un espacio vacío
-            /*if (arrEnemigosUno.get(i).getEstadoMov() != EnemigoUnoPlataformas.estadoMovimiento.INICIANDO) {
-                // Calcula la celda donde estaría después de moverlo
-                int celdaX = (int) (arrEnemigosUno.get(i).getX() / TAM_CELDA);
-                int celdaY = (int) ((arrEnemigosUno.get(i).getY() + arrEnemigosUno.get(i).VELOCIDAD_Y) / TAM_CELDA);
-                // Recuperamos la celda en esta posición
-                // La capa 0 son las plataformas
-                TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get(7);
-                TiledMapTileLayer.Cell celdaAbajo = capa.getCell(celdaX, celdaY);
-                TiledMapTileLayer.Cell celdaDerecha = capa.getCell(celdaX + 1, celdaY);
-                // probar si la celda está ocupada
-                if (celdaAbajo == null && celdaDerecha == null) {
-                    // Celda vacía, entonces el personaje puede avanzar
-                    arrEnemigosUno.get(i).caer();
-                    //jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.CAIDA_LIBRE); ******revisar******
-                } else {
-                    // Dejarlo sobre la celda que lo detiene
-                    arrEnemigosUno.get(i).setPosicion(arrEnemigosUno.get(i).getX(), (celdaY + 1) * TAM_CELDA);
-                    //jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.EN_PISO);*******revisar*******
-                }
-            }*/
         }
     }
 
@@ -1005,7 +945,7 @@ public class PantallaNivelDos extends Pantalla {
                 celdaX++;   // Casilla del lado derecho
             }
             TiledMapTileLayer.Cell celdaDerecha = capaPlataforma.getCell(celdaX+2, celdaY);
-            TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX-1, celdaY);
+            TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX, celdaY);
             TiledMapTileLayer.Cell celdaAbajoDerecha = capaPlataforma.getCell(celdaX+1, celdaY-1);
             TiledMapTileLayer.Cell celdaAbajoIzquierda = capaPlataforma.getCell(celdaX-1, celdaY-1);
             if(celdaDerecha != null && arrEnemigosUno.get(i).getEstadoMov() == EnemigoUnoPlataformas.estadoMovimiento.MOV_DERECHA){

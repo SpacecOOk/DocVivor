@@ -57,6 +57,12 @@ public class PantallaNivelTres extends Pantalla {
     private TextureRegion regionVidas;
     private Texture texturaVida = new Texture("vidas.png");
 
+    private Image imagenVidasEnemigos;
+    private Sprite spriteVidasEnemigos;
+    private TextureRegion[][] texturasFramesVidasEnemigos;
+    private TextureRegion regionVidasEnemigo;
+    private Texture texturaVidasEnemigo = new Texture("vida_barraEnemigo.png");
+
     //Proyectil
     private Texture texturaProyectilD;
     private Texture texturaProyectilI;
@@ -103,6 +109,7 @@ public class PantallaNivelTres extends Pantalla {
     private int[] posicionesEnemigosDos;
     private JefeFinal enemigoFinal;
     private Rectangle rectangleEnemigo;
+    private Rectangle auraEnemigo;
 
     //Item
     private Texture texturaItemCorazon;
@@ -147,6 +154,8 @@ public class PantallaNivelTres extends Pantalla {
         texturaEnemigoFinal = new Texture("enemigoFinal.png");
         enemigoFinal = new JefeFinal(texturaEnemigoFinal, 544*32,600,224,224);
         rectangleEnemigo = enemigoFinal.getSprite().getBoundingRectangle().setSize(enemigoFinal.getSprite().getWidth()*.75f,enemigoFinal.getSprite().getHeight()*.75f);
+        auraEnemigo = enemigoFinal.getSprite().getBoundingRectangle().setSize(enemigoFinal.getSprite().getWidth()*.90f,enemigoFinal.getSprite().getHeight()*.90f);
+
     }
 
     private void crearPosicionesDos() {
@@ -248,7 +257,7 @@ public class PantallaNivelTres extends Pantalla {
     private void crearPersonaje() {
         texturaPersonaje = new Texture("Level2/AssetsPersonajes/Doctor2_moviendose.png");
         jugador = new JugadorPlataformas(texturaPersonaje,56,55);
-        jugador.getSprite().setPosition(15568,700);//100 300
+        jugador.getSprite().setPosition(485*32,700);//100 300
         rectangleJugador = jugador.getSprite().getBoundingRectangle().setSize(texturaPersonaje.getWidth()*.8f,texturaPersonaje.getHeight()*.8f);
 
     }
@@ -428,6 +437,15 @@ public class PantallaNivelTres extends Pantalla {
         imagenVidas.setPosition(50, 650);
 
         HUD.addActor(imagenVidas);
+
+        regionVidasEnemigo = new TextureRegion(texturaVidasEnemigo);
+        texturasFramesVidasEnemigos = regionVidasEnemigo.split(304, 60);
+        spriteVidasEnemigos = new Sprite(texturasFramesVidasEnemigos[0][0]);
+        imagenVidasEnemigos = new Image(spriteVidasEnemigos);
+        imagenVidasEnemigos.setPosition((ANCHO / 2)-spriteVidasEnemigos.getWidth()/2, 44);
+
+        //HUD.addActor(imagenVidasEnemigos);*/
+
     }
 
 
@@ -444,7 +462,7 @@ public class PantallaNivelTres extends Pantalla {
     public void render(float delta) {
         if(estadoJuego == PantallaNivelTres.EstadoJuego.JUGANDO) {
             int numAleatorio = MathUtils.random(0,10);
-            if(numAleatorio>5 && proyectilJefeFinal==null){
+            if(numAleatorio>=4 && proyectilJefeFinal==null){
                 generarProyectil();
             }
             actualizar();
@@ -458,6 +476,7 @@ public class PantallaNivelTres extends Pantalla {
             corazonDos.render(batch);
             if(jugador.getX() >= 491*32) {
                 enemigoFinal.render(batch);
+                HUD.addActor(imagenVidasEnemigos);
             }
             dibujarEnemigos();
             if (proyectil != null) {
@@ -467,12 +486,15 @@ public class PantallaNivelTres extends Pantalla {
                 proyectilJefeFinal.render(batch);
             }
             batch.end();
-            //Quitar comentario despues
         }
 
         //************ HUD ***************
         batch.setProjectionMatrix(camaraHUD.combined);
+        if(estadoJuego == EstadoJuego.JUGANDO && jugador.getX()>=491*32){
+            HUD.addActor(imagenVidasEnemigos);
+        }
         HUD.draw();
+
 
         //*************Pausa*****************
         batch.setProjectionMatrix(camaraPausaHUD.combined);
@@ -502,6 +524,7 @@ public class PantallaNivelTres extends Pantalla {
         verificarColisionEnemigos();
         verificarColisionesEnemigosDos();
         verificarColisionesItems();
+        verificarColisionEnemigoFinal();
         
         if(proyectil != null){
             for (int j = arrEnemigosUno.size-1; j >= 0 ; j--) {
@@ -562,6 +585,20 @@ public class PantallaNivelTres extends Pantalla {
             }
         }
         //}
+    }
+
+    private void verificarColisionEnemigoFinal() {
+        if(estadoJuego == EstadoJuego.JUGANDO && rectangleJugador.overlaps(auraEnemigo)){
+            if (juego.efectoSonidoEstado != 1){
+                efectoMuerte.play();
+            }
+            //jugador.setVidas(jugador.getVidas()-1);
+            jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
+            jugador.getSprite().setY(-100); //Lo manda a lo alto
+            estadoJuego = PantallaNivelTres.EstadoJuego.DERROTA;
+            escenaDerrota = new PantallaNivelTres.EscenaDerrota(vistaDerrotaHUD,batch);
+            Gdx.input.setInputProcessor(escenaDerrota);
+        }
     }
 
     private void verificarColisionesItems() {
@@ -657,6 +694,7 @@ public class PantallaNivelTres extends Pantalla {
     private void actualizar() {
         rectangleJugador.setPosition(jugador.getX(),jugador.getY());
         rectangleEnemigo.setPosition(enemigoFinal.getX(), enemigoFinal.getY());
+        auraEnemigo.setPosition(enemigoFinal.getX(), enemigoFinal.getY());
         actualizarEnemigoFinal();
         actualizarCamara();
         actualizarProyectil();
@@ -664,8 +702,136 @@ public class PantallaNivelTres extends Pantalla {
         moverEnemigos();
         moverEnemigoDos();
         actualizarVidas();
+        if(jugador.getX() >= 491*32) {
+            actualizarVidasEnemigo();
+        }
         verificarColisiones();
         comprobarVictoria(); //cambiar la victoria
+    }
+
+    private void actualizarVidasEnemigo() {
+        switch (enemigoFinal.getVidas()) {
+            case 19:
+                spriteVidasEnemigos = new Sprite(texturasFramesVidasEnemigos[0][0]);
+                imagenVidasEnemigos = new Image(spriteVidasEnemigos);
+                imagenVidasEnemigos.setPosition((ANCHO / 2)-spriteVidasEnemigos.getWidth()/2, 44);
+                HUD.addActor(imagenVidasEnemigos);
+                break;
+            case 18:
+                spriteVidasEnemigos = new Sprite(texturasFramesVidasEnemigos[0][1]);
+                imagenVidasEnemigos = new Image(spriteVidasEnemigos);
+                imagenVidasEnemigos.setPosition((ANCHO / 2)-spriteVidasEnemigos.getWidth()/2, 44);
+                HUD.addActor(imagenVidasEnemigos);
+                break;
+            case 17:
+                spriteVidasEnemigos = new Sprite(texturasFramesVidasEnemigos[0][2]);
+                imagenVidasEnemigos = new Image(spriteVidasEnemigos);
+                imagenVidasEnemigos.setPosition((ANCHO / 2)-spriteVidasEnemigos.getWidth()/2, 44);
+                HUD.addActor(imagenVidasEnemigos);
+                break;
+            case 16:
+                spriteVidasEnemigos = new Sprite(texturasFramesVidasEnemigos[0][3]);
+                imagenVidasEnemigos = new Image(spriteVidasEnemigos);
+                imagenVidasEnemigos.setPosition((ANCHO / 2)-spriteVidasEnemigos.getWidth()/2, 44);
+                HUD.addActor(imagenVidasEnemigos);
+                break;
+            case 15:
+                spriteVidasEnemigos = new Sprite(texturasFramesVidasEnemigos[0][4]);
+                imagenVidasEnemigos = new Image(spriteVidasEnemigos);
+                imagenVidasEnemigos.setPosition((ANCHO / 2)-spriteVidasEnemigos.getWidth()/2, 44);
+                HUD.addActor(imagenVidasEnemigos);
+                break;
+            case 14:
+                spriteVidasEnemigos = new Sprite(texturasFramesVidasEnemigos[0][5]);
+                imagenVidasEnemigos = new Image(spriteVidasEnemigos);
+                imagenVidasEnemigos.setPosition((ANCHO / 2)-spriteVidasEnemigos.getWidth()/2, 44);
+                HUD.addActor(imagenVidasEnemigos);
+                break;
+            case 13:
+                spriteVidasEnemigos = new Sprite(texturasFramesVidasEnemigos[0][6]);
+                imagenVidasEnemigos = new Image(spriteVidasEnemigos);
+                imagenVidasEnemigos.setPosition((ANCHO / 2)-spriteVidasEnemigos.getWidth()/2, 44);
+                HUD.addActor(imagenVidasEnemigos);
+                break;
+            case 12:
+                spriteVidasEnemigos = new Sprite(texturasFramesVidasEnemigos[0][7]);
+                imagenVidasEnemigos = new Image(spriteVidasEnemigos);
+                imagenVidasEnemigos.setPosition((ANCHO / 2)-spriteVidasEnemigos.getWidth()/2, 44);
+                HUD.addActor(imagenVidasEnemigos);
+                break;
+            case 11:
+                spriteVidasEnemigos = new Sprite(texturasFramesVidasEnemigos[0][8]);
+                imagenVidasEnemigos = new Image(spriteVidasEnemigos);
+                imagenVidasEnemigos.setPosition((ANCHO / 2)-spriteVidasEnemigos.getWidth()/2, 44);
+                HUD.addActor(imagenVidasEnemigos);
+                break;
+            case 10:
+                spriteVidasEnemigos = new Sprite(texturasFramesVidasEnemigos[0][9]);
+                imagenVidasEnemigos = new Image(spriteVidasEnemigos);
+                imagenVidasEnemigos.setPosition((ANCHO / 2)-spriteVidasEnemigos.getWidth()/2, 44);
+                HUD.addActor(imagenVidasEnemigos);
+                break;
+            case 9:
+                spriteVidasEnemigos = new Sprite(texturasFramesVidasEnemigos[0][10]);
+                imagenVidasEnemigos = new Image(spriteVidasEnemigos);
+                imagenVidasEnemigos.setPosition((ANCHO / 2)-spriteVidasEnemigos.getWidth()/2, 44);
+                HUD.addActor(imagenVidasEnemigos);
+                break;
+            case 8:
+                spriteVidasEnemigos = new Sprite(texturasFramesVidasEnemigos[0][11]);
+                imagenVidasEnemigos = new Image(spriteVidasEnemigos);
+                imagenVidasEnemigos.setPosition((ANCHO / 2)-spriteVidasEnemigos.getWidth()/2, 44);
+                HUD.addActor(imagenVidasEnemigos);
+                break;
+            case 7:
+                spriteVidasEnemigos = new Sprite(texturasFramesVidasEnemigos[0][12]);
+                imagenVidasEnemigos = new Image(spriteVidasEnemigos);
+                imagenVidasEnemigos.setPosition((ANCHO / 2)-spriteVidasEnemigos.getWidth()/2, 44);
+                HUD.addActor(imagenVidasEnemigos);
+                break;
+            case 6:
+                spriteVidasEnemigos = new Sprite(texturasFramesVidasEnemigos[0][13]);
+                imagenVidasEnemigos = new Image(spriteVidasEnemigos);
+                imagenVidasEnemigos.setPosition((ANCHO / 2)-spriteVidasEnemigos.getWidth()/2, 44);
+                HUD.addActor(imagenVidasEnemigos);
+                break;
+            case 5:
+                spriteVidasEnemigos = new Sprite(texturasFramesVidasEnemigos[0][14]);
+                imagenVidasEnemigos = new Image(spriteVidasEnemigos);
+                imagenVidasEnemigos.setPosition((ANCHO / 2)-spriteVidasEnemigos.getWidth()/2, 44);
+                HUD.addActor(imagenVidasEnemigos);
+                break;
+            case 4:
+                spriteVidasEnemigos = new Sprite(texturasFramesVidasEnemigos[0][15]);
+                imagenVidasEnemigos = new Image(spriteVidasEnemigos);
+                imagenVidasEnemigos.setPosition((ANCHO / 2)-spriteVidasEnemigos.getWidth()/2, 44);
+                HUD.addActor(imagenVidasEnemigos);
+                break;
+            case 3:
+                spriteVidasEnemigos = new Sprite(texturasFramesVidasEnemigos[0][16]);
+                imagenVidasEnemigos = new Image(spriteVidasEnemigos);
+                imagenVidasEnemigos.setPosition((ANCHO / 2)-spriteVidasEnemigos.getWidth()/2, 44);
+                HUD.addActor(imagenVidasEnemigos);
+                break;
+            case 2:
+                spriteVidasEnemigos = new Sprite(texturasFramesVidasEnemigos[0][17]);
+                imagenVidasEnemigos = new Image(spriteVidasEnemigos);
+                imagenVidasEnemigos.setPosition((ANCHO / 2)-spriteVidasEnemigos.getWidth()/2, 44);
+                HUD.addActor(imagenVidasEnemigos);
+                break;
+            case 1:
+                spriteVidasEnemigos = new Sprite(texturasFramesVidasEnemigos[0][18]);
+                imagenVidasEnemigos = new Image(spriteVidasEnemigos);
+                imagenVidasEnemigos.setPosition((ANCHO / 2)-spriteVidasEnemigos.getWidth()/2, 44);
+                HUD.addActor(imagenVidasEnemigos);
+                break;
+            case 0:
+                spriteVidasEnemigos = new Sprite(texturasFramesVidasEnemigos[0][19]);
+                imagenVidasEnemigos = new Image(spriteVidasEnemigos);
+                imagenVidasEnemigos.setPosition((ANCHO / 2)-spriteVidasEnemigos.getWidth()/2, 44);
+                HUD.addActor(imagenVidasEnemigos);
+                break;
+        }
     }
 
     private void actualizarEnemigoFinal() {
@@ -774,7 +940,7 @@ public class PantallaNivelTres extends Pantalla {
                 celdaX++;   // Casilla del lado derecho
             }
             TiledMapTileLayer.Cell celdaDerecha = capaPlataforma.getCell(celdaX+2, celdaY);
-            TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX-1, celdaY);
+            TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX, celdaY);
             TiledMapTileLayer.Cell celdaAbajoDerecha = capaPlataforma.getCell(celdaX+1, celdaY-1);
             TiledMapTileLayer.Cell celdaAbajoIzquierda = capaPlataforma.getCell(celdaX-1, celdaY-1);
             if(celdaDerecha != null && arrEnemigosDos.get(i).getEstadoMov() == EnemigoDosPlataformas.estadoMovimiento.MOV_DERECHA){
@@ -898,7 +1064,7 @@ public class PantallaNivelTres extends Pantalla {
                 celdaX++;   // Casilla del lado derecho
             }
             TiledMapTileLayer.Cell celdaDerecha = capaPlataforma.getCell(celdaX+2, celdaY);
-            TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX-1, celdaY);
+            TiledMapTileLayer.Cell celdaIzquierda = capaPlataforma.getCell(celdaX, celdaY);
             TiledMapTileLayer.Cell celdaAbajoDerecha = capaPlataforma.getCell(celdaX+1, celdaY-1);
             TiledMapTileLayer.Cell celdaAbajoIzquierda = capaPlataforma.getCell(celdaX-1, celdaY-1);
             TiledMapTileLayer.Cell celdaArribaDerecha = capaPlataforma.getCell(celdaX+1, celdaY+1);
