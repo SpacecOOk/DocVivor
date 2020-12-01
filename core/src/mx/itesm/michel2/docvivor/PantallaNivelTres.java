@@ -48,7 +48,6 @@ public class PantallaNivelTres extends Pantalla {
     private Texture texturaPersonaje;
     private JugadorPlataformas jugador;
     public static final int TAM_CELDA = 32;
-    private Texture texturaJugadorMetralleta = new Texture("Level2/AssetsPersonajes/arma1_skinPersonaje.png");
     private Rectangle rectangleJugador;
 
     //vidas
@@ -65,9 +64,6 @@ public class PantallaNivelTres extends Pantalla {
     private Proyectil  proyectilJefeFinal;
     private Proyectil proyectil;
     private int orientacion;
-    private Texture texturaBalaMetralleta;
-    private Array<Proyectil> arrBalasMetralleta;
-    private int contadorMetralleta = 20;
 
     //Sonidos
     private Sound efectoSalto;
@@ -109,7 +105,9 @@ public class PantallaNivelTres extends Pantalla {
 
     //Item
     private Texture texturaItemCorazon;
-    private Array<Item> arrItmes;
+    private Item corazonUno;
+    private Item corazonDos;
+
 
     public PantallaNivelTres(Juego juego) {
         this.juego = juego;
@@ -131,10 +129,17 @@ public class PantallaNivelTres extends Pantalla {
         crearPosicionesDos();
         crearEnemigos();
         crearEnemigoFInal();
+        crearItem();
         if(juego.efectoSonidoEstado != 1){
             crearSonidos();
         }
         Gdx.input.setInputProcessor(HUD);
+    }
+
+    private void crearItem() {
+        texturaItemCorazon = new Texture("Item_corazon.png");
+        corazonUno = new Item(texturaItemCorazon,148*32,12*32,34,42);
+        corazonDos = new Item(texturaItemCorazon,516*32,11*32,34,42);
     }
 
     private void crearEnemigoFInal() {
@@ -235,14 +240,12 @@ public class PantallaNivelTres extends Pantalla {
         texturaProyectilEnemigo = new Texture("Balas/Bala_roja.png");
         texturaProyectilD = new Texture("Balas/Bala_Jeringa_D.png");
         texturaProyectilI = new Texture("Balas/Bala_Jeringa_I.png");
-        texturaBalaMetralleta = new Texture("Balas/Bala_azul.png");
-        arrBalasMetralleta = new Array<>();
     }
 
     private void crearPersonaje() {
         texturaPersonaje = new Texture("Level2/AssetsPersonajes/Doctor2_moviendose.png");
         jugador = new JugadorPlataformas(texturaPersonaje,56,55);
-        jugador.getSprite().setPosition(490*32,600);
+        jugador.getSprite().setPosition(148*32,600);
         rectangleJugador = jugador.getSprite().getBoundingRectangle().setSize(texturaPersonaje.getWidth()*.8f,texturaPersonaje.getHeight()*.8f);
 
     }
@@ -460,11 +463,12 @@ public class PantallaNivelTres extends Pantalla {
             rendererMapa.render();
             batch.begin();
             jugador.render(batch);
+            corazonUno.render(batch);
+            corazonDos.render(batch);
             if(jugador.getX() >= 491*32) {
                 enemigoFinal.render(batch);
             }
             dibujarEnemigos();
-            dibujarBalasMetralleta();
             if (proyectil != null) {
                 proyectil.render(batch);
             }
@@ -502,16 +506,11 @@ public class PantallaNivelTres extends Pantalla {
         proyectilJefeFinal = new Proyectil(texturaProyectilEnemigo,enemigoFinal.getX()+50,enemigoFinal.getY()+100);
     }
 
-    private void dibujarBalasMetralleta() {
-        for (Proyectil balaMetralleta:arrBalasMetralleta) {
-            balaMetralleta.render(batch);
-        }
-    }
-
     private void verificarColisiones() {
         verificarCaida();
         verificarColisionEnemigos();
         verificarColisionesEnemigosDos();
+        verificarColisionesItems();
         
         if(proyectil != null){
             for (int j = arrEnemigosUno.size-1; j >= 0 ; j--) {
@@ -574,6 +573,28 @@ public class PantallaNivelTres extends Pantalla {
             }
         }
         //}
+    }
+
+    private void verificarColisionesItems() {
+        if(estadoJuego == EstadoJuego.JUGANDO){
+            if(rectangleJugador.overlaps(corazonUno.sprite.getBoundingRectangle())){
+                if(jugador.getVidas()+1 <=4){
+                    jugador.setVidas(jugador.getVidas()+1);
+                    corazonUno.sprite.setPosition(corazonUno.sprite.getX(),-300);
+                    if(juego.efectoSonidoEstado != 1){
+                        efectoPowerUp.play();
+                    }
+                }
+            }else if( rectangleJugador.overlaps(corazonDos.sprite.getBoundingRectangle())){
+                if(jugador.getVidas()+1 <=4){
+                    jugador.setVidas(jugador.getVidas()+1);
+                    corazonDos.sprite.setPosition(corazonDos.sprite.getX(),-300);
+                    if(juego.efectoSonidoEstado != 1){
+                        efectoPowerUp.play();
+                    }
+                }
+            }
+        }
     }
 
     private void verificarColisionesEnemigosDos() {
@@ -1027,14 +1048,6 @@ public class PantallaNivelTres extends Pantalla {
                 jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.EN_PISO);
             }
         }
-
-        // Saltar
-        /*switch (jugador.getEstadoSalto()) {
-            case SUBIENDO:
-            case BAJANDO:
-                jugador.actualizarSalto();    // Actualizar posición en 'y'
-                break;
-        }*/
     }
 
     private void probarChoqueParedes() {
@@ -1055,27 +1068,21 @@ public class PantallaNivelTres extends Pantalla {
         TiledMapTileLayer.Cell celdaArribaDer = capaPlataforma.getCell(celdaX+1, celdaY+1);
         TiledMapTileLayer.Cell celdaArribaIzq = capaPlataforma.getCell(celdaX+1, celdaY+1);
         if(celdaDerecha != null && jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.MOV_DERECHA){
-            Gdx.app.log("Se ejeuto la primera condicion","");
             jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO);
         }
         if(celdaIzquierda != null && jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.MOV_IZQUIERDA){
-            Gdx.app.log("Se ejeuto la segunda condicion","");
             jugador.setEstadoMovimiento(JugadorPlataformas.EstadoMovimiento.QUIETO_IZQUIERDA);
         }
         if(celdaArribaDer != null && celdaArribaIzq != null){
-            Gdx.app.log("Se ejeuto la tercera condicion","");
             jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.BAJANDO);
         }
         if(celdaAbajoDer == null && celdaAbajoIzq == null && estadoSalto == JugadorPlataformas.EstadoSalto.BAJANDO){
-            Gdx.app.log("Se ejeuto la cuarta condicion","");
             jugador.caer();
         }
         if(celdaAbajoDer == null && celdaAbajoIzq == null && jugador.getEstadoSalto() == JugadorPlataformas.EstadoSalto.EN_PISO){
-            Gdx.app.log("Se ejeuto la quinta condicion","");
             jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.CAIDA_LIBRE);
         }
         if(celdaAbajoDer != null && celdaAbajoIzq != null && (estadoSalto == JugadorPlataformas.EstadoSalto.BAJANDO || estadoSalto ==  JugadorPlataformas.EstadoSalto.CAIDA_LIBRE)){
-            Gdx.app.log("Se ejeuto la sexta condicion","");
             jugador.setEstadoSalto(JugadorPlataformas.EstadoSalto.EN_PISO);
         }
     }
