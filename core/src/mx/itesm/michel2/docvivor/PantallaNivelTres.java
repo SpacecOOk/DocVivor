@@ -460,7 +460,7 @@ public class PantallaNivelTres extends Pantalla {
             rendererMapa.render();
             batch.begin();
             jugador.render(batch);
-            if(jugador.getX() >=508*32) {
+            if(jugador.getX() >=450*32) {
                 enemigoFinal.render(batch);
             }
             dibujarEnemigos();

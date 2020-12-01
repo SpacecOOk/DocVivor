@@ -42,6 +42,25 @@ public class EnemigoUnoPlataformas {
         sprite = new Sprite(texturasFrames[0][0]);    // quieto
         estadoMov = estadoMovimiento.INICIANDO;
     }
+    public EnemigoUnoPlataformas(Texture textura, int width, int height) {
+        // Lee la textura como región
+        TextureRegion texturaCompleta = new TextureRegion(textura);
+        // La divide en frames de 16x32 (ver marioSprite.png)
+        TextureRegion[][] texturasFrames = texturaCompleta.split(width,height);
+        // Crea la animación con tiempo de 0.25 segundos entre frames.
+        animacion = new Animation(0.15f,texturasFrames[0][0],texturasFrames[0][1],texturasFrames[0][2], texturasFrames[0][3], texturasFrames[0][4],texturasFrames[0][5],texturasFrames[0][6],
+                texturasFrames[0][7]);
+        animacionMuerte = new Animation(0.5f,texturasFrames[0][8],texturasFrames[0][9],texturasFrames[0][10],texturasFrames[0][11],texturasFrames[0][12],texturasFrames[0][13],texturasFrames[0][14],
+                texturasFrames[0][15]);
+        // Animación infinita
+        animacion.setPlayMode(Animation.PlayMode.LOOP);
+        animacionMuerte.setPlayMode(Animation.PlayMode.NORMAL);
+        // Inicia el timer que contará tiempo para saber qué frame se dibuja
+        timerAnimacion = 0;
+        // Crea el sprite cuando para el personaje quieto (idle)
+        sprite = new Sprite(texturasFrames[0][0]);    // quieto
+        estadoMov = estadoMovimiento.INICIANDO;
+    }
 
     public void render(SpriteBatch batch){
         actualizar();
