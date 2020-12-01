@@ -58,7 +58,7 @@ public class EnemigoDosPlataformas {
                     }
                 } else {
                     if (region.isFlipX()) {
-                        region.flip(false,false);
+                        region.flip(true,false);
                     }
                 }
                 // Dibuja el frame en las coordenadas del sprite
