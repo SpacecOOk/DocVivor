@@ -1,6 +1,7 @@
 package mx.itesm.michel2.docvivor;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -25,6 +26,7 @@ public class PantallaNiveles extends Pantalla {
     public void show() {
         texturaNiveles = new Texture("Fondos/fondo_general.png");
         crearPantallaNiveles();
+        Gdx.input.setCatchKey(Input.Keys.BACK,true);
     }
 
     private void crearPantallaNiveles() {

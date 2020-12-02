@@ -1,6 +1,7 @@
 package mx.itesm.michel2.docvivor;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
@@ -142,6 +143,7 @@ public class PantallaNivelTres extends Pantalla {
             crearSonidos();
         }
         Gdx.input.setInputProcessor(HUD);
+        Gdx.input.setCatchKey(Input.Keys.BACK,true);
     }
 
     private void crearItem() {

@@ -1,6 +1,7 @@
 package mx.itesm.michel2.docvivor;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
@@ -34,6 +35,7 @@ public class PantallaConfiguracion extends Pantalla {
     public void show() {
         texturaConfiguracion = new Texture("Fondos/fondo_general.png");
         crearConfiguracion();
+        Gdx.input.setCatchKey(Input.Keys.BACK,true);
     }
 
     private void crearConfiguracion() {

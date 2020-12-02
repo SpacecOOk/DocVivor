@@ -2,6 +2,7 @@ package mx.itesm.michel2.docvivor;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -43,6 +44,7 @@ public class PantallaCargando extends Pantalla
         spriteCargando.setPosition(ANCHO/2 - spriteCargando.getWidth()/2,
                 ALTO/2 - spriteCargando.getHeight()/2);
         cargarRecursos(siguientePantalla);
+        Gdx.input.setCatchKey(Input.Keys.BACK,true);
     }
 
     private void cargarRecursos(Pantallas siguientePantalla) {

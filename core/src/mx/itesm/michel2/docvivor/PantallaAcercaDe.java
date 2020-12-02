@@ -1,6 +1,7 @@
 package mx.itesm.michel2.docvivor;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
@@ -44,6 +45,7 @@ public class PantallaAcercaDe extends Pantalla {
     public void show() {
         texturaAcerca = new Texture("Fondos/fondo_general.png");
         crearAcerca();
+        Gdx.input.setCatchKey(Input.Keys.BACK,true);
     }
 
     private void crearAcerca() {

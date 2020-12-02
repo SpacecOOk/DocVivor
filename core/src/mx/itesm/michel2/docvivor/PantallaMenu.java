@@ -1,6 +1,7 @@
 package mx.itesm.michel2.docvivor;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
@@ -39,6 +40,7 @@ public class PantallaMenu extends Pantalla {
             juego.musicaFondo.stop();
         }
         juego.musicaFondo.setVolume(0.5f);
+        Gdx.input.setCatchKey(Input.Keys.BACK,false);
     }
 
     private void cargarPreferencias() {
