@@ -49,7 +49,7 @@ public class PantallaNiveles extends Pantalla {
         TextureRegionDrawable botonNivelUno = new TextureRegionDrawable(new TextureRegion(texturaNivelUno));
         //Aqui seria para el boton inverso
         ImageButton btnNivelUno = new ImageButton(botonNivelUno);
-        btnNivelUno.setPosition(0+btnNivelUno.getWidth(),0+btnNivelUno.getHeight(),Align.center);
+        btnNivelUno.setPosition(ANCHO/2,ALTO/2 + btnNivelUno.getHeight()*2,Align.center);
         btnNivelUno.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -79,7 +79,7 @@ public class PantallaNiveles extends Pantalla {
         TextureRegionDrawable botonNivelTres = new TextureRegionDrawable(new TextureRegion(texturaNivelTres));
         //Aqui seria para el boton inverso
         ImageButton btnNivelTres = new ImageButton(botonNivelTres);
-        btnNivelTres.setPosition(ANCHO-btnNivelUno.getWidth(),ALTO-btnNivelUno.getHeight(),Align.center);
+        btnNivelTres.setPosition(ANCHO/2,ALTO/2 - btnNivelUno.getHeight()*2,Align.center);
         btnNivelTres.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {

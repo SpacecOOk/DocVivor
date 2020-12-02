@@ -410,7 +410,7 @@ public class PantallaNivelTres extends Pantalla {
         TextureRegionDrawable botonPausa = new TextureRegionDrawable(new TextureRegion(texturaPausa));
         //Aqui para el boton inverso (click)
         ImageButton btnPausa = new ImageButton(botonPausa);
-        btnPausa.setPosition(ANCHO - btnSaltar.getWidth() / 2, ALTO - btnPausa.getHeight() / 2, Align.center);
+        btnPausa.setPosition(ANCHO - btnSaltar.getWidth()/2 - 30, ALTO - btnPausa.getHeight()/2 - 15, Align.center);
         btnPausa.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
