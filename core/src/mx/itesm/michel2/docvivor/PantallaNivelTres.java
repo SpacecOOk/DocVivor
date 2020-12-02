@@ -429,6 +429,7 @@ public class PantallaNivelTres extends Pantalla {
 
         //Le movi aqui
         HUD.addActor(btnPausa);
+        //hola
 
         regionVidas = new TextureRegion(texturaVida);
         texturasFramesVidas = regionVidas.split(34, 34);
