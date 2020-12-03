@@ -426,9 +426,11 @@ public class PantallaNivelDos extends Pantalla {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 //Salta a la izquierda/derecha
-                    jugador.saltar();
                 if (juego.efectoSonidoEstado != 1) {
+                    jugador.saltar();
                     efectoSalto.play();
+                }else{
+                    jugador.saltar();
                 }
             }
         });

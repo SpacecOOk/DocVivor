@@ -299,14 +299,17 @@ public class PantallaNivelUno extends Pantalla {
                         proyectil = new Proyectil(texturaProyectilD,jugador.sprite.getX()+jugador.sprite.getWidth()/2,
                                 jugador.sprite.getY()+jugador.sprite.getHeight()*0.3f);
                         orientacion=1;
+                        if (juego.efectoSonidoEstado != 1){
+                            efectoDisparo.play();
+                        }
                     }else if(jugador.getEstadoCaminando() == EstadoCaminando.IZQUIERDA || jugador.getEstadoCaminando() == EstadoCaminando.QUIETO_IZQUIERDA){
                         proyectil = new Proyectil(texturaProyectilI,jugador.sprite.getX()+jugador.sprite.getWidth()/2,
                                 jugador.sprite.getY()+jugador.sprite.getHeight()*0.3f);
                         orientacion=0;
+                        if (juego.efectoSonidoEstado != 1){
+                            efectoDisparo.play();
+                        }
                     }
-                }
-                if (juego.efectoSonidoEstado != 1){
-                    efectoDisparo.play();
                 }
             } //Jeringa
         });
