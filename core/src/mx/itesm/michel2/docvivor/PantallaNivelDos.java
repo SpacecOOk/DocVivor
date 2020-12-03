@@ -153,15 +153,15 @@ public class PantallaNivelDos extends Pantalla {
 
     private void crearPosicionesDos() {
         posicionesEnemigosDos = new int[5];
-        int x = MathUtils.random(233*32,268*32);
+        int x = MathUtils.random(233*32,267*32);
         posicionesEnemigos[0] = x;
-        int y = MathUtils.random(320*32,364*32);
+        int y = MathUtils.random(320*32,362*32);
         posicionesEnemigos[1] = y;
-        int z = MathUtils.random(516*32,541*32);
+        int z = MathUtils.random(516*32,539*32);
         posicionesEnemigos[2] = z;
-        int w = MathUtils.random(595*32,641*32);
+        int w = MathUtils.random(595*32,639*32);
         posicionesEnemigos[3] = w;
-        int t = MathUtils.random(812*32,834*32);
+        int t = MathUtils.random(812*32,832*32);
         posicionesEnemigos[4] = t;
     }
 
@@ -169,29 +169,29 @@ public class PantallaNivelDos extends Pantalla {
         posicionesEnemigos = new int[13];
         int a = MathUtils.random(85*32,96*32);
         posicionesEnemigos[0] = a;
-        int b = MathUtils.random(126*32, 149*32);
+        int b = MathUtils.random(126*32, 147*32);
         posicionesEnemigos[1] = b;
-        int c = MathUtils.random(212*32,229*32);
+        int c = MathUtils.random(212*32,227*32);
         posicionesEnemigos[2] = c;
-        int d = MathUtils.random(233*32,256*32);
+        int d = MathUtils.random(233*32,254*32);
         posicionesEnemigos[3] = d;
-        int e = MathUtils.random(320*32,364*32);
+        int e = MathUtils.random(320*32,362*32);
         posicionesEnemigos[4] = e;
-        int f = MathUtils.random(429*32, 442*32);
+        int f = MathUtils.random(429*32, 440*32);
         posicionesEnemigos[5] = f;
-        int g = MathUtils.random(484*32,497*32);
+        int g = MathUtils.random(484*32,495*32);
         posicionesEnemigos[6] = g;
-        int h = MathUtils.random(516*32,541*32);
+        int h = MathUtils.random(516*32,539*32);
         posicionesEnemigos[7] = h;
-        int i = MathUtils.random(578*32,615*32);
+        int i = MathUtils.random(578*32,613*32);
         posicionesEnemigos[8] = i;
         int j = MathUtils.random(623*32,641*32);
         posicionesEnemigos[9] = j;
-        int k = MathUtils.random(687*32,801*32);
+        int k = MathUtils.random(687*32,799*32);
         posicionesEnemigos[10] = k;
-        int l = MathUtils.random(811*32,834*32);
+        int l = MathUtils.random(811*32,832*32);
         posicionesEnemigos[11] = l;
-        int m = MathUtils.random(845*32,889*32);
+        int m = MathUtils.random(845*32,888*32);
         posicionesEnemigos[12] = m;
     }
 
