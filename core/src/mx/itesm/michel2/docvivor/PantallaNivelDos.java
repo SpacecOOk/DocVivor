@@ -198,7 +198,7 @@ public class PantallaNivelDos extends Pantalla {
     private void crearItems() {
         //Metralleta
         texturaMetralleta = new Texture("Items/metralleta.png");
-        metralleta = new Item(texturaMetralleta,14816,928,119,56);//14816 928
+        metralleta = new Item(texturaMetralleta,14816,728,119,56);//14816 928
     }
 
     private void crearEnemigos() {
@@ -209,14 +209,14 @@ public class PantallaNivelDos extends Pantalla {
         for (int i = 0; i < 20; i++) {
             EnemigoUnoPlataformas enemigo = new EnemigoUnoPlataformas(texturaEnemigoUno);
             int x = MathUtils.random(0,posicionesEnemigos.length-1);
-            enemigo.getSprite().setPosition(posicionesEnemigos[x],18*32);
+            enemigo.getSprite().setPosition(posicionesEnemigos[x],25*32);
             arrEnemigosUno.add(enemigo);
             crearPosiciones();
         }
         for (int i = 0; i < 10; i++) {
             EnemigoDosPlataformas enemigoDos = new EnemigoDosPlataformas(texturaEnemigoDos);
             int x = MathUtils.random(0,posicionesEnemigosDos.length-1);
-            enemigoDos.getSprite().setPosition(posicionesEnemigos[x],18*32);
+            enemigoDos.getSprite().setPosition(posicionesEnemigos[x],25*32);
             arrEnemigosDos.add(enemigoDos);
             crearPosicionesDos();
         }
@@ -261,7 +261,7 @@ public class PantallaNivelDos extends Pantalla {
     private void crearPersonaje() {
         texturaPersonaje = new Texture("Level2/AssetsPersonajes/Doctor2_moviendose.png");
         jugador = new JugadorPlataformas(texturaPersonaje,56,55);
-        jugador.getSprite().setPosition(100,300);
+        jugador.getSprite().setPosition(14716,800);
         rectangleJugador = jugador.getSprite().getBoundingRectangle().setSize(texturaPersonaje.getWidth()*.8f,texturaPersonaje.getHeight()*.8f);
 
     }
@@ -657,7 +657,7 @@ public class PantallaNivelDos extends Pantalla {
             //estas lineas no funcionan bien
             float x = jugador.getX();
             float y = jugador.getY();
-            metralleta.sprite.setY(ALTO+100);
+            metralleta.sprite.setY(-300);
             jugador = new JugadorPlataformas(texturaJugadorMetralleta,64,55);
             jugador.getSprite().setPosition(x,y);
 

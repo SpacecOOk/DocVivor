@@ -206,14 +206,14 @@ public class PantallaNivelTres extends Pantalla {
         for (int i = 0; i < 16; i++) {
             EnemigoUnoPlataformas enemigo = new EnemigoUnoPlataformas(texturaEnemigoUno);
             int x = MathUtils.random(0,posicionesEnemigos.length-1);
-            enemigo.getSprite().setPosition(posicionesEnemigos[x],18*32);
+            enemigo.getSprite().setPosition(posicionesEnemigos[x],25*32);
             arrEnemigosUno.add(enemigo);
             crearPosiciones();
         }
         for (int i = 0; i < 8; i++) {
             EnemigoDosPlataformas enemigoDos = new EnemigoDosPlataformas(texturaEnemigoDos);
             int x = MathUtils.random(0,posicionesEnemigosDos.length-1);
-            enemigoDos.getSprite().setPosition(posicionesEnemigos[x],18*32);
+            enemigoDos.getSprite().setPosition(posicionesEnemigos[x],25*32);
             arrEnemigosDos.add(enemigoDos);
             crearPosicionesDos();
         }
