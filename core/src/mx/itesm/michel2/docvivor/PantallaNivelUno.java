@@ -671,6 +671,12 @@ public class PantallaNivelUno extends Pantalla {
     @Override
     public void dispose() {
         texturaFondoNivelUno.dispose();
+        texturaTraje.dispose();
+        texturaEnemigoUno.dispose();
+        texturaPersonaje.dispose();
+        texturaPersonajeTraje.dispose();
+        texturaProyectilD.dispose();
+        texturaProyectilI.dispose();
         batch.dispose();
     }
 

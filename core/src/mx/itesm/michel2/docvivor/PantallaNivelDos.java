@@ -261,8 +261,8 @@ public class PantallaNivelDos extends Pantalla {
     private void crearPersonaje() {
         texturaPersonaje = new Texture("Level2/AssetsPersonajes/Doctor2_moviendose.png");
         jugador = new JugadorPlataformas(texturaPersonaje,56,55);
-        jugador.getSprite().setPosition(14716,800);
-        rectangleJugador = jugador.getSprite().getBoundingRectangle().setSize(texturaPersonaje.getWidth()*.8f,texturaPersonaje.getHeight()*.8f);
+        jugador.getSprite().setPosition(100,300);
+        rectangleJugador = jugador.getSprite().getBoundingRectangle().setSize(texturaPersonaje.getWidth()*.28f,texturaPersonaje.getHeight()*.8f);
 
     }
 
@@ -1138,6 +1138,14 @@ public class PantallaNivelDos extends Pantalla {
     @Override
     public void dispose() {
         mapa.dispose();
+        texturaBalaMetralleta.dispose();
+        texturaEnemigoDos.dispose();
+        texturaEnemigoUno.dispose();
+        texturaPersonaje.dispose();
+        texturaProyectilD.dispose();
+        texturaProyectilI.dispose();
+        texturaJugadorMetralleta.dispose();
+        texturaMetralleta.dispose();
         batch.dispose();
     }
 
