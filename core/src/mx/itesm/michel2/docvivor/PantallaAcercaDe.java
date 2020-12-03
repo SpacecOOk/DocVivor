@@ -156,6 +156,14 @@ public class PantallaAcercaDe extends Pantalla {
     @Override
     public void dispose() {
         texturaAcerca.dispose();
+        Mich.dispose();
+        Diego.dispose();
+        Bruno.dispose();
+        Roberto.dispose();
+        name_Bruno.dispose();
+        name_Diego.dispose();
+        name_Mich.dispose();
+        name_Roberto.dispose();
         batch.dispose();
     }
 }
