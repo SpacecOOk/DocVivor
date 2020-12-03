@@ -389,14 +389,17 @@ public class PantallaNivelDos extends Pantalla {
                             proyectil = new Proyectil(texturaProyectilD, jugador.getX() + jugador.getSprite().getWidth() / 2,
                                     jugador.getSprite().getY() + 32);
                             orientacion = 1;
+                            if (juego.efectoSonidoEstado != 1) {
+                                efectoDisparo.play();
+                            }
                         } else if (jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.MOV_IZQUIERDA || jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.QUIETO_IZQUIERDA) {
                             proyectil = new Proyectil(texturaProyectilI, jugador.getX() + jugador.getSprite().getWidth() / 2,
                                     jugador.getSprite().getY() + 32);
                             orientacion = 0;
+                            if (juego.efectoSonidoEstado != 1) {
+                                efectoDisparo.play();
+                            }
                         }
-                    }
-                    if (juego.efectoSonidoEstado != 1) {
-                        efectoDisparo.play();
                     }
                 }else if(contadorMetralleta>0 && jugador.getSprite().getTexture() == texturaJugadorMetralleta){
                     crearProyectilMetralleta();

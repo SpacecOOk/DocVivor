@@ -374,10 +374,16 @@ public class PantallaNivelTres extends Pantalla {
                             proyectil = new Proyectil(texturaProyectilD, jugador.getX() + jugador.getSprite().getWidth() / 2,
                                     jugador.getY() + jugador.getSprite().getHeight() * 0.3f);
                             orientacion = 1;
+                            if (juego.efectoSonidoEstado != 1) {
+                                efectoDisparo.play();
+                            }
                         } else if (jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.MOV_IZQUIERDA || jugador.getEstadoMovimiento() == JugadorPlataformas.EstadoMovimiento.QUIETO_IZQUIERDA) {
                             proyectil = new Proyectil(texturaProyectilI, jugador.getX() + jugador.getSprite().getWidth() / 2,
                                     jugador.getY() + jugador.getSprite().getHeight() * 0.3f);
                             orientacion = 0;
+                            if (juego.efectoSonidoEstado != 1) {
+                                efectoDisparo.play();
+                            }
                         }
                     }
                 }
