@@ -328,11 +328,13 @@ public class PantallaNivelUno extends Pantalla {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 //Salta a la izquierda/derecha
-                if(jugador.getEstado() != EstadoJugador.SALTANDO){
-                    jugador.saltar();
-                }
-                if (juego.efectoSonidoEstado != 1){
-                    efectoSalto.play();
+                if (jugador.getEstado() != EstadoJugador.SALTANDO) {
+                    if(juego.efectoSonidoEstado != 1){
+                        jugador.saltar();
+                        efectoSalto.play();
+                    }else{
+                        jugador.saltar();
+                    }
                 }
             }
         });
