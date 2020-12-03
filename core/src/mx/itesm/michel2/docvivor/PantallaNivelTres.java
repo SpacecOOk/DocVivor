@@ -178,7 +178,7 @@ public class PantallaNivelTres extends Pantalla {
         posicionesEnemigos = new int[10];
         int a = MathUtils.random(70*32,75*32);
         posicionesEnemigos[0] = a;
-        int b = MathUtils.random(83*32, 89*32);
+        int b = MathUtils.random(83*32, 87*32);
         posicionesEnemigos[1] = b;
         int c = MathUtils.random(166*32,177*32);
         posicionesEnemigos[2] = c;
