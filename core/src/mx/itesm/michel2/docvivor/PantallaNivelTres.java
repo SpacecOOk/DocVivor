@@ -182,7 +182,7 @@ public class PantallaNivelTres extends Pantalla {
         posicionesEnemigos[1] = b;
         int c = MathUtils.random(166*32,177*32);
         posicionesEnemigos[2] = c;
-        int d = MathUtils.random(194*32,215*32);
+        int d = MathUtils.random(194*32,214*32);
         posicionesEnemigos[3] = d;
         int e = MathUtils.random(234*32,240*32);
         posicionesEnemigos[4] = e;
