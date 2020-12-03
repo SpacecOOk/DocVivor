@@ -93,6 +93,16 @@ public class PantallaInstrucciones extends Pantalla {
     @Override
     public void dispose() {
         texturaFondoInstrucciones.dispose();
+        right.dispose();
+        left.dispose();
+        jump.dispose();
+        shoot.dispose();
+        pause.dispose();
+        imgjump.dispose();
+        imgder.dispose();
+        imgleft.dispose();
+        imgpausa.dispose();
+        imgshoot.dispose();
         batch.dispose();
     }
 }
