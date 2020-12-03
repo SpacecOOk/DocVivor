@@ -162,37 +162,37 @@ public class PantallaNivelTres extends Pantalla {
 
     private void crearPosicionesDos() {
         posicionesEnemigosDos = new int[5];
-        int x = MathUtils.random(161*32,178*32);
+        int x = MathUtils.random(161*32,177*32);
         posicionesEnemigos[0] = x;
-        int y = MathUtils.random(195*32,215*32);
+        int y = MathUtils.random(195*32,214*32);
         posicionesEnemigos[1] = y;
-        int z = MathUtils.random(516*32,541*32); //Verificar por lo del jefe final
+        int z = MathUtils.random(516*32,540*32); //Verificar por lo del jefe final
         posicionesEnemigos[2] = z;
-        int w = MathUtils.random(270*32,277*32);
+        int w = MathUtils.random(270*32,276*32);
         posicionesEnemigos[3] = w;
-        int t = MathUtils.random(459*32,477*32);
+        int t = MathUtils.random(459*32,476*32);
         posicionesEnemigos[4] = t;
     }
 
     private void crearPosiciones() {
         posicionesEnemigos = new int[10];
-        int a = MathUtils.random(70*32,76*32);
+        int a = MathUtils.random(70*32,75*32);
         posicionesEnemigos[0] = a;
-        int b = MathUtils.random(83*32, 90*32);
+        int b = MathUtils.random(83*32, 89*32);
         posicionesEnemigos[1] = b;
-        int c = MathUtils.random(166*32,178*32);
+        int c = MathUtils.random(166*32,177*32);
         posicionesEnemigos[2] = c;
-        int d = MathUtils.random(194*32,217*32);
+        int d = MathUtils.random(194*32,216*32);
         posicionesEnemigos[3] = d;
-        int e = MathUtils.random(234*32,241*32);
+        int e = MathUtils.random(234*32,240*32);
         posicionesEnemigos[4] = e;
-        int f = MathUtils.random(249*32, 259*32);
+        int f = MathUtils.random(249*32, 258*32);
         posicionesEnemigos[5] = f;
-        int g = MathUtils.random(261*32,279*32);
+        int g = MathUtils.random(261*32,278*32);
         posicionesEnemigos[6] = g;
-        int h = MathUtils.random(290*32,305*32);
+        int h = MathUtils.random(290*32,304*32);
         posicionesEnemigos[7] = h;
-        int i = MathUtils.random(459*32,477*32);
+        int i = MathUtils.random(459*32,476*32);
         posicionesEnemigos[8] = i;
         int j = MathUtils.random(495*32,533*32); //depende por la posicion del jefe final
         posicionesEnemigos[9] = j;
